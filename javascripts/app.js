@@ -103,22 +103,37 @@ var Rover = function(){
   };
 
   Rover.prototype.prepareMoves = (list) => {
-    list.split('').forEach(move => {
-      switch(move){
-        case 'f':
-          self.moveForward();
-        break;
-        case 'l':
-          self.turnLeft();
-        break;
-        case 'r':
-          self.turnRight();
-        break;
-        case 'b':
-          self.moveBackward();
-        break;
+    var validMoves = ['f', 'l', 'r', 'b'];
+    var movements = list.slice().split('');
+    var fails = 0;
+
+    for(var letter of movements){
+      if(!validMoves.includes(letter)){
+        fails += 1;
       }
-    });
+    }
+    
+    if(fails <= 0){
+      movements.forEach(move => {
+        switch(move){
+          case 'f':
+            self.moveForward();
+          break;
+          case 'l':
+            self.turnLeft();
+          break;
+          case 'r':
+            self.turnRight();
+          break;
+          case 'b':
+            self.moveBackward();
+          break;
+        }
+      });
+    }else{
+      console.error("Some of the movements are not valid. The Rover stays in the same position.");
+    }
+
     return self.travelLog;
   }
 
