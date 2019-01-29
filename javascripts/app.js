@@ -1,4 +1,5 @@
 var map = createMap(10, 10);
+var limits = getMapLimits(map);
 
 // Rover Object Goes Here
 // ======================
@@ -57,20 +58,36 @@ var Rover = function(){
   Rover.prototype.moveForward = () => {
     switch(self.direction){
       case 'N':
-        self.y -= 1;
-        self.travelLog.push({x:self.x, y: self.y});
+        if(self.y - 1 < limits.minY){
+          console.log("You reached the north limit of the map!")
+        }else{
+          self.y -= 1;
+          self.travelLog.push({x:self.x, y: self.y});
+        }
       break;
       case 'W':
-        self.x -= 1;
-        self.travelLog.push({x:self.x, y: self.y});
+        if(self.x - 1 < limits.minX){
+          console.log("You reached the west limit of the map!")
+        }else{
+          self.x -= 1;
+          self.travelLog.push({x:self.x, y: self.y});
+        }
       break;
       case 'S':
-        self.y += 1;
-        self.travelLog.push({x:self.x, y: self.y});
+        if(self.y + 1 > limits.maxY){
+          console.log("You reached the south limit of the map!")
+        }else{
+          self.y += 1;
+          self.travelLog.push({x:self.x, y: self.y});
+        }
       break;
       case 'E':
-        self.x += 1;
-        self.travelLog.push({x:self.x, y: self.y});
+        if(self.x + 1 > limits.maxX){
+          console.log("You reached the east limit of the map!")
+        }else{
+          self.x += 1;
+          self.travelLog.push({x:self.x, y: self.y});
+        }
       break;
       default:
         console.log("Rover engine is broken!!");
@@ -81,20 +98,36 @@ var Rover = function(){
   Rover.prototype.moveBackward = () => {
     switch(self.direction){
       case 'N':
-        self.y += 1;
-        self.travelLog.push({x:self.x, y: self.y});
+        if(self.y + 1 > limits.maxY){
+          console.log("You reached the north limit of the map!")
+        }else{
+          self.y += 1;
+          self.travelLog.push({x:self.x, y: self.y});
+        }
       break;
       case 'W':
-        self.x += 1;
-        self.travelLog.push({x:self.x, y: self.y});
+        if(self.x + 1 > limits.maxX){
+          console.log("You reached the west limit of the map!")
+        }else{
+          self.x += 1;
+          self.travelLog.push({x:self.x, y: self.y});
+        }
       break;
       case 'S':
-        self.y -= 1;
-        self.travelLog.push({x:self.x, y: self.y});
+        if(self.y - 1 < limits.minY){
+          console.log("You reached the south limit of the map!")
+        }else{
+          self.y -= 1;
+          self.travelLog.push({x:self.x, y: self.y});
+        }
       break;
       case 'E':
-        self.x -= 1;
-        self.travelLog.push({x:self.x, y: self.y});
+        if(self.x - 1 < limits.minX){
+          console.log("You reached the east limit of the map!")
+        }else{
+          self.x -= 1;
+          self.travelLog.push({x:self.x, y: self.y});
+        }
       break;
       default:
         console.log("Rover engine is broken!!");
@@ -156,4 +189,8 @@ function getRandomPosition(grid){
   var row = Math.floor(Math.random() * grid.length);
   var col = Math.floor(Math.random() * grid[row].length);
   return {row,col};
+}
+
+function getMapLimits(grid){
+  return {minX: 0, maxX: grid[0].length - 1, minY: 0, maxY: grid.length - 1}
 }
