@@ -73,6 +73,30 @@ function moveForward(rover){
   }
 }
 
+function moveBackward(rover){
+  switch(rover.direction){
+    case 'N':
+      rover.y += 1;
+      rover.travelLog.push({x:rover.x, y: rover.y});
+    break;
+    case 'W':
+      rover.x += 1;
+      rover.travelLog.push({x:rover.x, y: rover.y});
+    break;
+    case 'S':
+      rover.y -= 1;
+      rover.travelLog.push({x:rover.x, y: rover.y});
+    break;
+    case 'E':
+      rover.x -= 1;
+      rover.travelLog.push({x:rover.x, y: rover.y});
+    break;
+    default:
+      console.log("Rover engine is broken!!");
+    break;
+  }
+}
+
 function createMap(rows, cols){
   var map = [];
   for(var i = 0; i < rows; i += 1){
@@ -102,6 +126,9 @@ function prepareMoves(rover, list){
       break;
       case 'r':
         turnRight(rover);
+      break;
+      case 'b':
+        moveBackward(rover);
       break;
     }
   });
