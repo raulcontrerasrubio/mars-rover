@@ -1,8 +1,8 @@
+'use strict'
+
 var map = createMap(10, 10);
 var limits = getMapLimits(map);
 
-// Rover Object Goes Here
-// ======================
 var Rover = function(){
 
   var self = this;
@@ -171,7 +171,6 @@ var Rover = function(){
   }
 
 }
-// ======================
 
 function createMap(rows, cols){
   var map = [];
