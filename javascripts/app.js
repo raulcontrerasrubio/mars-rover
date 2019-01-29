@@ -2,100 +2,128 @@ var map = createMap(10, 10);
 
 // Rover Object Goes Here
 // ======================
-var rover = {
-  x: getRandomPosition(map).col,
-  y: getRandomPosition(map).row,
-  direction: "N",
-  travelLog: []
-};
+var Rover = function(){
+
+  var self = this;
+
+  Rover.prototype.getPositionX = () => self.x;
+  Rover.prototype.getPositionY = () => self.y;
+  
+  this.x = getRandomPosition(map).col;
+  this.y = getRandomPosition(map).row;
+  this.direction = "N";
+  this.travelLog = [{x: this.getPositionX(), y: this.getPositionY()}];
+
+  Rover.prototype.turnLeft = () => {
+    switch(self.direction){
+      case 'N':
+        self.direction = 'W';
+      break;
+      case 'W':
+        self.direction = 'S';
+      break;
+      case 'S':
+        self.direction = 'E';
+      break;
+      case 'E':
+        self.direction = 'N';
+      break;
+      default:
+        console.log("Rover direction is broken!!");
+      break;
+    }
+  };
+
+  Rover.prototype.turnRight = () => {
+    switch(self.direction){
+      case 'N':
+        self.direction = 'E';
+      break;
+      case 'W':
+        self.direction = 'N';
+      break;
+      case 'S':
+        self.direction = 'W';
+      break;
+      case 'E':
+        self.direction = 'S';
+      break;
+      default:
+        console.log("Rover direction is broken!!");
+      break;
+    }
+  };
+
+  Rover.prototype.moveForward = () => {
+    switch(self.direction){
+      case 'N':
+        self.y -= 1;
+        self.travelLog.push({x:self.x, y: self.y});
+      break;
+      case 'W':
+        self.x -= 1;
+        self.travelLog.push({x:self.x, y: self.y});
+      break;
+      case 'S':
+        self.y += 1;
+        self.travelLog.push({x:self.x, y: self.y});
+      break;
+      case 'E':
+        self.x += 1;
+        self.travelLog.push({x:self.x, y: self.y});
+      break;
+      default:
+        console.log("Rover engine is broken!!");
+      break;
+    }
+  };
+
+  Rover.prototype.moveBackward = () => {
+    switch(self.direction){
+      case 'N':
+        self.y += 1;
+        self.travelLog.push({x:self.x, y: self.y});
+      break;
+      case 'W':
+        self.x += 1;
+        self.travelLog.push({x:self.x, y: self.y});
+      break;
+      case 'S':
+        self.y -= 1;
+        self.travelLog.push({x:self.x, y: self.y});
+      break;
+      case 'E':
+        self.x -= 1;
+        self.travelLog.push({x:self.x, y: self.y});
+      break;
+      default:
+        console.log("Rover engine is broken!!");
+      break;
+    }
+  };
+
+  Rover.prototype.prepareMoves = (list) => {
+    list.split('').forEach(move => {
+      switch(move){
+        case 'f':
+          self.moveForward();
+        break;
+        case 'l':
+          self.turnLeft();
+        break;
+        case 'r':
+          self.turnRight();
+        break;
+        case 'b':
+          self.moveBackward();
+        break;
+      }
+    });
+    return self.travelLog;
+  }
+
+}
 // ======================
-function turnLeft(rover){
-  switch(rover.direction){
-    case 'N':
-      rover.direction = 'W';
-    break;
-    case 'W':
-      rover.direction = 'S';
-    break;
-    case 'S':
-      rover.direction = 'E';
-    break;
-    case 'E':
-      rover.direction = 'N';
-    break;
-    default:
-      console.log("Rover direction is broken!!");
-    break;
-  }
-}
-
-function turnRight(rover){
-  switch(rover.direction){
-    case 'N':
-      rover.direction = 'E';
-    break;
-    case 'W':
-      rover.direction = 'N';
-    break;
-    case 'S':
-      rover.direction = 'W';
-    break;
-    case 'E':
-      rover.direction = 'S';
-    break;
-    default:
-      console.log("Rover direction is broken!!");
-    break;
-  }
-}
-
-function moveForward(rover){
-  switch(rover.direction){
-    case 'N':
-      rover.y -= 1; // El sistema de coordenadas es, hacia arriba, menos y. Hacia la derecha, más x
-      rover.travelLog.push({x:rover.x, y: rover.y});
-    break;
-    case 'W':
-      rover.x -= 1;
-      rover.travelLog.push({x:rover.x, y: rover.y});
-    break;
-    case 'S':
-      rover.y += 1;
-      rover.travelLog.push({x:rover.x, y: rover.y});
-    break;
-    case 'E':
-      rover.x += 1;
-      rover.travelLog.push({x:rover.x, y: rover.y});
-    break;
-    default:
-      console.log("Rover engine is broken!!");
-    break;
-  }
-}
-
-function moveBackward(rover){
-  switch(rover.direction){
-    case 'N':
-      rover.y += 1;
-      rover.travelLog.push({x:rover.x, y: rover.y});
-    break;
-    case 'W':
-      rover.x += 1;
-      rover.travelLog.push({x:rover.x, y: rover.y});
-    break;
-    case 'S':
-      rover.y -= 1;
-      rover.travelLog.push({x:rover.x, y: rover.y});
-    break;
-    case 'E':
-      rover.x -= 1;
-      rover.travelLog.push({x:rover.x, y: rover.y});
-    break;
-    default:
-      console.log("Rover engine is broken!!");
-    break;
-  }
-}
 
 function createMap(rows, cols){
   var map = [];
@@ -113,24 +141,4 @@ function getRandomPosition(grid){
   var row = Math.floor(Math.random() * grid.length);
   var col = Math.floor(Math.random() * grid[row].length);
   return {row,col};
-}
-
-function prepareMoves(rover, list){
-  list.split('').forEach(move => {
-    switch(move){
-      case 'f':
-        moveForward(rover);
-      break;
-      case 'l':
-        turnLeft(rover);
-      break;
-      case 'r':
-        turnRight(rover);
-      break;
-      case 'b':
-        moveBackward(rover);
-      break;
-    }
-  });
-  return rover.travelLog;
 }
