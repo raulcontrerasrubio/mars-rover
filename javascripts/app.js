@@ -5,7 +5,8 @@ var map = createMap(10, 10);
 var rover = {
   x: getRandomPosition(map).col,
   y: getRandomPosition(map).row,
-  direction: "N"
+  direction: "N",
+  travelLog: []
 };
 // ======================
 function turnLeft(rover){
@@ -52,15 +53,19 @@ function moveForward(rover){
   switch(rover.direction){
     case 'N':
       rover.y -= 1; // El sistema de coordenadas es, hacia arriba, menos y. Hacia la derecha, más x
+      rover.travelLog.push({x:rover.x, y: rover.y});
     break;
     case 'W':
       rover.x -= 1;
+      rover.travelLog.push({x:rover.x, y: rover.y});
     break;
     case 'S':
       rover.y += 1;
+      rover.travelLog.push({x:rover.x, y: rover.y});
     break;
     case 'E':
       rover.x += 1;
+      rover.travelLog.push({x:rover.x, y: rover.y});
     break;
     default:
       console.log("Rover engine is broken!!");
@@ -99,6 +104,6 @@ function prepareMoves(rover, list){
         turnRight(rover);
       break;
     }
-    // console.log(rover);
   });
+  return rover.travelLog;
 }
