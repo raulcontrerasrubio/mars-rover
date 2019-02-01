@@ -3,6 +3,16 @@
 var map = createMap(10, 10);
 var limits = getMapLimits(map);
 
+function getRandomPosition(grid){
+  var row = Math.floor(Math.random() * grid.length);
+  var col = Math.floor(Math.random() * grid[row].length);
+  return {row,col};
+}
+
+function getMapLimits(grid){
+  return {minX: 0, maxX: grid[0].length - 1, minY: 0, maxY: grid.length - 1}
+}
+
 var Rover = function(){
 
   var self = this;
@@ -182,14 +192,4 @@ function createMap(rows, cols){
   }
 
   return map;
-}
-
-function getRandomPosition(grid){
-  var row = Math.floor(Math.random() * grid.length);
-  var col = Math.floor(Math.random() * grid[row].length);
-  return {row,col};
-}
-
-function getMapLimits(grid){
-  return {minX: 0, maxX: grid[0].length - 1, minY: 0, maxY: grid.length - 1}
 }
