@@ -3,10 +3,44 @@
 var map = createEmptyMap(10, 10);
 var limits = getMapLimits(map);
 
-function getRandomPosition(grid){
-  var row = Math.floor(Math.random() * grid.length);
-  var col = Math.floor(Math.random() * grid[row].length);
-  return {row,col};
+function createEmptyMap(rows, cols){
+  var map = [];
+  for(var i = 0; i < rows; i += 1){
+    map.push([]);
+    for(var j = 0; j < cols; j += 1){
+      map[i].push(0);
+    }
+  }
+  return map;
+}
+
+function getRandomPosition(grid, rover = null){
+  // Check if there is any position available
+  var anyAvailable = false;
+  for(var r of grid){
+    if(r.indexOf(0) !== -1){
+      anyAvailable = true;
+      break;
+    }
+  }
+
+  if(anyAvailable){
+    var valid = false;
+    while(!valid){
+      var row = Math.floor(Math.random() * grid.length);
+      var col = Math.floor(Math.random() * grid[row].length);
+      valid = grid[row][col] === 0;
+    }
+    
+    if(rover){
+      rover.printPosition(col, row);
+    }
+
+    return {row,col};
+  }else{
+    return false;
+  }
+  
 }
 
 function getMapLimits(grid){
@@ -25,26 +59,36 @@ var Rover = function(id = 0){
 
   var self = this;
 
-  Rover.prototype.getPositionX = () => self.x;
-  Rover.prototype.getPositionY = () => self.y;
-  Rover.prototype.clearPosition = (x, y) => {
-    map[y][x] = 0;
-  }
-  Rover.prototype.printPosition = (x, y) => {
-    map[y][x] = self.id;
-  }
+  this.id = id;
 
   Rover.prototype.obstacleReached = () => {
     console.log("There is an obstacle in front of you!");
   }
+  this.clearPosition = (x, y) => {
+    map[y][x] = 0;
+  }
+  this.printPosition = (x, y) => {
+    map[y][x] = self.id;
+  }
 
-  this.id = id;
-  this.x = getRandomPosition(map).col;
-  this.y = getRandomPosition(map).row;
+  var initialPosition = getRandomPosition(map, this);
+
+  if(!initialPosition){
+    console.log("No hay ningún espacio disponible en el mapa");
+    delete window[this];
+    return;
+  }
+
+  this.x = initialPosition.col;
+  this.y = initialPosition.row;
   this.direction = "N";
+
+  this.getPositionX = () => self.x;
+  this.getPositionY = () => self.y;
   this.travelLog = [{x: this.getPositionX(), y: this.getPositionY()}];
 
-  Rover.prototype.turnLeft = () => {
+  // Motion
+  this.turnLeft = () => {
     switch(self.direction){
       case 'N':
         self.direction = 'W';
@@ -64,7 +108,7 @@ var Rover = function(id = 0){
     }
   };
 
-  Rover.prototype.turnRight = () => {
+  this.turnRight = () => {
     switch(self.direction){
       case 'N':
         self.direction = 'E';
@@ -84,7 +128,7 @@ var Rover = function(id = 0){
     }
   };
 
-  Rover.prototype.moveForward = () => {
+  this.moveForward = () => {
     let nextMove;
     switch(self.direction){
       case 'N':
@@ -137,7 +181,7 @@ var Rover = function(id = 0){
     }
   };
 
-  Rover.prototype.moveBackward = () => {
+  this.moveBackward = () => {
     let nextMove;
     switch(self.direction){
       case 'N':
@@ -190,7 +234,7 @@ var Rover = function(id = 0){
     }
   };
 
-  Rover.prototype.prepareMoves = (list) => {
+  this.prepareMoves = (list) => {
     var validMoves = ['f', 'l', 'r', 'b'];
     var movements = list.slice().split('');
     var fails = 0;
@@ -225,16 +269,4 @@ var Rover = function(id = 0){
     return self.travelLog;
   }
 
-}
-
-function createEmptyMap(rows, cols){
-  var map = [];
-  for(var i = 0; i < rows; i += 1){
-    map.push([]);
-    for(var j = 0; j < cols; j += 1){
-      map[i].push(0);
-    }
-  }
-
-  return map;
 }
