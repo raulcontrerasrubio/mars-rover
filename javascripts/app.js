@@ -1,6 +1,6 @@
 'use strict'
 
-var map = createMap(10, 10);
+var map = createEmptyMap(10, 10);
 var limits = getMapLimits(map);
 
 function getRandomPosition(grid){
@@ -13,13 +13,32 @@ function getMapLimits(grid){
   return {minX: 0, maxX: grid[0].length - 1, minY: 0, maxY: grid.length - 1}
 }
 
-var Rover = function(){
+function isInMapBounds(x, y){
+  return (x >= limits.minX && x <= limits.maxX && y >= limits.minY && y <= limits.maxY);
+}
+
+function isFreeCell(x, y){
+  return isInMapBounds(x, y) && map[y][x] === 0;
+}
+
+var Rover = function(id = 0){
 
   var self = this;
 
   Rover.prototype.getPositionX = () => self.x;
   Rover.prototype.getPositionY = () => self.y;
-  
+  Rover.prototype.clearPosition = (x, y) => {
+    map[y][x] = 0;
+  }
+  Rover.prototype.printPosition = (x, y) => {
+    map[y][x] = self.id;
+  }
+
+  Rover.prototype.obstacleReached = () => {
+    console.log("There is an obstacle in front of you!");
+  }
+
+  this.id = id;
   this.x = getRandomPosition(map).col;
   this.y = getRandomPosition(map).row;
   this.direction = "N";
@@ -66,37 +85,50 @@ var Rover = function(){
   };
 
   Rover.prototype.moveForward = () => {
+    let nextMove;
     switch(self.direction){
       case 'N':
-        if(self.y - 1 < limits.minY){
-          console.log("You reached the north limit of the map!")
+        nextMove = self.y - 1;
+        if(!isFreeCell(self.x, nextMove)){
+          self.obstacleReached();
         }else{
-          self.y -= 1;
+          self.clearPosition(self.x, self.y);
+          self.y = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
+          self.printPosition(self.x, self.y);
         }
       break;
       case 'W':
-        if(self.x - 1 < limits.minX){
-          console.log("You reached the west limit of the map!")
+        nextMove = self.x - 1;
+        if(!isFreeCell(nextMove, self.y)){
+          self.obstacleReached();
         }else{
-          self.x -= 1;
+          self.clearPosition(self.x, self.y);
+          self.x = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
+          self.printPosition(self.x, self.y);
         }
       break;
       case 'S':
-        if(self.y + 1 > limits.maxY){
-          console.log("You reached the south limit of the map!")
+        nextMove = self.y + 1;
+        if(!isFreeCell(self.x, nextMove)){
+          self.obstacleReached();
         }else{
-          self.y += 1;
+          self.clearPosition(self.x, self.y);
+          self.y = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
+          self.printPosition(self.x, self.y);
         }
       break;
       case 'E':
-        if(self.x + 1 > limits.maxX){
-          console.log("You reached the east limit of the map!")
+        nextMove = self.x + 1;
+        if(!isFreeCell(nextMove, self.y)){
+          self.obstacleReached();
         }else{
-          self.x += 1;
+          self.clearPosition(self.x, self.y);
+          self.x = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
+          self.printPosition(self.x, self.y);
         }
       break;
       default:
@@ -106,37 +138,50 @@ var Rover = function(){
   };
 
   Rover.prototype.moveBackward = () => {
+    let nextMove;
     switch(self.direction){
       case 'N':
-        if(self.y + 1 > limits.maxY){
-          console.log("You reached the north limit of the map!")
+        nextMove = self.y + 1;
+        if(!isFreeCell(self.x, nextMove)){
+          self.obstacleReached();
         }else{
-          self.y += 1;
+          self.clearPosition(self.x, self.y);
+          self.y = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
+          self.printPosition(self.x, self.y);
         }
       break;
       case 'W':
-        if(self.x + 1 > limits.maxX){
-          console.log("You reached the west limit of the map!")
+        nextMove = self.x + 1;
+        if(!isFreeCell(nextMove, self.y)){
+          self.obstacleReached();
         }else{
-          self.x += 1;
+          self.clearPosition(self.x, self.y);
+          self.x = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
+          self.printPosition(self.x, self.y);
         }
       break;
       case 'S':
-        if(self.y - 1 < limits.minY){
-          console.log("You reached the south limit of the map!")
+        nextMove = self.y - 1;
+        if(!isFreeCell(self.x, nextMove)){
+          self.obstacleReached();
         }else{
-          self.y -= 1;
+          self.clearPosition(self.x, self.y);
+          self.y = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
+          self.printPosition(self.x, self.y);
         }
       break;
       case 'E':
-        if(self.x - 1 < limits.minX){
-          console.log("You reached the east limit of the map!")
+        nextMove = self.x - 1;
+        if(!isFreeCell(nextMove, self.y)){
+          self.obstacleReached();
         }else{
-          self.x -= 1;
+          self.clearPosition(self.x, self.y);
+          self.x = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
+          self.printPosition(self.x, self.y);
         }
       break;
       default:
@@ -182,7 +227,7 @@ var Rover = function(){
 
 }
 
-function createMap(rows, cols){
+function createEmptyMap(rows, cols){
   var map = [];
   for(var i = 0; i < rows; i += 1){
     map.push([]);
