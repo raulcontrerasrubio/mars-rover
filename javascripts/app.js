@@ -1,5 +1,13 @@
 'use strict'
 
+// Constantes
+const CANVAS_HEIGHT = 320;
+const CANVAS_WIDTH = 320;
+const FRAMES_PER_SECOND = 60;
+const TILE_HEIGHT = 32;
+const TILE_WIDTH = 32;
+const TILE_STROKE = 1;
+
 var Map = function(row = 10, cols = 10){
   var self = this;
 
@@ -58,7 +66,14 @@ var Map = function(row = 10, cols = 10){
     return self.isInMapBounds(x, y) && self.grid[y][x] === 0;
   };
 
-  
+  this.print = function(context){
+    for(let i = 0, rows = this.grid.length; i < rows; i += 1){
+      for(let j = 0, cols = this.grid[i].length; j < cols; j += 1){
+        context.fillStyle = 'hsl(75, 50%, 50%)';
+        context.fillRect(TILE_WIDTH * j, TILE_HEIGHT * i, TILE_WIDTH - TILE_STROKE, TILE_HEIGHT - TILE_STROKE);
+      }
+    }
+  }
   
 }
 
@@ -276,7 +291,44 @@ var Rover = function(map, id = 0){
     return self.travelLog;
   }
 
+  this.print = function(context){
+    context.beginPath();
+    context.arc( (self.x * TILE_WIDTH) + TILE_WIDTH/2, (self.y * TILE_HEIGHT) + TILE_HEIGHT/2, 10, 0, Math.PI * 2);
+    context.fillStyle = 'white';
+    context.fill();
+    context.closePath();
+  }
+
 }
 
-var map = new Map();
-var rover = new Rover(map, 1);
+// Creamos los elementos
+var map = new Map(10, 10);
+var rover = [new Rover(map, 1)];
+
+window.onload = () => {
+  
+
+  // Creamos el canvas
+  var canvas = document.querySelector('#canvas');
+  var ctx = canvas.getContext('2d');
+
+  // Configuramos el canvas
+  canvas.height = CANVAS_HEIGHT;
+  canvas.width = CANVAS_WIDTH;
+  
+  // Los dibujamos en pantalla cada x frames
+  window.setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
+  
+  function gameLoop(){
+    drawTiles();
+    drawRover();
+  }
+
+  function drawTiles(){
+    map.print(ctx);
+  }
+
+  function drawRover(){
+    rover.map(r => r.print(ctx));
+  }
+};
