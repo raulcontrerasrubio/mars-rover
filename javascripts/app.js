@@ -105,6 +105,8 @@ var Rover = function(map, id = 0){
   var self = this;
 
   this.id = id;
+  this.image = new Image();
+  this.image.src = this.image.src = 'images/rover-back.svg';
 
   Rover.prototype.obstacleReached = () => {
     console.log("There is an obstacle in front of you!");
@@ -137,15 +139,19 @@ var Rover = function(map, id = 0){
     switch(self.direction){
       case 'N':
         self.direction = 'W';
+        this.image.src = 'images/rover-left.svg';
       break;
       case 'W':
         self.direction = 'S';
+        this.image.src = 'images/rover-front.svg';
       break;
       case 'S':
         self.direction = 'E';
+        this.image.src = 'images/rover-right.svg';
       break;
       case 'E':
         self.direction = 'N';
+        this.image.src = 'images/rover-back.svg';
       break;
       default:
         console.log("Rover direction is broken!!");
@@ -157,15 +163,19 @@ var Rover = function(map, id = 0){
     switch(self.direction){
       case 'N':
         self.direction = 'E';
+        this.image.src = 'images/rover-right.svg';
       break;
       case 'W':
         self.direction = 'N';
+        this.image.src = 'images/rover-back.svg';
       break;
       case 'S':
         self.direction = 'W';
+        this.image.src = 'images/rover-left.svg';
       break;
       case 'E':
         self.direction = 'S';
+        this.image.src = 'images/rover-front.svg';
       break;
       default:
         console.log("Rover direction is broken!!");
@@ -315,13 +325,16 @@ var Rover = function(map, id = 0){
   }
 
   this.print = function(context){
-    context.beginPath();
-    context.arc( (self.x * TILE_WIDTH) + TILE_WIDTH/2, (self.y * TILE_HEIGHT) + TILE_HEIGHT/2, 10, 0, Math.PI * 2);
-    context.fillStyle = 'white';
-    context.fill();
-    context.closePath();
+    drawBitMapWithRotation(context, this.image , (this.x * TILE_WIDTH) + TILE_WIDTH/2 ,(this.y * TILE_HEIGHT) + TILE_HEIGHT/2);
   }
 
+}
+
+function drawBitMapWithRotation(context, useBitmap, atX, atY){
+  context.save();
+  context.translate(atX, atY);
+  context.drawImage(useBitmap, -useBitmap.width/2, -useBitmap.height/2);
+  context.restore();
 }
 
 window.onload = () => {
@@ -362,5 +375,7 @@ var l0 = [[null, null, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
 
-var map = new Map(test);
+var map = new Map(l0);
 var rover = [new Rover(map, 1)];
+
+// Load images
