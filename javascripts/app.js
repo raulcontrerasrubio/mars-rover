@@ -8,7 +8,10 @@ const TILE_HEIGHT = 32;
 const TILE_WIDTH = 32;
 const TILE_STROKE = 1;
 
-var Map = function(row = 10, cols = 10){
+const DEFAULT_MAP_ROWS = 10;
+const DEFAULT_MAP_COLS = 10;
+
+var Map = function(layout){
   var self = this;
 
   Map.prototype.createEmptyMap = (rows, cols) => {
@@ -22,7 +25,11 @@ var Map = function(row = 10, cols = 10){
     return map;
   };
 
-  this.grid = this.createEmptyMap(row, cols);
+  if(layout){
+    this.grid = layout;
+  }else{
+    this.grid = this.createEmptyMap(DEFAULT_MAP_ROWS, DEFAULT_MAP_COLS);
+  }
 
   this.isAnyTileAvailable = () => {
     for(var r of self.grid){
@@ -66,11 +73,27 @@ var Map = function(row = 10, cols = 10){
     return self.isInMapBounds(x, y) && self.grid[y][x] === 0;
   };
 
+  this.addRover = function(id){
+    if(self.isAnyTileAvailable()){
+      if(!rover.filter((r) => r.id == id).includes(true)){ // No funciona
+        rover.push(new Rover(self, id));
+        return true;
+      }else{
+        console.log("Ya existe otro Rover con ese id");
+      }
+    }else{
+      console.log("¡No hay más espacio!");
+    }
+    return false;
+  }
+
   this.print = function(context){
     for(let i = 0, rows = this.grid.length; i < rows; i += 1){
       for(let j = 0, cols = this.grid[i].length; j < cols; j += 1){
-        context.fillStyle = 'hsl(75, 50%, 50%)';
-        context.fillRect(TILE_WIDTH * j, TILE_HEIGHT * i, TILE_WIDTH - TILE_STROKE, TILE_HEIGHT - TILE_STROKE);
+        if(this.grid[i][j] || this.grid[i][j] === 0){
+          context.fillStyle = 'hsl(30, 50%, 50%)';
+          context.fillRect(TILE_WIDTH * j, TILE_HEIGHT * i, TILE_WIDTH - TILE_STROKE, TILE_HEIGHT - TILE_STROKE);
+        }
       }
     }
   }
@@ -301,34 +324,43 @@ var Rover = function(map, id = 0){
 
 }
 
-// Creamos los elementos
-var map = new Map(10, 10);
-var rover = [new Rover(map, 1)];
-
 window.onload = () => {
-  
-
-  // Creamos el canvas
   var canvas = document.querySelector('#canvas');
   var ctx = canvas.getContext('2d');
-
-  // Configuramos el canvas
+  
   canvas.height = CANVAS_HEIGHT;
   canvas.width = CANVAS_WIDTH;
-  
-  // Los dibujamos en pantalla cada x frames
+
   window.setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
-  
+
   function gameLoop(){
     drawTiles();
     drawRover();
   }
-
+  
   function drawTiles(){
     map.print(ctx);
   }
-
+  
   function drawRover(){
     rover.map(r => r.print(ctx));
   }
+  
 };
+
+var test = [[null, 0,0],
+            [null, 0,0],]
+var l0 = [[null, null, 0, 0, 0, 0, 0, 0, 0, 0],
+          [null, null, null, 0, 0, 0, 0, 0, 0, 0],
+          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [null, 0, 0, 0, null, null, 0, null, null, 0],
+          [null, 0, 0, 0, null, null, 0, 0, 0, 0],
+          [null, 0, 0, 0, null, null, null, null, null, 0],
+          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, null, null, null, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+
+var map = new Map(test);
+var rover = [new Rover(map, 1)];
