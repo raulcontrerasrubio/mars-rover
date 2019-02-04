@@ -3,8 +3,7 @@ This is a project from Ironhack's prework Javascript module
 
 ## How to test the project
 1. Go to the [Demo page](https://raulcontrerasrubio.github.io/mars-rover/).
-2. Open your browser's developer tools. Go to the Console.
-3. Now you can access to the Rover's properties and methods. These are explained in the next section.
+2. Use the arrow keys to move the rover.
 
 ## What you can do with the Rover using the console
 First, open your browser's developer tools. Go to the console.
