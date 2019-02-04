@@ -378,4 +378,76 @@ var l0 = [[null, null, 0, 0, 0, 0, 0, 0, 0, 0],
 var map = new Map(l0);
 var rover = [new Rover(map, 1)];
 
-// Load images
+document.addEventListener('keydown', (evt) => {
+    evt.preventDefault();
+    switch(evt.keyCode){
+      case 38:
+        switch(rover[0].direction){
+          case 'N':
+            rover[0].moveForward();
+          break;
+          case 'E':
+            rover[0].turnLeft();
+          break;
+          case 'S':
+            rover[0].moveBackward();
+          break;
+          case 'W':
+            rover[0].turnRight();
+          break;
+        }
+        
+      break;
+      case 40:
+        switch(rover[0].direction){
+          case 'N':
+            rover[0].moveBackward();
+          break;
+          case 'E':
+            rover[0].turnRight();
+          break;
+          case 'S':
+            rover[0].moveForward();
+          break;
+          case 'W':
+            rover[0].turnLeft();
+          break;
+        }
+        
+      break;
+      case 39:
+        switch(rover[0].direction){
+          case 'N':
+            rover[0].turnRight();
+          break;
+          case 'E':
+            rover[0].moveForward();
+          break;
+          case 'S':
+            rover[0].turnLeft();
+          break;
+          case 'W':
+            rover[0].moveBackward();
+          break;
+        }
+
+      break;
+      case 37:
+        switch(rover[0].direction){
+          case 'N':
+            rover[0].turnLeft();
+          break;
+          case 'E':
+            rover[0].moveBackward();
+          break;
+          case 'S':
+            rover[0].turnRight();
+          break;
+          case 'W':
+            rover[0].moveForward();
+          break;
+        }
+
+      break;
+    }
+  });
