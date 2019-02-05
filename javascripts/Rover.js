@@ -2,37 +2,61 @@ var Rover = function(id = 0){
 
   var self = this;
 
-  this.id = id;
-  this.image = new Image();
-  this.image.src = this.image.src = 'images/rover-back.svg';
+  this.id;
+  this.image;
+  this.x;
+  this.y;
+  this.direction;
+  this.travelLog;
+  this.controls;
+
+  this.init = function(){
+    this.id = id;
+    this.getInitialPosition();
+    this.image = new Image();
+    this.image.src = 'images/rover-back.svg';
+    this.direction = "N";
+    this.travelLog = [{x: this.getPositionX(), y: this.getPositionY()}];
+    this.controls = Controls.presets.primary;
+  }
 
   Rover.prototype.obstacleReached = () => {
     console.log("There is an obstacle in front of you!");
   }
+
+  this.getInitialPosition = () => {
+    var position = map.getRandomPosition(this);
+
+    if(position){
+      this.x = position.col;
+      this.y = position.row;
+    }
+
+  }
+
+  this.getPositionX = () => self.x;
+
+  this.getPositionY = () => self.y;
+
   this.clearPosition = (x, y) => {
     map.grid[y][x] = 0;
   }
+
   this.printPosition = (x, y) => {
-    map.grid[y][x] = self.id;
+    map.grid[y][x] = -self.id;
   }
 
-  var initialPosition = map.getRandomPosition(this);
+  this.setControls = (preset) => {
+    switch(preset){
+      case 'primary':
+        self.controls = Controls.presets.primary;
+      break;
+      case 'secondary':
+        self.controls = Controls.presets.secondary;
+      break;
+    }
+  }  
 
-  if(!initialPosition){
-    console.log("No hay ningún espacio disponible en el mapa");
-    delete window[this];
-    return;
-  }
-
-  this.x = initialPosition.col;
-  this.y = initialPosition.row;
-  this.direction = "N";
-
-  this.getPositionX = () => self.x;
-  this.getPositionY = () => self.y;
-  this.travelLog = [{x: this.getPositionX(), y: this.getPositionY()}];
-
-  // Motion
   this.turnLeft = () => {
     switch(self.direction){
       case 'N':
@@ -222,20 +246,12 @@ var Rover = function(id = 0){
     return self.travelLog;
   }
 
-  this.print = function(){
-    drawBitMap(ctx, this.image , (this.x * TILE_WIDTH) + TILE_WIDTH/2 ,(this.y * TILE_HEIGHT) + TILE_HEIGHT/2);
+  this.print = () => {
+    if((this.x || this.y) || (this.x === 0 && this.y === 0)){
+      drawBitMap(ctx, this.image , (this.x * TILE_WIDTH) + TILE_WIDTH/2 ,(this.y * TILE_HEIGHT) + TILE_HEIGHT/2);
+    } 
   }
 
-  this.controls = Controls.presets.primary;
-  this.setControls = function(preset){
-    switch(preset){
-      case 'primary':
-        self.controls = Controls.presets.primary;
-      break;
-      case 'secondary':
-        self.controls = Controls.presets.secondary;
-      break;
-    }
-  }
-
+  // Execution
+  this.init();
 }
