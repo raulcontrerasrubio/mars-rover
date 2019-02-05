@@ -17,7 +17,7 @@ var Controls = {
     document.addEventListener('keydown', Controls.keyHandler);
   },
   keyHandler: (evt) => {
-    for(let rover of rovers){
+    for(let rover of Game.rovers){
       Controls.useControls(evt, rover);
     }
   },

@@ -11,13 +11,13 @@ var Rover = function(id = 0){
   this.controls;
 
   this.init = function(){
-    this.id = id;
-    this.getInitialPosition();
-    this.image = new Image();
-    this.image.src = 'images/rover-back.svg';
-    this.direction = "N";
-    this.travelLog = [{x: this.getPositionX(), y: this.getPositionY()}];
-    this.controls = Controls.presets.primary;
+    self.id = id;
+    self.getInitialPosition();
+    self.image = new Image();
+    self.image.src = 'images/rover-back.svg';
+    self.direction = "N";
+    self.travelLog = [{x: self.getPositionX(), y: self.getPositionY()}];
+    self.controls = Controls.presets.primary;
   }
 
   Rover.prototype.obstacleReached = () => {
@@ -25,7 +25,7 @@ var Rover = function(id = 0){
   }
 
   this.getInitialPosition = () => {
-    var position = map.getRandomPosition(this);
+    var position = Game.map.getRandomPosition(this);
 
     if(position){
       this.x = position.col;
@@ -39,11 +39,11 @@ var Rover = function(id = 0){
   this.getPositionY = () => self.y;
 
   this.clearPosition = (x, y) => {
-    map.grid[y][x] = 0;
+    Game.map.grid[y][x] = 0;
   }
 
   this.printPosition = (x, y) => {
-    map.grid[y][x] = -self.id;
+    Game.map.grid[y][x] = -self.id;
   }
 
   this.setControls = (preset) => {
@@ -110,7 +110,7 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.y - 1;
-        if(!map.isFreeCell(self.x, nextMove)){
+        if(!Game.map.isFreeCell(self.x, nextMove)){
           self.obstacleReached();
         }else{
           self.clearPosition(self.x, self.y);
@@ -121,7 +121,7 @@ var Rover = function(id = 0){
       break;
       case 'W':
         nextMove = self.x - 1;
-        if(!map.isFreeCell(nextMove, self.y)){
+        if(!Game.map.isFreeCell(nextMove, self.y)){
           self.obstacleReached();
         }else{
           self.clearPosition(self.x, self.y);
@@ -132,7 +132,7 @@ var Rover = function(id = 0){
       break;
       case 'S':
         nextMove = self.y + 1;
-        if(!map.isFreeCell(self.x, nextMove)){
+        if(!Game.map.isFreeCell(self.x, nextMove)){
           self.obstacleReached();
         }else{
           self.clearPosition(self.x, self.y);
@@ -143,7 +143,7 @@ var Rover = function(id = 0){
       break;
       case 'E':
         nextMove = self.x + 1;
-        if(!map.isFreeCell(nextMove, self.y)){
+        if(!Game.map.isFreeCell(nextMove, self.y)){
           self.obstacleReached();
         }else{
           self.clearPosition(self.x, self.y);
@@ -163,7 +163,7 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.y + 1;
-        if(!map.isFreeCell(self.x, nextMove)){
+        if(!Game.map.isFreeCell(self.x, nextMove)){
           self.obstacleReached();
         }else{
           self.clearPosition(self.x, self.y);
@@ -174,7 +174,7 @@ var Rover = function(id = 0){
       break;
       case 'W':
         nextMove = self.x + 1;
-        if(!map.isFreeCell(nextMove, self.y)){
+        if(!Game.map.isFreeCell(nextMove, self.y)){
           self.obstacleReached();
         }else{
           self.clearPosition(self.x, self.y);
@@ -185,7 +185,7 @@ var Rover = function(id = 0){
       break;
       case 'S':
         nextMove = self.y - 1;
-        if(!map.isFreeCell(self.x, nextMove)){
+        if(!Game.map.isFreeCell(self.x, nextMove)){
           self.obstacleReached();
         }else{
           self.clearPosition(self.x, self.y);
@@ -196,7 +196,7 @@ var Rover = function(id = 0){
       break;
       case 'E':
         nextMove = self.x - 1;
-        if(!map.isFreeCell(nextMove, self.y)){
+        if(!Game.map.isFreeCell(nextMove, self.y)){
           self.obstacleReached();
         }else{
           self.clearPosition(self.x, self.y);
@@ -248,7 +248,7 @@ var Rover = function(id = 0){
 
   this.print = () => {
     if((this.x || this.y) || (this.x === 0 && this.y === 0)){
-      Common.drawBitMap(ctx, this.image , (this.x * TILE_WIDTH) + TILE_WIDTH/2 ,(this.y * TILE_HEIGHT) + TILE_HEIGHT/2);
+      Common.drawBitMap(this.image , (this.x * TILE_WIDTH) + TILE_WIDTH/2 ,(this.y * TILE_HEIGHT) + TILE_HEIGHT/2);
     } 
   }
 

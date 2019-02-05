@@ -5,9 +5,9 @@ var Map = function(layout){
   this.limits;
 
   this.init = () => {
-    this.grid = layout ? layout : this.createEmptyMap(DEFAULT_MAP_ROWS, DEFAULT_MAP_COLS);
-    this.limits = this.getMapLimits();
-  }
+    self.grid = layout ? layout : self.createEmptyMap(DEFAULT_MAP_ROWS, DEFAULT_MAP_COLS);
+    self.limits = self.getMapLimits();
+  };
 
   Map.prototype.createEmptyMap = (rows, cols) => {
     var map = [];
@@ -27,7 +27,7 @@ var Map = function(layout){
       }
     }
     return false;
-  }
+  };
 
   this.getRandomPosition = (rover = null) => {
     if(self.isAnyTileAvailable()){
@@ -46,7 +46,7 @@ var Map = function(layout){
     }else{
       return false;
     }
-  }
+  };
 
   this.getMapLimits = () => {
     return {minX: 0, maxX: self.grid[0].length - 1, minY: 0, maxY: self.grid.length - 1}
@@ -64,24 +64,24 @@ var Map = function(layout){
     if(self.isAnyTileAvailable()){
         let newRover = new Rover(id);
         newRover.setControls(controls);
-        rovers.push(newRover);
+        Game.rovers.push(newRover);
         return true;
     }else{
       console.log("¡No hay más espacio!");
     }
     return false;
-  }
+  };
 
   this.print = () => {
     for(let i = 0, rows = this.grid.length; i < rows; i += 1){
       for(let j = 0, cols = this.grid[i].length; j < cols; j += 1){
         if(this.grid[i][j] || this.grid[i][j] === 0){
-          ctx.fillStyle = 'hsl(30, 50%, 50%)';
-          ctx.fillRect(TILE_WIDTH * j, TILE_HEIGHT * i, TILE_WIDTH - TILE_STROKE, TILE_HEIGHT - TILE_STROKE);
+          Game.context.fillStyle = 'hsl(30, 50%, 50%)';
+          Game.context.fillRect(TILE_WIDTH * j, TILE_HEIGHT * i, TILE_WIDTH - TILE_STROKE, TILE_HEIGHT - TILE_STROKE);
         }
       }
     }
-  }
+  };
 
   // Execution
   this.init();

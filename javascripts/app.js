@@ -1,30 +1,25 @@
 'use strict'
-var canvas, ctx;
 
-var test = [[null, 0,0],
-            [null, 0,0],];
-            
-var l0 = [[null, null, 0, 0, 0, 0, 0, 0, 0, 0],
-          [null, null, null, 0, 0, 0, 0, 0, 0, 0],
-          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [null, 0, 0, 0, null, null, 0, null, null, 0],
-          [null, 0, 0, 0, null, null, 0, 0, 0, 0],
-          [null, 0, 0, 0, null, null, null, null, null, 0],
-          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, null, null, null, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
-
-
-var map = new Map(l0);
-var rovers = [new Rover(1)];
+var Game = {
+  canvas: null,
+  context:  null,
+  map:  null,
+  rovers: [],
+  resizeCanvas: (width, height) => {
+    Game.canvas.width = width;
+    Game.canvas.height = height;
+  },
+  init: () => {
+    Game.map = new Map(Layouts.l0);
+    Game.rovers = [new Rover(1)];
+  }
+};
 
 window.onload = () => {
-  canvas = document.querySelector('#canvas');
-  ctx = canvas.getContext('2d');
-  
-  canvas.height = CANVAS_HEIGHT;
-  canvas.width = CANVAS_WIDTH;
+  Game.init();
+  Game.canvas = document.querySelector('#canvas');
+  Game.context = Game.canvas.getContext('2d');
+  Game.resizeCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 
   window.setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
   Controls.setup();
@@ -35,12 +30,11 @@ window.onload = () => {
   }
   
   function drawTiles(){
-    map.print();
+    Game.map.print();
   }
   
   function drawRovers(){
-    rovers.map(r => r.print());
+    Game.rovers.map(rover => rover.print());
   }
   
 };
-
