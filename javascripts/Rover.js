@@ -14,7 +14,7 @@ var Rover = function(id = 0){
     self.id = id;
     self.getInitialPosition();
     self.image = new Image();
-    self.image.src = 'images/rover-back.svg';
+    self.image.src = 'images/svg/rover/rover-back.svg';
     self.direction = "N";
     self.travelLog = [{x: self.getPositionX(), y: self.getPositionY()}];
     self.controls = Controls.presets.primary;
@@ -61,19 +61,19 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         self.direction = 'W';
-        this.image.src = 'images/rover-left.svg';
+        this.image.src = 'images/svg/rover/rover-left.svg';
       break;
       case 'W':
         self.direction = 'S';
-        this.image.src = 'images/rover-front.svg';
+        this.image.src = 'images/svg/rover/rover-front.svg';
       break;
       case 'S':
         self.direction = 'E';
-        this.image.src = 'images/rover-right.svg';
+        this.image.src = 'images/svg/rover/rover-right.svg';
       break;
       case 'E':
         self.direction = 'N';
-        this.image.src = 'images/rover-back.svg';
+        this.image.src = 'images/svg/rover/rover-back.svg';
       break;
       default:
         console.log("Rover direction is broken!!");
@@ -85,19 +85,19 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         self.direction = 'E';
-        this.image.src = 'images/rover-right.svg';
+        this.image.src = 'images/svg/rover/rover-right.svg';
       break;
       case 'W':
         self.direction = 'N';
-        this.image.src = 'images/rover-back.svg';
+        this.image.src = 'images/svg/rover/rover-back.svg';
       break;
       case 'S':
         self.direction = 'W';
-        this.image.src = 'images/rover-left.svg';
+        this.image.src = 'images/svg/rover/rover-left.svg';
       break;
       case 'E':
         self.direction = 'S';
-        this.image.src = 'images/rover-front.svg';
+        this.image.src = 'images/svg/rover/rover-front.svg';
       break;
       default:
         console.log("Rover direction is broken!!");
