@@ -1,0 +1,14 @@
+// CANVAS
+const CANVAS_HEIGHT = 320;
+const CANVAS_WIDTH = 320;
+
+const FRAMES_PER_SECOND = 60;
+
+// TILES
+const TILE_HEIGHT = 32;
+const TILE_WIDTH = 32;
+const TILE_STROKE = 0;
+
+// MAP
+const DEFAULT_MAP_ROWS = 10;
+const DEFAULT_MAP_COLS = 10;
