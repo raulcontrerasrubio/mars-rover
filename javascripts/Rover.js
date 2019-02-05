@@ -248,7 +248,7 @@ var Rover = function(id = 0){
 
   this.print = () => {
     if((this.x || this.y) || (this.x === 0 && this.y === 0)){
-      drawBitMap(ctx, this.image , (this.x * TILE_WIDTH) + TILE_WIDTH/2 ,(this.y * TILE_HEIGHT) + TILE_HEIGHT/2);
+      Common.drawBitMap(ctx, this.image , (this.x * TILE_WIDTH) + TILE_WIDTH/2 ,(this.y * TILE_HEIGHT) + TILE_HEIGHT/2);
     } 
   }
 
