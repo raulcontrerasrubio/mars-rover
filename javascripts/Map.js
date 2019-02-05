@@ -1,6 +1,14 @@
 var Map = function(layout){
   var self = this;
 
+  this.grid;
+  this.limits;
+
+  this.init = () => {
+    this.grid = layout ? layout : this.createEmptyMap(DEFAULT_MAP_ROWS, DEFAULT_MAP_COLS);
+    this.limits = this.getMapLimits();
+  }
+
   Map.prototype.createEmptyMap = (rows, cols) => {
     var map = [];
     for(var i = 0; i < rows; i += 1){
@@ -11,12 +19,6 @@ var Map = function(layout){
     }
     return map;
   };
-
-  if(layout){
-    this.grid = layout;
-  }else{
-    this.grid = this.createEmptyMap(DEFAULT_MAP_ROWS, DEFAULT_MAP_COLS);
-  }
 
   this.isAnyTileAvailable = () => {
     for(var r of self.grid){
@@ -49,8 +51,6 @@ var Map = function(layout){
   this.getMapLimits = () => {
     return {minX: 0, maxX: self.grid[0].length - 1, minY: 0, maxY: self.grid.length - 1}
   };
-
-  this.limits = this.getMapLimits();
   
   this.isInMapBounds = (x, y) => {
     return (x >= self.limits.minX && x <= self.limits.maxX && y >= self.limits.minY && y <= self.limits.maxY);
@@ -60,7 +60,7 @@ var Map = function(layout){
     return self.isInMapBounds(x, y) && self.grid[y][x] === 0;
   };
 
-  this.addRover = function(id, controls){
+  this.addRover = (id, controls) => {
     if(self.isAnyTileAvailable()){
         let newRover = new Rover(id);
         newRover.setControls(controls);
@@ -72,7 +72,7 @@ var Map = function(layout){
     return false;
   }
 
-  this.print = function(){
+  this.print = () => {
     for(let i = 0, rows = this.grid.length; i < rows; i += 1){
       for(let j = 0, cols = this.grid[i].length; j < cols; j += 1){
         if(this.grid[i][j] || this.grid[i][j] === 0){
@@ -82,5 +82,8 @@ var Map = function(layout){
       }
     }
   }
+
+  // Execution
+  this.init();
   
 }

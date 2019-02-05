@@ -1,6 +1,24 @@
 'use strict'
 var canvas, ctx;
 
+var test = [[null, 0,0],
+            [null, 0,0],];
+            
+var l0 = [[null, null, 0, 0, 0, 0, 0, 0, 0, 0],
+          [null, null, null, 0, 0, 0, 0, 0, 0, 0],
+          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [null, 0, 0, 0, null, null, 0, null, null, 0],
+          [null, 0, 0, 0, null, null, 0, 0, 0, 0],
+          [null, 0, 0, 0, null, null, null, null, null, 0],
+          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, null, null, null, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+
+
+var map = new Map(l0);
+var rovers = [new Rover(1)];
+
 window.onload = () => {
   canvas = document.querySelector('#canvas');
   ctx = canvas.getContext('2d');
@@ -26,19 +44,3 @@ window.onload = () => {
   
 };
 
-var test = [[null, 0,0],
-            [null, 0,0],]
-var l0 = [[null, null, 0, 0, 0, 0, 0, 0, 0, 0],
-          [null, null, null, 0, 0, 0, 0, 0, 0, 0],
-          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [null, 0, 0, 0, null, null, 0, null, null, 0],
-          [null, 0, 0, 0, null, null, 0, 0, 0, 0],
-          [null, 0, 0, 0, null, null, null, null, null, 0],
-          [null, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, null, null, null, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-
-
-var map = new Map(l0);
-var rovers = [new Rover(1)];
