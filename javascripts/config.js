@@ -1,6 +1,6 @@
 // CANVAS
 const CANVAS_HEIGHT = 320;
-const CANVAS_WIDTH = 320;
+const CANVAS_WIDTH = 480;
 
 const FRAMES_PER_SECOND = 30;
 
