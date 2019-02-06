@@ -76,12 +76,10 @@ var Map = function(layout){
     var sand = new Image();
     sand.src = 'images/png32/sand/sand.png';
 
-    for(let i = 0, rows = this.grid.length; i < rows; i += 1){
-      for(let j = 0, cols = this.grid[i].length; j < cols; j += 1){
-        if(this.grid[i][j] || this.grid[i][j] === 0){
+    for(let i = 0, rows = CANVAS_HEIGHT/TILE_HEIGHT; i < rows; i += 1){
+      for(let j = 0, cols = CANVAS_WIDTH/TILE_WIDTH; j < cols; j += 1){
+        if(this.grid[i] && (this.grid[i][j] || this.grid[i][j] === 0)){
           Common.drawBitMap(sand, TILE_WIDTH * j + TILE_WIDTH/2, TILE_HEIGHT * i + TILE_HEIGHT/2);
-          //Game.context.fillStyle = 'hsl(30, 50%, 50%)';
-          //Game.context.fillRect(TILE_WIDTH * j, TILE_HEIGHT * i, TILE_WIDTH - TILE_STROKE, TILE_HEIGHT - TILE_STROKE);
         }
       }
     }

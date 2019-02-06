@@ -22,5 +22,5 @@ Example: To prepare your rover to go forward, forward, right, backward, left, le
 
 If you put an invalid movement, the rover will stay on the same site. 
 
-Change 'id' with the index of the Rover you want to move.
+Change 'id' with the index of the Rover you want to move.<br>
 If you go beyond the limits of the map, or there is another obstacle, you will get an error.
