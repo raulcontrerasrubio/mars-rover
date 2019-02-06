@@ -85,6 +85,21 @@ var Map = function(layout){
     }
   };
 
+  this.printTilesOnScreen = () => {
+    var sand = new Image();
+    sand.src = 'images/png32/sand/sand.png';
+
+    for(let i = Game.selectedCamera.view.top, rows = Game.selectedCamera.view.bottom; i < rows; i+= 1){
+      for(let j = Game.selectedCamera.view.left, cols = Game.selectedCamera.view.right; j < cols; j += 1){
+        if(this.grid[i][j] || this.grid[i][j] === 0){
+          var posY = i * TILE_HEIGHT + TILE_HEIGHT/2;
+          var posX = j * TILE_WIDTH + TILE_WIDTH/2;
+          Common.drawBitMap(sand, posX, posY);
+        }
+      }
+    }
+  }
+
   // Execution
   this.init();
   

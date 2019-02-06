@@ -6,12 +6,12 @@ var Camera = function(target){
   this.view = {top: null, bottom: null, left: null, right: null}
 
   this.init = () => {
-    this.position = {
+    self.position = {
       x: target.x,
       y: target.y
     }
 
-    this.targetPosition = {
+    self.targetPosition = {
       x: target.getPositionX(),
       y: target.getPositionY()
     }
@@ -23,28 +23,24 @@ var Camera = function(target){
     if(self.isTargetBeyondTopLimit()){
       while(self.isTargetBeyondTopLimit()){
         self.moveUp();
-        console.log("Arriba")
       }
     }
 
     if(self.isTargetBeyondBottomLimit()){
       while(self.isTargetBeyondBottomLimit()){
         self.moveDown();
-        console.log("Abajo")
       }
     }
 
     if(self.isTargetBeyondRightLimit()){
       while(self.isTargetBeyondRightLimit()){
         self.moveRight();
-        console.log("Derecha")
       }
     }
 
     if(self.isTargetBeyondLeftLimit()){
       while(self.isTargetBeyondLeftLimit()){
         self.moveLeft();
-        console.log("Izquierda") 
       }
     }
   }
@@ -60,15 +56,17 @@ var Camera = function(target){
   this.isTargetBeyondLeftLimit = () => self.targetPosition.x < self.position.x - TARGET_LEFT_LIMIT_TO_MOVE_CAMERA;
 
   this.updateView = () => {
+    
+
     self.view = {
-      top: self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM,
-      bottom: self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM,
-      left: self.position.x - CAMERA_TILES_SIDES_RIGHT_LEFT,
+      top: self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM < 0 ? 0 : self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM,
+      bottom: self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM > Game.map.grid.length ? Game.map.grid.length : self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM,
+      left: self.position.x - CAMERA_TILES_SIDES_RIGHT_LEFT < 0 ? 0 : self.position.x - CAMERA_TILES_SIDES_RIGHT_LEFT,
       right: self.position.x + CAMERA_TILES_SIDES_RIGHT_LEFT
     }
   }
 
-  this.printCamera = () => {
+  this.showPosition = () => {
     Game.context.beginPath()
     Game.context.fillStyle = "blue";
     Game.context.arc(self.position.x * TILE_WIDTH + TILE_WIDTH/2, self.position.y * TILE_HEIGHT + TILE_HEIGHT/2, 10, 0, Math.PI * 2);
@@ -81,7 +79,6 @@ var Camera = function(target){
     self.targetPosition.y = target.getPositionY();
 
     this.moveIfNeeded();
-    this.printCamera();
   }
 
   this.init();

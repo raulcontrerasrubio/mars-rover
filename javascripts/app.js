@@ -20,7 +20,7 @@ var Game = {
 };
 
 window.onload = () => {
-  Game.init(Layouts.l);
+  Game.init(Layouts.xl);
   Game.canvas = document.querySelector('#canvas');
   Game.context = Game.canvas.getContext('2d');
   Game.resizeCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -29,20 +29,40 @@ window.onload = () => {
   Controls.setup();
 
   function gameLoop(){
-    // Game.context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    
-    // Game.context.save();
-    // Game.context.translate(TILE_WIDTH * Game.selectedCamera.position.x, TILE_HEIGHT * Game.selectedCamera.position.y);
-    
-    Game.map.print();
-    Game.rovers.map(rover => rover.print());
-    Game.selectedCamera.use();
-    //Game.context.restore();
-    
+    moveElements();
+    printElements();  
   }
-  
-  cam = Game.selectedCamera;
-  pl = Game.rovers[0];
-};
 
-var cam,pl;
+  function moveElements(){
+    Game.selectedCamera.use();
+  }
+
+  function printElements(){
+    printBackground();
+
+    printCameraView(printObjects);
+
+  }
+
+  function printBackground(){
+    Game.context.fillStyle = 'hsl(0, 20%, 15%)';
+    Game.context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  }
+
+  function printObjects(){
+    Game.map.printTilesOnScreen();
+    Game.rovers.map(rover => rover.print());
+    Game.selectedCamera.showPosition();
+  }
+
+  function printCameraView(callback){
+    Game.context.save();
+    
+    Game.context.translate(-Game.selectedCamera.position.x * TILE_WIDTH + CANVAS_WIDTH/2, -Game.selectedCamera.position.y * TILE_HEIGHT + CANVAS_HEIGHT/2)
+    
+    callback();
+
+    Game.context.restore();
+  }
+
+};

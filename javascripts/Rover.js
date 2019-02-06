@@ -13,6 +13,8 @@ var Rover = function(id = 0){
   this.init = function(){
     self.id = id;
     self.getInitialPosition();
+    // self.x = 0;
+    // self.y = 0;
     self.image = new Image();
     self.image.src = 'images/svg/rover/rover-back.svg';
     self.direction = "N";
