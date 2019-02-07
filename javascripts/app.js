@@ -57,7 +57,9 @@ window.onload = () => {
 
   function printCameraView(callback){
     Game.context.save();
-    Game.context.translate(-Game.selectedCamera.position.x * TILE_WIDTH + CANVAS_WIDTH/2, -Game.selectedCamera.position.y * TILE_HEIGHT + CANVAS_HEIGHT/2)   
+    var translateX = -Game.selectedCamera.position.x * TILE_WIDTH + CANVAS_WIDTH/2;
+    var translateY = -Game.selectedCamera.position.y * TILE_HEIGHT + CANVAS_HEIGHT/2;
+    Game.context.translate(translateX, translateY);   
     callback();
     Game.context.restore();
   }
