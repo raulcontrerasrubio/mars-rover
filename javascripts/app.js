@@ -34,13 +34,17 @@ window.onload = () => {
   }
 
   function moveElements(){
-    Game.selectedCamera.use();
+    if(Game.selectedCamera){
+      Game.selectedCamera.use();
+    }
   }
 
   function printElements(){
     printBackground();
 
-    printCameraView(printObjects);
+    if(Game.selectedCamera){
+      printCameraView(printObjects);
+    }
 
   }
 
@@ -50,18 +54,41 @@ window.onload = () => {
   }
 
   function printObjects(){
-    Game.map.printTilesOnScreen();
+    if(!Game.selectedCamera){
+      Game.map.print();
+    }else{
+      Game.map.printTilesOnScreen();
+    }
+    
     Game.rovers.map(rover => rover.print());
-    //Game.selectedCamera.showPosition();
+
+    if(DEBUG_CAMERA && Game.selectedCamera){
+      Game.selectedCamera.showPosition();
+    }
+    
   }
 
   function printCameraView(callback){
     Game.context.save();
     var translateX = -Game.selectedCamera.position.x * TILE_WIDTH + CANVAS_WIDTH/2;
     var translateY = -Game.selectedCamera.position.y * TILE_HEIGHT + CANVAS_HEIGHT/2;
+    if(translateX > TILE_WIDTH){
+      translateX = TILE_WIDTH;
+    }
+
+    if(translateY > TILE_HEIGHT){
+      translateY = TILE_HEIGHT;
+    }
+
+
+    TX = translateX;
+    TY = translateY;
     Game.context.translate(translateX, translateY);   
     callback();
     Game.context.restore();
   }
 
 };
+
+var TX;
+var TY;

@@ -91,12 +91,12 @@ var Map = function(layout){
 
     for(let i = Game.selectedCamera.view.top, rows = Game.selectedCamera.view.bottom; i < rows; i+= 1){
       for(let j = Game.selectedCamera.view.left, cols = Game.selectedCamera.view.right; j < cols; j += 1){
-        self.printTile(i, j);
+        self.printTile(j, i);
       }
     }
   };
 
-  this.tileExists = (y, x) => {
+  this.tileExists = (x, y) => {
     try{
       this.grid[y][x];
       return true;
@@ -105,26 +105,29 @@ var Map = function(layout){
     }
   }; 
 
-  this.checkTileType = (y, x) => {
-    if(self.tileExists(y, x)){
-      var image = new Image();
+  this.getTileType = (x, y) => {
+    if(self.tileExists(x, y)){
       var response = false;
-      switch(this.grid[y][x]){
-        case 0:
-          response = {obj: image, source: 'images/png32/sand/sand.png'};
+      var currentTile = this.grid[y][x];
+      var foundTile = Tile.getTileById(currentTile);
+      
+      if(foundTile){
+        response = foundTile;
       }
+
       return response;
     }
   };
 
-  this.printTile = (y, x) => {
-    var image = self.checkTileType(y, x);
-    if(image){
-      image.obj.src = image.source;
+  this.printTile = (x, y) => {
+    var image = new Image();
+    var tile = self.getTileType(x, y);
+    if(tile){
+      image.src = tile.source;
       var posY = y * TILE_HEIGHT + TILE_HEIGHT/2;
       var posX = x * TILE_WIDTH + TILE_WIDTH/2;
 
-      Common.drawBitMap(image.obj, posX, posY);
+      Common.drawBitMap(image, posX, posY);
     }      
       
   };
