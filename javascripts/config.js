@@ -7,7 +7,6 @@ const FRAMES_PER_SECOND = 45;
 // TILES
 const TILE_HEIGHT = 32;
 const TILE_WIDTH = 32;
-// const TILE_STROKE = 1;
 
 // MAP
 const DEFAULT_MAP_ROWS = 9;

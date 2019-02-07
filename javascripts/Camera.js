@@ -1,4 +1,5 @@
 var Camera = function(target){
+  
   var self = this;
 
   this.position = {x: null, y: null};

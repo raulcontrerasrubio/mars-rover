@@ -76,8 +76,8 @@ var Map = function(layout){
     var sand = new Image();
     sand.src = 'images/png32/sand/sand.png';
 
-    for(let i = 0, rows = CANVAS_HEIGHT/TILE_HEIGHT; i < rows; i += 1){
-      for(let j = 0, cols = CANVAS_WIDTH/TILE_WIDTH; j < cols; j += 1){
+    for(let i = 0, rows = Game.canvas.height/TILE_HEIGHT; i < rows; i += 1){
+      for(let j = 0, cols = Game.canvas.width/TILE_WIDTH; j < cols; j += 1){
         if(this.grid[i] && (this.grid[i][j] || this.grid[i][j] === 0)){
           Common.drawBitMap(sand, TILE_WIDTH * j + TILE_WIDTH/2, TILE_HEIGHT * i + TILE_HEIGHT/2);
         }
