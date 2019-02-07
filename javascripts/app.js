@@ -45,7 +45,7 @@ window.onload = () => {
   }
 
   function printBackground(){
-    Game.context.fillStyle = 'hsl(0, 20%, 15%)';
+    Game.context.fillStyle = BACKGROUND_COLOR;
     Game.context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   }
 
