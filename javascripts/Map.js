@@ -86,9 +86,6 @@ var Map = function(layout){
   };
 
   this.printTilesOnScreen = () => {
-    var sand = new Image();
-    sand.src = 'images/png32/sand/sand.png';
-
     for(let i = Game.selectedCamera.view.top, rows = Game.selectedCamera.view.bottom; i < rows; i+= 1){
       for(let j = Game.selectedCamera.view.left, cols = Game.selectedCamera.view.right; j < cols; j += 1){
         self.printTile(j, i);

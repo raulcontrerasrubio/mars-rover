@@ -62,7 +62,7 @@ var Camera = function(target){
       top: self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM < 0 ? 0 : self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM,
       bottom: self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM > Game.map.grid.length ? Game.map.grid.length : self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM,
       left: self.position.x - CAMERA_TILES_SIDES_RIGHT_LEFT < 0 ? 0 : self.position.x - CAMERA_TILES_SIDES_RIGHT_LEFT,
-      right: self.position.x + CAMERA_TILES_SIDES_RIGHT_LEFT
+      right: self.position.x + CAMERA_TILES_SIDES_RIGHT_LEFT > Game.map.grid[self.position.y].length ? Game.map.grid[self.position.y].length : self.position.x + CAMERA_TILES_SIDES_RIGHT_LEFT
     }
   }
 
