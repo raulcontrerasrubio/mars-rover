@@ -40,13 +40,13 @@ var Rover = function(id = 0){
 
   this.getPositionY = () => self.y;
 
-  this.clearPosition = (x, y) => {
-    Game.map.grid[y][x] = 0;
-  }
+  // this.clearPosition = (x, y) => {
+  //   Game.map.grid[y][x] = 0;
+  // }
 
-  this.printPosition = (x, y) => {
-    Game.map.grid[y][x] = -self.id;
-  }
+  // this.printPosition = (x, y) => {
+  //   Game.map.grid[y][x] = -self.id;
+  // }
 
   this.setControls = (preset) => {
     switch(preset){
@@ -115,10 +115,10 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(self.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.clearPosition(self.x, self.y);
+          // self.clearPosition(self.x, self.y);
           self.y = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
-          self.printPosition(self.x, self.y);
+          // self.printPosition(self.x, self.y);
         }
       break;
       case 'W':
@@ -126,10 +126,10 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(nextMove, self.y)){
           self.obstacleReached();
         }else{
-          self.clearPosition(self.x, self.y);
+          // self.clearPosition(self.x, self.y);
           self.x = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
-          self.printPosition(self.x, self.y);
+          // self.printPosition(self.x, self.y);
         }
       break;
       case 'S':
@@ -137,10 +137,10 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(self.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.clearPosition(self.x, self.y);
+          // self.clearPosition(self.x, self.y);
           self.y = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
-          self.printPosition(self.x, self.y);
+          // self.printPosition(self.x, self.y);
         }
       break;
       case 'E':
@@ -148,10 +148,10 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(nextMove, self.y)){
           self.obstacleReached();
         }else{
-          self.clearPosition(self.x, self.y);
+          // self.clearPosition(self.x, self.y);
           self.x = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
-          self.printPosition(self.x, self.y);
+          // self.printPosition(self.x, self.y);
         }
       break;
       default:
@@ -168,10 +168,10 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(self.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.clearPosition(self.x, self.y);
+          // self.clearPosition(self.x, self.y);
           self.y = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
-          self.printPosition(self.x, self.y);
+          // self.printPosition(self.x, self.y);
         }
       break;
       case 'W':
@@ -179,10 +179,10 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(nextMove, self.y)){
           self.obstacleReached();
         }else{
-          self.clearPosition(self.x, self.y);
+          // self.clearPosition(self.x, self.y);
           self.x = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
-          self.printPosition(self.x, self.y);
+          // self.printPosition(self.x, self.y);
         }
       break;
       case 'S':
@@ -190,10 +190,10 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(self.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.clearPosition(self.x, self.y);
+          // self.clearPosition(self.x, self.y);
           self.y = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
-          self.printPosition(self.x, self.y);
+          // self.printPosition(self.x, self.y);
         }
       break;
       case 'E':
@@ -201,10 +201,10 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(nextMove, self.y)){
           self.obstacleReached();
         }else{
-          self.clearPosition(self.x, self.y);
+          // self.clearPosition(self.x, self.y);
           self.x = nextMove;
           self.travelLog.push({x:self.x, y: self.y});
-          self.printPosition(self.x, self.y);
+          // self.printPosition(self.x, self.y);
         }
       break;
       default:

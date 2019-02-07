@@ -38,14 +38,14 @@ var Map = function(layout){
         valid = self.grid[row][col] === 0;
       }
       
-      if(rover){
-        rover.printPosition(col, row);
-      }
+      // if(rover){
+      //   rover.printPosition(col, row);
+      // }
 
       return {row,col};
-    }else{
-      return false;
     }
+      
+    return false;
   };
 
   this.getMapLimits = () => {
@@ -91,14 +91,43 @@ var Map = function(layout){
 
     for(let i = Game.selectedCamera.view.top, rows = Game.selectedCamera.view.bottom; i < rows; i+= 1){
       for(let j = Game.selectedCamera.view.left, cols = Game.selectedCamera.view.right; j < cols; j += 1){
-        if(this.grid[i][j] || this.grid[i][j] === 0){
-          var posY = i * TILE_HEIGHT + TILE_HEIGHT/2;
-          var posX = j * TILE_WIDTH + TILE_WIDTH/2;
-          Common.drawBitMap(sand, posX, posY);
-        }
+        self.printTile(i, j);
       }
     }
-  }
+  };
+
+  this.tileExists = (y, x) => {
+    try{
+      this.grid[y][x];
+      return true;
+    }catch(e){
+      return false;
+    }
+  }; 
+
+  this.checkTileType = (y, x) => {
+    if(self.tileExists(y, x)){
+      var image = new Image();
+      var response = false;
+      switch(this.grid[y][x]){
+        case 0:
+          response = {obj: image, source: 'images/png32/sand/sand.png'};
+      }
+      return response;
+    }
+  };
+
+  this.printTile = (y, x) => {
+    var image = self.checkTileType(y, x);
+    if(image){
+      image.obj.src = image.source;
+      var posY = y * TILE_HEIGHT + TILE_HEIGHT/2;
+      var posX = x * TILE_WIDTH + TILE_WIDTH/2;
+
+      Common.drawBitMap(image.obj, posX, posY);
+    }      
+      
+  };
 
   // Execution
   this.init();
