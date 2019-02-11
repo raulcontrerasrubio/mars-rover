@@ -268,11 +268,11 @@ var Rover = function(id = 0){
   }
 
   this.updateImageRight = () => {
-    self.image.position.x -= self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
+    self.image.position.x += self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
   }
 
   this.updateImageLeft = () => {
-    self.image.position.x += self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
+    self.image.position.x -= self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
   }
 
   this.print = () => {
@@ -282,26 +282,20 @@ var Rover = function(id = 0){
         if(!self.movingUp){
           self.image.position.y = self.getPositionY() * TILE_HEIGHT;
         }
-      }
-
-      if(self.movingDown && self.getPositionY() > self.image.position.y/TILE_HEIGHT){
+      }else if(self.movingDown && self.getPositionY() > self.image.position.y/TILE_HEIGHT){
         self.updateImageDown();
         self.movingDown = self.getPositionY() > self.image.position.y/TILE_HEIGHT;
         if(!self.movingDown){
           self.image.position.y = self.getPositionY() * TILE_HEIGHT;
         }
-      }
-
-      if(self.movingRight && self.getPositionX() > self.image.position.x/TILE_WIDTH){
+      }else if(self.movingRight && self.getPositionX() > self.image.position.x/TILE_WIDTH){
         self.updateImageRight();
         self.movingRight = self.getPositionX() > self.image.position.x/TILE_WIDTH;
         if(!self.movingRight){
           self.image.position.x = self.getPositionX() * TILE_WIDTH;
         }
-      }
-
-      if(self.movingLeft && self.getPositionX() < self.image.position.x/TILE_WIDTH){
-        self.updateImageRight();
+      }else if(self.movingLeft && self.getPositionX() < self.image.position.x/TILE_WIDTH){
+        self.updateImageLeft();
         self.movingLeft = self.getPositionX() < self.image.position.x/TILE_WIDTH;
         if(!self.movingLeft){
           self.image.position.x = self.getPositionX() * TILE_WIDTH;
