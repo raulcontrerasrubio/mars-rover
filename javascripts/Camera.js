@@ -58,7 +58,6 @@ var Camera = function(target){
 
   this.updateView = () => {
     
-
     self.view = {
       top: self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM < 0 ? 0 : self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM,
       bottom: self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM > Game.map.grid.length ? Game.map.grid.length : self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM,

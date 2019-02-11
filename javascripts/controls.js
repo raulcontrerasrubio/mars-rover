@@ -20,8 +20,6 @@ var Controls = {
     for(let rover of Game.rovers){
       Controls.useControls(evt, rover);
     }
-
-    
   },
   useControls: (evt, rover) => {
     var action = rover.controls;
