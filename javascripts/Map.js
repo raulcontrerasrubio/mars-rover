@@ -29,7 +29,7 @@ var Map = function(layout){
     return false;
   };
 
-  this.getRandomPosition = (rover = null) => {
+  this.getRandomPosition = () => {
     if(self.isAnyTileAvailable()){
       var valid = false;
       while(!valid){
@@ -37,10 +37,6 @@ var Map = function(layout){
         var col = Math.floor(Math.random() * self.grid[row].length);
         valid = self.grid[row][col] === 0;
       }
-      
-      // if(rover){
-      //   rover.printPosition(col, row);
-      // }
 
       return {row,col};
     }

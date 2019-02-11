@@ -4,17 +4,17 @@ var Rover = function(id = 0){
 
   this.id;
   this.image;
-  this.x;
-  this.y;
+  this.position;
+  // this.x;
+  // this.y;
   this.direction;
   this.travelLog;
   this.controls;
 
   this.init = function(){
     self.id = id;
+    self.position = {x: null, y:null};
     self.getInitialPosition();
-    // self.x = 0;
-    // self.y = 0;
     self.image = new Image();
     self.image.src = 'images/svg/rover/rover-back.svg';
     self.direction = "N";
@@ -30,15 +30,15 @@ var Rover = function(id = 0){
     var position = Game.map.getRandomPosition(this);
 
     if(position){
-      this.x = position.col;
-      this.y = position.row;
+      this.position.x = position.col;
+      this.position.y = position.row;
     }
 
   }
 
-  this.getPositionX = () => self.x;
+  this.getPositionX = () => self.position.x;
 
-  this.getPositionY = () => self.y;
+  this.getPositionY = () => self.position.y;
 
   this.setControls = (preset) => {
     switch(preset){
@@ -103,39 +103,39 @@ var Rover = function(id = 0){
     let nextMove;
     switch(self.direction){
       case 'N':
-        nextMove = self.y - 1;
-        if(!Game.map.isFreeCell(self.x, nextMove)){
+        nextMove = self.position.y - 1;
+        if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.y = nextMove;
-          self.travelLog.push({x:self.x, y: self.y});
+          self.position.y = nextMove;
+          self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'W':
-        nextMove = self.x - 1;
-        if(!Game.map.isFreeCell(nextMove, self.y)){
+        nextMove = self.position.x - 1;
+        if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          self.x = nextMove;
-          self.travelLog.push({x:self.x, y: self.y});
+          self.position.x = nextMove;
+          self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'S':
-        nextMove = self.y + 1;
-        if(!Game.map.isFreeCell(self.x, nextMove)){
+        nextMove = self.position.y + 1;
+        if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.y = nextMove;
-          self.travelLog.push({x:self.x, y: self.y});
+          self.position.y = nextMove;
+          self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'E':
-        nextMove = self.x + 1;
-        if(!Game.map.isFreeCell(nextMove, self.y)){
+        nextMove = self.position.x + 1;
+        if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          self.x = nextMove;
-          self.travelLog.push({x:self.x, y: self.y});
+          self.position.x = nextMove;
+          self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       default:
@@ -148,39 +148,39 @@ var Rover = function(id = 0){
     let nextMove;
     switch(self.direction){
       case 'N':
-        nextMove = self.y + 1;
-        if(!Game.map.isFreeCell(self.x, nextMove)){
+        nextMove = self.position.y + 1;
+        if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.y = nextMove;
-          self.travelLog.push({x:self.x, y: self.y});
+          self.position.y = nextMove;
+          self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'W':
-        nextMove = self.x + 1;
-        if(!Game.map.isFreeCell(nextMove, self.y)){
+        nextMove = self.position.x + 1;
+        if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          self.x = nextMove;
-          self.travelLog.push({x:self.x, y: self.y});
+          self.position.x = nextMove;
+          self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'S':
-        nextMove = self.y - 1;
-        if(!Game.map.isFreeCell(self.x, nextMove)){
+        nextMove = self.position.y - 1;
+        if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.y = nextMove;
-          self.travelLog.push({x:self.x, y: self.y});
+          self.position.y = nextMove;
+          self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'E':
-        nextMove = self.x - 1;
-        if(!Game.map.isFreeCell(nextMove, self.y)){
+        nextMove = self.position.x - 1;
+        if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          self.x = nextMove;
-          self.travelLog.push({x:self.x, y: self.y});
+          self.position.x = nextMove;
+          self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       default:
@@ -225,8 +225,8 @@ var Rover = function(id = 0){
   }
 
   this.print = () => {
-    if((this.x || this.y) || (this.x === 0 && this.y === 0)){
-      Common.drawBitMap(this.image , (this.x * TILE_WIDTH) + TILE_WIDTH/2 ,(this.y * TILE_HEIGHT) + TILE_HEIGHT/2);
+    if((this.position.x || this.position.y) || (this.position.x === 0 && this.position.y === 0)){
+      Common.drawBitMap(this.image , (this.position.x * TILE_WIDTH) + TILE_WIDTH/2 ,(this.position.y * TILE_HEIGHT) + TILE_HEIGHT/2);
     } 
   }
 

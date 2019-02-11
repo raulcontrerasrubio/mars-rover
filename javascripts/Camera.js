@@ -8,8 +8,8 @@ var Camera = function(target){
 
   this.init = () => {
     self.position = {
-      x: target.x,
-      y: target.y
+      x: target.getPositionX(),
+      y: target.getPositionY()
     }
 
     self.targetPosition = {
@@ -57,13 +57,13 @@ var Camera = function(target){
   this.isTargetBeyondLeftLimit = () => self.targetPosition.x < self.position.x - TARGET_LEFT_LIMIT_TO_MOVE_CAMERA;
 
   this.updateView = () => {
-    
     self.view = {
       top: self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM < 0 ? 0 : self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM,
       bottom: self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM > Game.map.grid.length ? Game.map.grid.length : self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM,
       left: self.position.x - CAMERA_TILES_SIDES_RIGHT_LEFT < 0 ? 0 : self.position.x - CAMERA_TILES_SIDES_RIGHT_LEFT,
       right: self.position.x + CAMERA_TILES_SIDES_RIGHT_LEFT > Game.map.grid[self.position.y].length ? Game.map.grid[self.position.y].length : self.position.x + CAMERA_TILES_SIDES_RIGHT_LEFT
     }
+    
   }
 
   this.showPosition = () => {
