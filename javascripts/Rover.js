@@ -10,11 +10,16 @@ var Rover = function(id = 0){
   this.controls;
   this.speed;
 
+  this.movingUp;
+  this.movingDown;
+  this.movingLeft;
+  this.movingRight;
+
   this.init = function(){
     self.id = id;
     self.position = {x: null, y:null};
     self.getInitialPosition();
-    self.speed = 1;
+    self.speed = 10;
     self.image = {
       obj: new Image(),
       position: {
@@ -29,6 +34,11 @@ var Rover = function(id = 0){
     self.direction = "N";
     self.travelLog = [{x: self.getPositionX(), y: self.getPositionY()}];
     self.controls = Controls.presets.primary;
+
+    self.movingUp = false;
+    self.movingDown = false;
+    self.movingLeft = false;
+    self.movingRight = false;
   }
 
   Rover.prototype.obstacleReached = () => {
@@ -113,55 +123,45 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.position.y - 1;
-        nextCoord = nextMove * TILE_HEIGHT;
         if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          while(self.image.position.y > nextCoord){
-            self.image.position.y += self.speed * (TILE_HEIGHT/FRAMES_PER_SECOND);
-          }
           self.position.y = nextMove;
+          self.updateImageUp();
+          self.movingUp = true;
           self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'W':
         nextMove = self.position.x - 1;
-        nextCoord = nextMove * TILE_WIDTH;
         if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          while(self.image.position.x > nextCoord){
-            self.image.position.x -= self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
-          }
           self.position.x = nextMove;
+          self.updateImageLeft();
+          self.movingLeft = true;
           self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'S':
         nextMove = self.position.y + 1;
-        nextCoord = nextMove * TILE_HEIGHT;
         if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          while(self.image.position.y < nextCoord){
-            self.image.position.y += self.speed * (TILE_HEIGHT/FRAMES_PER_SECOND);
-          }
           self.position.y = nextMove;
+          self.updateImageDown();
+          self.movingDown = true;
           self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'E':
         nextMove = self.position.x + 1;
-        nextCoord = nextMove * TILE_WIDTH;
         if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          while(self.image.position.x < nextCoord){
-            self.image.position.x += self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
-            console.log(self.image.position.x)
-            self.print();
-          }
           self.position.x = nextMove;
+          self.updateImageRight();
+          self.movingRight = true;
           self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
@@ -176,53 +176,45 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.position.y + 1;
-        nextCoord = nextMove * TILE_HEIGHT;
         if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          while(self.image.position.y < nextCoord){
-            self.image.position.y += self.speed * (TILE_HEIGHT/FRAMES_PER_SECOND);
-          }
           self.position.y = nextMove;
+          self.updateImageDown();
+          self.movingDown = true;
           self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'W':
         nextMove = self.position.x + 1;
-        nextCoord = nextMove * TILE_WIDTH;
         if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          while(self.image.position.x < nextCoord){
-            self.image.position.x += self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
-          }
           self.position.x = nextMove;
+          self.updateImageRight();
+          self.movingRight = true;
           self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'S':
         nextMove = self.position.y - 1;
-        nextCoord = nextMove * TILE_HEIGHT;
         if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          while(self.image.position.y > nextCoord){
-            self.image.position.y -= self.speed * (TILE_HEIGHT/FRAMES_PER_SECOND);
-          }
           self.position.y = nextMove;
+          self.updateImageUp();
+          self.movingUp = true;
           self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
       case 'E':
         nextMove = self.position.x - 1;
-        nextCoord = nextMove * TILE_WIDTH;
         if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          while(self.image.position.x > nextCoord){
-            self.image.position.x -= self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
-          }
           self.position.x = nextMove;
+          self.updateImageLeft();
+          self.movingLeft = true;
           self.travelLog.push({x:self.position.x, y: self.position.y});
         }
       break;
@@ -267,11 +259,55 @@ var Rover = function(id = 0){
     return self.travelLog;
   }
 
+  this.updateImageUp = () => {
+    self.image.position.y -= self.speed * (TILE_HEIGHT/FRAMES_PER_SECOND);
+  }
+
+  this.updateImageDown = () => {
+    self.image.position.y += self.speed * (TILE_HEIGHT/FRAMES_PER_SECOND);
+  }
+
+  this.updateImageRight = () => {
+    self.image.position.x -= self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
+  }
+
+  this.updateImageLeft = () => {
+    self.image.position.x += self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
+  }
+
   this.print = () => {
-    
-    // if((self.position.x || self.position.y) || (self.position.x === 0 && self.position.y === 0)){
+      if(self.movingUp && self.getPositionY() < self.image.position.y/TILE_HEIGHT){
+        self.updateImageUp();
+        self.movingUp = self.getPositionY() < self.image.position.y/TILE_HEIGHT;
+        if(!self.movingUp){
+          self.image.position.y = self.getPositionY() * TILE_HEIGHT;
+        }
+      }
+
+      if(self.movingDown && self.getPositionY() > self.image.position.y/TILE_HEIGHT){
+        self.updateImageDown();
+        self.movingDown = self.getPositionY() > self.image.position.y/TILE_HEIGHT;
+        if(!self.movingDown){
+          self.image.position.y = self.getPositionY() * TILE_HEIGHT;
+        }
+      }
+
+      if(self.movingRight && self.getPositionX() > self.image.position.x/TILE_WIDTH){
+        self.updateImageRight();
+        self.movingRight = self.getPositionX() > self.image.position.x/TILE_WIDTH;
+        if(!self.movingRight){
+          self.image.position.x = self.getPositionX() * TILE_WIDTH;
+        }
+      }
+
+      if(self.movingLeft && self.getPositionX() < self.image.position.x/TILE_WIDTH){
+        self.updateImageRight();
+        self.movingLeft = self.getPositionX() < self.image.position.x/TILE_WIDTH;
+        if(!self.movingLeft){
+          self.image.position.x = self.getPositionX() * TILE_WIDTH;
+        }
+      }
       Common.drawBitMap(self.image.obj ,self.image.position.x + TILE_WIDTH/2 , self.image.position.y + TILE_HEIGHT/2);
-    // } 
   }
 
   // Execution
