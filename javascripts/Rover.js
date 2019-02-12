@@ -19,7 +19,7 @@ var Rover = function(id = 0){
     self.id = id;
     self.position = {x: null, y:null};
     self.getInitialPosition();
-    self.speed = 10;
+    self.speed = 5;
     self.image = {
       obj: new Image(),
       position: {
@@ -28,9 +28,6 @@ var Rover = function(id = 0){
       }
     }
     self.image.obj.src = 'images/svg/rover/rover-back.svg';
-    
-    // self.image = new Image();
-    // self.image.src = 'images/svg/rover/rover-back.svg';
     self.direction = "N";
     self.travelLog = [{x: self.getPositionX(), y: self.getPositionY()}];
     self.controls = Controls.presets.primary;
@@ -126,10 +123,12 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.position.y = nextMove;
-          self.updateImageUp();
-          self.movingUp = true;
-          self.travelLog.push({x:self.position.x, y: self.position.y});
+          if(!self.movingUp){
+            self.position.y = nextMove;
+            self.updateImageUp();
+            self.movingUp = true;
+            self.travelLog.push({x:self.position.x, y: self.position.y});
+          }
         }
       break;
       case 'W':
@@ -137,10 +136,12 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          self.position.x = nextMove;
-          self.updateImageLeft();
-          self.movingLeft = true;
-          self.travelLog.push({x:self.position.x, y: self.position.y});
+          if(!self.movingLeft){
+            self.position.x = nextMove;
+            self.updateImageLeft();
+            self.movingLeft = true;
+            self.travelLog.push({x:self.position.x, y: self.position.y});
+          }
         }
       break;
       case 'S':
@@ -148,10 +149,12 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.position.y = nextMove;
-          self.updateImageDown();
-          self.movingDown = true;
-          self.travelLog.push({x:self.position.x, y: self.position.y});
+          if(!self.movingDown){
+            self.position.y = nextMove;
+            self.updateImageDown(); 
+            self.movingDown = true; 
+            self.travelLog.push({x:self.position.x, y: self.position.y}); 
+          }
         }
       break;
       case 'E':
@@ -159,10 +162,12 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          self.position.x = nextMove;
-          self.updateImageRight();
-          self.movingRight = true;
-          self.travelLog.push({x:self.position.x, y: self.position.y});
+          if(!self.movingRight){
+            self.position.x = nextMove;
+            self.updateImageRight();
+            self.movingRight = true;
+            self.travelLog.push({x:self.position.x, y: self.position.y});
+          }
         }
       break;
       default:
@@ -179,10 +184,12 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.position.y = nextMove;
-          self.updateImageDown();
-          self.movingDown = true;
-          self.travelLog.push({x:self.position.x, y: self.position.y});
+          if(!self.movingDown){
+            self.position.y = nextMove;
+            self.updateImageDown();
+            self.movingDown = true;
+            self.travelLog.push({x:self.position.x, y: self.position.y});
+          }
         }
       break;
       case 'W':
@@ -190,10 +197,12 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          self.position.x = nextMove;
-          self.updateImageRight();
-          self.movingRight = true;
-          self.travelLog.push({x:self.position.x, y: self.position.y});
+          if(!self.movingRight){
+            self.position.x = nextMove;
+            self.updateImageRight();
+            self.movingRight = true;
+            self.travelLog.push({x:self.position.x, y: self.position.y});
+          }
         }
       break;
       case 'S':
@@ -201,10 +210,12 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
-          self.position.y = nextMove;
-          self.updateImageUp();
-          self.movingUp = true;
-          self.travelLog.push({x:self.position.x, y: self.position.y});
+          if(!self.movingUp){
+            self.position.y = nextMove;
+            self.updateImageUp();
+            self.movingUp = true;
+            self.travelLog.push({x:self.position.x, y: self.position.y});
+          }
         }
       break;
       case 'E':
@@ -212,10 +223,12 @@ var Rover = function(id = 0){
         if(!Game.map.isFreeCell(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
-          self.position.x = nextMove;
-          self.updateImageLeft();
-          self.movingLeft = true;
-          self.travelLog.push({x:self.position.x, y: self.position.y});
+          if(!self.movingLeft){
+            self.position.x = nextMove;
+            self.updateImageLeft();
+            self.movingLeft = true;
+            self.travelLog.push({x:self.position.x, y: self.position.y});
+          }
         }
       break;
       default:
