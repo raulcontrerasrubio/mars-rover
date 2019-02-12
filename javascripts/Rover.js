@@ -70,20 +70,28 @@ var Rover = function(id = 0){
   this.turnLeft = () => {
     switch(self.direction){
       case 'N':
+      if(!(self.movingUp || self.movingDown || self.movingLeft || self.movingRight)){
         self.direction = 'W';
         self.image.obj.src = 'images/svg/rover/rover-left.svg';
+      }
       break;
       case 'W':
+      if(!(self.movingUp || self.movingDown || self.movingLeft || self.movingRight)){
         self.direction = 'S';
         self.image.obj.src = 'images/svg/rover/rover-front.svg';
+      }
       break;
       case 'S':
+      if(!(self.movingUp || self.movingDown || self.movingLeft || self.movingRight)){
         self.direction = 'E';
         self.image.obj.src = 'images/svg/rover/rover-right.svg';
+      }
       break;
       case 'E':
+      if(!(self.movingUp || self.movingDown || self.movingLeft || self.movingRight)){
         self.direction = 'N';
         self.image.obj.src = 'images/svg/rover/rover-back.svg';
+      }
       break;
       default:
         console.log("Rover direction is broken!!");
@@ -94,20 +102,28 @@ var Rover = function(id = 0){
   this.turnRight = () => {
     switch(self.direction){
       case 'N':
-        self.direction = 'E';
-        self.image.obj.src = 'images/svg/rover/rover-right.svg';
+        if(!(self.movingUp || self.movingDown || self.movingRight || self.movingLeft)){
+          self.direction = 'E';
+          self.image.obj.src = 'images/svg/rover/rover-right.svg';
+        }
       break;
       case 'W':
-        self.direction = 'N';
-        self.image.obj.src = 'images/svg/rover/rover-back.svg';
+        if(!(self.movingUp || self.movingDown || self.movingRight || self.movingLeft)){
+          self.direction = 'N';
+          self.image.obj.src = 'images/svg/rover/rover-back.svg';
+        }
       break;
       case 'S':
-        self.direction = 'W';
-        self.image.obj.src = 'images/svg/rover/rover-left.svg';
+        if(!(self.movingUp || self.movingDown || self.movingRight || self.movingLeft)){
+          self.direction = 'W';
+          self.image.obj.src = 'images/svg/rover/rover-left.svg';
+        }
       break;
       case 'E':
-        self.direction = 'S';
-        self.image.obj.src = 'images/svg/rover/rover-front.svg';
+        if(!(self.movingUp || self.movingDown || self.movingRight || self.movingLeft)){
+          self.direction = 'S';
+          self.image.obj.src = 'images/svg/rover/rover-front.svg';
+        }
       break;
       default:
         console.log("Rover direction is broken!!");
