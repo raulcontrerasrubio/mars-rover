@@ -9,20 +9,33 @@ var Camera = function(target){
   this.CAMERA_TILES_SIDES_UP_BOTTOM;
   this.CAMERA_TILES_SIDES_RIGHT_LEFT;
 
+  this.speed;
+  this.movingUp;
+  this.movingDown;
+  this.movingLeft;
+  this.movingRight;
+
   this.position = {x: null, y: null};
   this.targetPosition = {x: null, y: null};
   this.view = {top: null, bottom: null, left: null, right: null}
 
   this.init = () => {
     self.position = {
-      x: target.getPositionX(),
-      y: target.getPositionY()
+      x: target.image.position.x,
+      y: target.image.position.y
     }
 
     self.targetPosition = {
-      x: target.getPositionX(),
-      y: target.getPositionY()
+      x: target.image.position.x,
+      y: target.image.position.y
     }
+
+    self.speed = target.speed;
+
+    self.movingUp = false;
+    self.movingDown = false;
+    self.movingLeft = false;
+    self.movingRight = false;
 
     self.updateView();
   }  
@@ -53,15 +66,27 @@ var Camera = function(target){
     }
   }
 
-  this.moveLeft = () => { self.position.x -= 1; self.updateView();}
-  this.moveRight = () => { self.position.x += 1; self.updateView();}
-  this.moveUp = () => { self.position.y -= 1; self.updateView();}
-  this.moveDown = () => { self.position.y += 1; self.updateView();}
+  this.moveLeft = () => { 
+    self.position.x -= self.speed * (Config.TILE_WIDTH/Config.FRAMES_PER_SECOND); 
+    self.updateView();
+  }
+  this.moveRight = () => { 
+    self.position.x += self.speed * (Config.TILE_WIDTH/Config.FRAMES_PER_SECOND); 
+    self.updateView();
+  }
+  this.moveUp = () => { 
+    self.position.y -= self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND); 
+    self.updateView();
+  }
+  this.moveDown = () => { 
+    self.position.y += self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND); 
+    self.updateView();
+  }
 
-  this.isTargetBeyondTopLimit = () => self.targetPosition.y < self.position.y - self.TARGET_TOP_LIMIT_TO_MOVE_CAMERA;
-  this.isTargetBeyondBottomLimit = () => self.targetPosition.y > self.position.y + self.TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA;
-  this.isTargetBeyondRightLimit = () => self.targetPosition.x > self.position.x + self.TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA;
-  this.isTargetBeyondLeftLimit = () => self.targetPosition.x < self.position.x - self.TARGET_LEFT_LIMIT_TO_MOVE_CAMERA;
+  this.isTargetBeyondTopLimit = () => self.targetPosition.y < self.position.y - self.TARGET_TOP_LIMIT_TO_MOVE_CAMERA * Config.TILE_HEIGHT;
+  this.isTargetBeyondBottomLimit = () => self.targetPosition.y > self.position.y + self.TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA * Config.TILE_HEIGHT;
+  this.isTargetBeyondRightLimit = () => self.targetPosition.x > self.position.x + self.TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA * Config.TILE_WIDTH;
+  this.isTargetBeyondLeftLimit = () => self.targetPosition.x < self.position.x - self.TARGET_LEFT_LIMIT_TO_MOVE_CAMERA * Config.TILE_WIDTH;
 
   this.updateView = () => {
 
@@ -73,10 +98,10 @@ var Camera = function(target){
     self.CAMERA_TILES_SIDES_RIGHT_LEFT = 2 * Math.floor((Game.canvas.width/Config.TILE_WIDTH)/2);
 
     self.view = {
-      top: self.position.y - self.CAMERA_TILES_SIDES_UP_BOTTOM < 0 ? 0 : self.position.y - self.CAMERA_TILES_SIDES_UP_BOTTOM,
-      bottom: self.position.y + self.CAMERA_TILES_SIDES_UP_BOTTOM > Game.map.grid.length ? Game.map.grid.length : self.position.y + self.CAMERA_TILES_SIDES_UP_BOTTOM,
-      left: self.position.x - self.CAMERA_TILES_SIDES_RIGHT_LEFT < 0 ? 0 : self.position.x - self.CAMERA_TILES_SIDES_RIGHT_LEFT,
-      right: self.position.x + self.CAMERA_TILES_SIDES_RIGHT_LEFT > Game.map.grid[self.position.y].length ? Game.map.grid[self.position.y].length : self.position.x + self.CAMERA_TILES_SIDES_RIGHT_LEFT
+      top: Math.round(self.position.y/Config.TILE_HEIGHT) - self.CAMERA_TILES_SIDES_UP_BOTTOM < 0 ? 0 : Math.round(self.position.y/Config.TILE_HEIGHT) - self.CAMERA_TILES_SIDES_UP_BOTTOM,
+      bottom: Math.round(self.position.y/Config.TILE_HEIGHT) + self.CAMERA_TILES_SIDES_UP_BOTTOM > Game.map.grid.length ? Game.map.grid.length : Math.round(self.position.y/Config.TILE_HEIGHT) + self.CAMERA_TILES_SIDES_UP_BOTTOM,
+      left: Math.round(self.position.x/Config.TILE_WIDTH) - self.CAMERA_TILES_SIDES_RIGHT_LEFT < 0 ? 0 : Math.round(self.position.x/Config.TILE_WIDTH) - self.CAMERA_TILES_SIDES_RIGHT_LEFT,
+      right: Math.round(self.position.x/Config.TILE_WIDTH) + self.CAMERA_TILES_SIDES_RIGHT_LEFT > Game.map.grid[Math.round(self.position.y/Config.TILE_HEIGHT)].length ? Game.map.grid[Math.round(self.position.y/Config.TILE_HEIGHT)].length : Math.round(self.position.x/Config.TILE_WIDTH) + self.CAMERA_TILES_SIDES_RIGHT_LEFT
     }
     
   }
@@ -84,14 +109,14 @@ var Camera = function(target){
   this.showPosition = () => {
     Game.context.beginPath()
     Game.context.fillStyle = "blue";
-    Game.context.arc(self.position.x * Config.TILE_WIDTH + Config.TILE_WIDTH/2, self.position.y * Config.TILE_HEIGHT + Config.TILE_HEIGHT/2, 10, 0, Math.PI * 2);
+    Game.context.arc(self.position.x, self.position.y, 10, 0, Math.PI * 2);
     Game.context.fill();
     Game.context.closePath();
   }
 
   this.use = () => {
-    self.targetPosition.x = target.getPositionX();
-    self.targetPosition.y = target.getPositionY();
+    self.targetPosition.x = target.image.position.x;
+    self.targetPosition.y = target.image.position.y;
 
     this.moveIfNeeded();
   }

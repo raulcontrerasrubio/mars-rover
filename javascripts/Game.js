@@ -59,8 +59,8 @@ var Game = {
   printCameraView: (callback) => {
     Game.context.save();
     
-    var translateX = -Game.selectedCamera.position.x * Config.TILE_WIDTH + Game.canvas.width/2;
-    var translateY = -Game.selectedCamera.position.y * Config.TILE_HEIGHT + Game.canvas.height/2;
+    var translateX = -Game.selectedCamera.position.x + Game.canvas.width/2;
+    var translateY = -Game.selectedCamera.position.y + Game.canvas.height/2;
     
     if(translateX > Config.TILE_WIDTH){
       translateX = Config.TILE_WIDTH;
