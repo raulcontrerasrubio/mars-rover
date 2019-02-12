@@ -1,3 +1,22 @@
+var Config = {
+  CANVAS_HEIGHT: 320,
+  CANVAS_WIDTH: 640,
+  BACKGROUND_COLOR: 'hsl(0, 20%, 15%)',
+  FRAMES_PER_SECOND: 45,
+  
+  DEFAULT_MAP_ROWS: 10,
+  DEFAULT_MAP_COLS: 10,
+  TILE_HEIGHT: 32,
+  TILE_WIDTH: 32,
+  
+  DEBUG_CAMERA: false,
+  TARGET_TOP_LIMIT_TO_MOVE_CAMERA: Math.floor((Game.canvas.height/12) / this.TILE_HEIGHT),
+  TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA: Math.floor((Game.canvas.height/12) / this.TILE_HEIGHT),
+  TARGET_LEFT_LIMIT_TO_MOVE_CAMERA: Math.floor((Game.canvas.width/12) / this.TILE_WIDTH),
+  TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA: Math.floor((Game.canvas.width/12) / this.TILE_WIDTH),
+  CAMERA_TILES_SIDES_UP_BOTTOM: 2 * Math.floor((Game.canvas.height/this.TILE_HEIGHT)/2),
+  CAMERA_TILES_SIDES_RIGHT_LEFT: 2 * Math.floor((Game.canvas.width/this.TILE_WIDTH)/2)
+};
 // CANVAS
 const CANVAS_HEIGHT = 320;
 const CANVAS_WIDTH = 640;
