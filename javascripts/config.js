@@ -9,35 +9,5 @@ var Config = {
   TILE_HEIGHT: 32,
   TILE_WIDTH: 32,
   
-  DEBUG_CAMERA: false,
-  TARGET_TOP_LIMIT_TO_MOVE_CAMERA: Math.floor((Game.canvas.height/12) / this.TILE_HEIGHT),
-  TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA: Math.floor((Game.canvas.height/12) / this.TILE_HEIGHT),
-  TARGET_LEFT_LIMIT_TO_MOVE_CAMERA: Math.floor((Game.canvas.width/12) / this.TILE_WIDTH),
-  TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA: Math.floor((Game.canvas.width/12) / this.TILE_WIDTH),
-  CAMERA_TILES_SIDES_UP_BOTTOM: 2 * Math.floor((Game.canvas.height/this.TILE_HEIGHT)/2),
-  CAMERA_TILES_SIDES_RIGHT_LEFT: 2 * Math.floor((Game.canvas.width/this.TILE_WIDTH)/2)
+  DEBUG_CAMERA: false
 };
-// CANVAS
-const CANVAS_HEIGHT = 320;
-const CANVAS_WIDTH = 640;
-const BACKGROUND_COLOR = 'hsl(0, 20%, 15%)';
-const FRAMES_PER_SECOND = 45;
-
-// TILES
-const TILE_HEIGHT = 32;
-const TILE_WIDTH = 32;
-
-// MAP
-const DEFAULT_MAP_ROWS = 9;
-const DEFAULT_MAP_COLS = 11;
-
-// CAMERA 
-const TARGET_TOP_LIMIT_TO_MOVE_CAMERA = Math.floor((CANVAS_HEIGHT/12) / TILE_HEIGHT);
-const TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA = Math.floor((CANVAS_HEIGHT/12) / TILE_HEIGHT);
-const TARGET_LEFT_LIMIT_TO_MOVE_CAMERA = Math.floor((CANVAS_WIDTH/12) / TILE_WIDTH);
-const TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA = Math.floor((CANVAS_WIDTH/12) / TILE_WIDTH);
-
-const CAMERA_TILES_SIDES_UP_BOTTOM = 2 * Math.floor((CANVAS_HEIGHT/TILE_HEIGHT)/2);
-const CAMERA_TILES_SIDES_RIGHT_LEFT = 2 * Math.floor((CANVAS_WIDTH/TILE_WIDTH)/2);
-
-const DEBUG_CAMERA = false;

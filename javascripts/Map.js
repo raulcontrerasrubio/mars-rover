@@ -5,7 +5,7 @@ var Map = function(layout){
   this.limits;
 
   this.init = () => {
-    self.grid = layout ? layout : self.createEmptyMap(DEFAULT_MAP_ROWS, DEFAULT_MAP_COLS);
+    self.grid = layout ? layout : self.createEmptyMap(Config.DEFAULT_MAP_ROWS, Config.DEFAULT_MAP_COLS);
     self.limits = self.getMapLimits();
   };
 
@@ -72,10 +72,10 @@ var Map = function(layout){
     var sand = new Image();
     sand.src = 'images/png32/sand/sand.png';
 
-    for(let i = 0, rows = Game.canvas.height/TILE_HEIGHT; i < rows; i += 1){
-      for(let j = 0, cols = Game.canvas.width/TILE_WIDTH; j < cols; j += 1){
+    for(let i = 0, rows = Game.canvas.height/Config.TILE_HEIGHT; i < rows; i += 1){
+      for(let j = 0, cols = Game.canvas.width/Config.TILE_WIDTH; j < cols; j += 1){
         if(this.grid[i] && (this.grid[i][j] || this.grid[i][j] === 0)){
-          Common.drawBitMap(sand, TILE_WIDTH * j + TILE_WIDTH/2, TILE_HEIGHT * i + TILE_HEIGHT/2);
+          Common.drawBitMap(sand, Config.TILE_WIDTH * j + Config.TILE_WIDTH/2, Config.TILE_HEIGHT * i + Config.TILE_HEIGHT/2);
         }
       }
     }
@@ -117,8 +117,8 @@ var Map = function(layout){
     var tile = self.getTileType(x, y);
     if(tile){
       image.src = tile.source;
-      var posY = y * TILE_HEIGHT + TILE_HEIGHT/2;
-      var posX = x * TILE_WIDTH + TILE_WIDTH/2;
+      var posY = y * Config.TILE_HEIGHT + Config.TILE_HEIGHT/2;
+      var posX = x * Config.TILE_WIDTH + Config.TILE_WIDTH/2;
 
       Common.drawBitMap(image, posX, posY);
     }      

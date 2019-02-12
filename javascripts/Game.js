@@ -8,6 +8,12 @@ var Game = {
   resizeCanvas: (width, height) => {
     Game.canvas.width = width;
     Game.canvas.height = height;
+
+    if(Game.cameras){
+      for(let camera of Game.cameras){
+        camera.updateView();
+      }
+    }
   },
   init: (layout) => {
     Game.map = new Map(layout);
@@ -33,7 +39,7 @@ var Game = {
 
   },
   printBackground: () => {
-    Game.context.fillStyle = BACKGROUND_COLOR;
+    Game.context.fillStyle = Config.BACKGROUND_COLOR;
     Game.context.fillRect(0, 0, Game.canvas.width, Game.canvas.height);
   },
   printObjects: () => {
@@ -45,7 +51,7 @@ var Game = {
     
     Game.rovers.map(rover => rover.print());
 
-    if(DEBUG_CAMERA && Game.selectedCamera){
+    if(Config.DEBUG_CAMERA && Game.selectedCamera){
       Game.selectedCamera.showPosition();
     }
     
@@ -53,23 +59,23 @@ var Game = {
   printCameraView: (callback) => {
     Game.context.save();
     
-    var translateX = -Game.selectedCamera.position.x * TILE_WIDTH + Game.canvas.width/2;
-    var translateY = -Game.selectedCamera.position.y * TILE_HEIGHT + Game.canvas.height/2;
+    var translateX = -Game.selectedCamera.position.x * Config.TILE_WIDTH + Game.canvas.width/2;
+    var translateY = -Game.selectedCamera.position.y * Config.TILE_HEIGHT + Game.canvas.height/2;
     
-    if(translateX > TILE_WIDTH){
-      translateX = TILE_WIDTH;
+    if(translateX > Config.TILE_WIDTH){
+      translateX = Config.TILE_WIDTH;
     }
 
-    if(translateX < -1 * ((Game.map.grid[0].length) - (Game.canvas.width/TILE_WIDTH) + 1) * TILE_WIDTH){
-      translateX = -1 * ((Game.map.grid[0].length) - (Game.canvas.width/TILE_WIDTH) + 1) * TILE_WIDTH;
+    if(translateX < -1 * ((Game.map.grid[0].length) - (Game.canvas.width/Config.TILE_WIDTH) + 1) * Config.TILE_WIDTH){
+      translateX = -1 * ((Game.map.grid[0].length) - (Game.canvas.width/Config.TILE_WIDTH) + 1) * Config.TILE_WIDTH;
     }
 
-    if(translateY > TILE_HEIGHT){
-      translateY = TILE_HEIGHT;
+    if(translateY > Config.TILE_HEIGHT){
+      translateY = Config.TILE_HEIGHT;
     }
 
-    if(translateY < -1 * ((Game.map.grid.length) - (Game.canvas.height/TILE_HEIGHT) + 1) * TILE_HEIGHT){
-      translateY = -1 * ((Game.map.grid.length) - (Game.canvas.height/TILE_HEIGHT) + 1) * TILE_HEIGHT;
+    if(translateY < -1 * ((Game.map.grid.length) - (Game.canvas.height/Config.TILE_HEIGHT) + 1) * Config.TILE_HEIGHT){
+      translateY = -1 * ((Game.map.grid.length) - (Game.canvas.height/Config.TILE_HEIGHT) + 1) * Config.TILE_HEIGHT;
     }
 
     Game.context.translate(translateX, translateY);   

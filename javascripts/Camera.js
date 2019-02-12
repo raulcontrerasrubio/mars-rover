@@ -2,6 +2,13 @@ var Camera = function(target){
   
   var self = this;
 
+  this.TARGET_TOP_LIMIT_TO_MOVE_CAMERA;
+  this.TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA;
+  this.TARGET_LEFT_LIMIT_TO_MOVE_CAMERA;
+  this.TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA;
+  this.CAMERA_TILES_SIDES_UP_BOTTOM;
+  this.CAMERA_TILES_SIDES_RIGHT_LEFT;
+
   this.position = {x: null, y: null};
   this.targetPosition = {x: null, y: null};
   this.view = {top: null, bottom: null, left: null, right: null}
@@ -17,7 +24,7 @@ var Camera = function(target){
       y: target.getPositionY()
     }
 
-    this.updateView();
+    self.updateView();
   }  
 
   this.moveIfNeeded = () => {
@@ -51,17 +58,25 @@ var Camera = function(target){
   this.moveUp = () => { self.position.y -= 1; self.updateView();}
   this.moveDown = () => { self.position.y += 1; self.updateView();}
 
-  this.isTargetBeyondTopLimit = () => self.targetPosition.y < self.position.y - TARGET_TOP_LIMIT_TO_MOVE_CAMERA;
-  this.isTargetBeyondBottomLimit = () => self.targetPosition.y > self.position.y + TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA;
-  this.isTargetBeyondRightLimit = () => self.targetPosition.x > self.position.x + TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA;
-  this.isTargetBeyondLeftLimit = () => self.targetPosition.x < self.position.x - TARGET_LEFT_LIMIT_TO_MOVE_CAMERA;
+  this.isTargetBeyondTopLimit = () => self.targetPosition.y < self.position.y - self.TARGET_TOP_LIMIT_TO_MOVE_CAMERA;
+  this.isTargetBeyondBottomLimit = () => self.targetPosition.y > self.position.y + self.TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA;
+  this.isTargetBeyondRightLimit = () => self.targetPosition.x > self.position.x + self.TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA;
+  this.isTargetBeyondLeftLimit = () => self.targetPosition.x < self.position.x - self.TARGET_LEFT_LIMIT_TO_MOVE_CAMERA;
 
   this.updateView = () => {
+
+    self.TARGET_TOP_LIMIT_TO_MOVE_CAMERA = Math.floor((Game.canvas.height/12) / Config.TILE_HEIGHT);
+    self.TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA = Math.floor((Game.canvas.height/12) / Config.TILE_HEIGHT);
+    self.TARGET_LEFT_LIMIT_TO_MOVE_CAMERA = Math.floor((Game.canvas.width/12) / Config.TILE_WIDTH);
+    self.TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA = Math.floor((Game.canvas.width/12) / Config.TILE_WIDTH);
+    self.CAMERA_TILES_SIDES_UP_BOTTOM = 2 * Math.floor((Game.canvas.height/Config.TILE_HEIGHT)/2);
+    self.CAMERA_TILES_SIDES_RIGHT_LEFT = 2 * Math.floor((Game.canvas.width/Config.TILE_WIDTH)/2);
+
     self.view = {
-      top: self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM < 0 ? 0 : self.position.y - CAMERA_TILES_SIDES_UP_BOTTOM,
-      bottom: self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM > Game.map.grid.length ? Game.map.grid.length : self.position.y + CAMERA_TILES_SIDES_UP_BOTTOM,
-      left: self.position.x - CAMERA_TILES_SIDES_RIGHT_LEFT < 0 ? 0 : self.position.x - CAMERA_TILES_SIDES_RIGHT_LEFT,
-      right: self.position.x + CAMERA_TILES_SIDES_RIGHT_LEFT > Game.map.grid[self.position.y].length ? Game.map.grid[self.position.y].length : self.position.x + CAMERA_TILES_SIDES_RIGHT_LEFT
+      top: self.position.y - self.CAMERA_TILES_SIDES_UP_BOTTOM < 0 ? 0 : self.position.y - self.CAMERA_TILES_SIDES_UP_BOTTOM,
+      bottom: self.position.y + self.CAMERA_TILES_SIDES_UP_BOTTOM > Game.map.grid.length ? Game.map.grid.length : self.position.y + self.CAMERA_TILES_SIDES_UP_BOTTOM,
+      left: self.position.x - self.CAMERA_TILES_SIDES_RIGHT_LEFT < 0 ? 0 : self.position.x - self.CAMERA_TILES_SIDES_RIGHT_LEFT,
+      right: self.position.x + self.CAMERA_TILES_SIDES_RIGHT_LEFT > Game.map.grid[self.position.y].length ? Game.map.grid[self.position.y].length : self.position.x + self.CAMERA_TILES_SIDES_RIGHT_LEFT
     }
     
   }
@@ -69,7 +84,7 @@ var Camera = function(target){
   this.showPosition = () => {
     Game.context.beginPath()
     Game.context.fillStyle = "blue";
-    Game.context.arc(self.position.x * TILE_WIDTH + TILE_WIDTH/2, self.position.y * TILE_HEIGHT + TILE_HEIGHT/2, 10, 0, Math.PI * 2);
+    Game.context.arc(self.position.x * Config.TILE_WIDTH + Config.TILE_WIDTH/2, self.position.y * Config.TILE_HEIGHT + Config.TILE_HEIGHT/2, 10, 0, Math.PI * 2);
     Game.context.fill();
     Game.context.closePath();
   }

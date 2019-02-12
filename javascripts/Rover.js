@@ -23,8 +23,8 @@ var Rover = function(id = 0){
     self.image = {
       obj: new Image(),
       position: {
-        x: self.getPositionX() * TILE_WIDTH,
-        y: self.getPositionY() * TILE_HEIGHT
+        x: self.getPositionX() * Config.TILE_WIDTH,
+        y: self.getPositionY() * Config.TILE_HEIGHT
       }
     }
     self.image.obj.src = 'images/svg/rover/rover-back.svg';
@@ -273,48 +273,48 @@ var Rover = function(id = 0){
   }
 
   this.updateImageUp = () => {
-    self.image.position.y -= self.speed * (TILE_HEIGHT/FRAMES_PER_SECOND);
+    self.image.position.y -= self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND);
   }
 
   this.updateImageDown = () => {
-    self.image.position.y += self.speed * (TILE_HEIGHT/FRAMES_PER_SECOND);
+    self.image.position.y += self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND);
   }
 
   this.updateImageRight = () => {
-    self.image.position.x += self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
+    self.image.position.x += self.speed * (Config.TILE_WIDTH/Config.FRAMES_PER_SECOND);
   }
 
   this.updateImageLeft = () => {
-    self.image.position.x -= self.speed * (TILE_WIDTH/FRAMES_PER_SECOND);
+    self.image.position.x -= self.speed * (Config.TILE_WIDTH/Config.FRAMES_PER_SECOND);
   }
 
   this.print = () => {
-      if(self.movingUp && self.getPositionY() < self.image.position.y/TILE_HEIGHT){
+      if(self.movingUp && self.getPositionY() < self.image.position.y/Config.TILE_HEIGHT){
         self.updateImageUp();
-        self.movingUp = self.getPositionY() < self.image.position.y/TILE_HEIGHT;
+        self.movingUp = self.getPositionY() < self.image.position.y/Config.TILE_HEIGHT;
         if(!self.movingUp){
-          self.image.position.y = self.getPositionY() * TILE_HEIGHT;
+          self.image.position.y = self.getPositionY() * Config.TILE_HEIGHT;
         }
-      }else if(self.movingDown && self.getPositionY() > self.image.position.y/TILE_HEIGHT){
+      }else if(self.movingDown && self.getPositionY() > self.image.position.y/Config.TILE_HEIGHT){
         self.updateImageDown();
-        self.movingDown = self.getPositionY() > self.image.position.y/TILE_HEIGHT;
+        self.movingDown = self.getPositionY() > self.image.position.y/Config.TILE_HEIGHT;
         if(!self.movingDown){
-          self.image.position.y = self.getPositionY() * TILE_HEIGHT;
+          self.image.position.y = self.getPositionY() * Config.TILE_HEIGHT;
         }
-      }else if(self.movingRight && self.getPositionX() > self.image.position.x/TILE_WIDTH){
+      }else if(self.movingRight && self.getPositionX() > self.image.position.x/Config.TILE_WIDTH){
         self.updateImageRight();
-        self.movingRight = self.getPositionX() > self.image.position.x/TILE_WIDTH;
+        self.movingRight = self.getPositionX() > self.image.position.x/Config.TILE_WIDTH;
         if(!self.movingRight){
-          self.image.position.x = self.getPositionX() * TILE_WIDTH;
+          self.image.position.x = self.getPositionX() * Config.TILE_WIDTH;
         }
-      }else if(self.movingLeft && self.getPositionX() < self.image.position.x/TILE_WIDTH){
+      }else if(self.movingLeft && self.getPositionX() < self.image.position.x/Config.TILE_WIDTH){
         self.updateImageLeft();
-        self.movingLeft = self.getPositionX() < self.image.position.x/TILE_WIDTH;
+        self.movingLeft = self.getPositionX() < self.image.position.x/Config.TILE_WIDTH;
         if(!self.movingLeft){
-          self.image.position.x = self.getPositionX() * TILE_WIDTH;
+          self.image.position.x = self.getPositionX() * Config.TILE_WIDTH;
         }
       }
-      Common.drawBitMap(self.image.obj ,self.image.position.x + TILE_WIDTH/2 , self.image.position.y + TILE_HEIGHT/2);
+      Common.drawBitMap(self.image.obj ,self.image.position.x + Config.TILE_WIDTH/2 , self.image.position.y + Config.TILE_HEIGHT/2);
   }
 
   // Execution
