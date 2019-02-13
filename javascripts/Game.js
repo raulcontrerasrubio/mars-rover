@@ -5,6 +5,23 @@ var Game = {
   rovers: null,
   cameras: null,
   selectedCamera: null,
+  selectedCameraIndex: null,
+  prevCamera: () => {
+    let lastCamera = Game.cameras.length - 1;
+    if(Game.selectedCameraIndex - 1 < 0){
+      Game.selectedCameraIndex = lastCamera;
+      return;
+    }
+    Game.selectedCameraIndex -= 1;
+  },
+  nextCamera: () => {
+    let lastCamera = Game.cameras.length - 1;
+    if(Game.selectedCameraIndex + 1 > lastCamera){
+      Game.selectedCameraIndex = 0;
+      return;
+    }
+    Game.selectedCameraIndex += 1;
+  },
   resizeCanvas: (width, height) => {
     Game.canvas.width = width;
     Game.canvas.height = height;
@@ -19,13 +36,15 @@ var Game = {
     Game.map = new Map(layout);
     Game.rovers = [new Rover(1)];
     Game.cameras = [new Camera(Game.rovers[0])];
-    Game.selectedCamera = Game.cameras[0];
+    Game.selectedCameraIndex = Game.cameras.length - 1;
+    Game.selectedCamera = Game.cameras[Game.selectedCameraIndex];
   },
   gameLoop: () => {
     Game.moveElements();
     Game.printElements();  
   },
   moveElements: () => {
+    Game.selectedCamera = Game.cameras[Game.selectedCameraIndex];
     if(Game.selectedCamera){
       Game.selectedCamera.use();
     }

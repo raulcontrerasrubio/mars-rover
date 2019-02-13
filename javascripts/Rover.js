@@ -30,7 +30,7 @@ var Rover = function(id = 0){
     self.image.obj.src = 'images/svg/rover/rover-back.svg';
     self.direction = "N";
     self.travelLog = [{x: self.getPositionX(), y: self.getPositionY()}];
-    self.controls = Controls.presets.primary;
+    self.controls = Controls.presets.primary();
 
     self.movingUp = false;
     self.movingDown = false;
@@ -59,10 +59,10 @@ var Rover = function(id = 0){
   this.setControls = (preset) => {
     switch(preset){
       case 'primary':
-        self.controls = Controls.presets.primary;
+        self.controls = Controls.presets.primary();
       break;
       case 'secondary':
-        self.controls = Controls.presets.secondary;
+        self.controls = Controls.presets.secondary();
       break;
     }
   }  

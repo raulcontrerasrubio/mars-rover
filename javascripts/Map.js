@@ -61,6 +61,8 @@ var Map = function(layout){
         let newRover = new Rover(id);
         newRover.setControls(controls);
         Game.rovers.push(newRover);
+        Game.cameras.push(new Camera(newRover));
+        Game.selectedCameraIndex = Game.cameras.length - 1;
         return true;
     }else{
       console.log("¡No hay más espacio!");

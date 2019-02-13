@@ -9,5 +9,6 @@ var Config = {
   TILE_HEIGHT: 32,
   TILE_WIDTH: 32,
   
-  DEBUG_CAMERA: false
+  DEBUG_CAMERA: false,
+
 };
