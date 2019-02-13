@@ -21,10 +21,18 @@ var Camera = function(target){
   this.view = {top: null, bottom: null, left: null, right: null}
 
   this.init = () => {
-    
-    self.focus();
+    if(target){
+      self.focus();
+      self.speed = target.speed;
+    }else{
+      let {row, col} = Game.map.getRandomCoord();
+      self.position = {
+        x: col * Config.TILE_WIDTH,
+        y: row * Config.TILE_HEIGHT
+      }
 
-    self.speed = target.speed;
+      self.speed = Config.DEFAULT_CAMERA_SPEED;
+    }
 
     self.movingUp = false;
     self.movingDown = false;
@@ -32,6 +40,14 @@ var Camera = function(target){
     self.movingRight = false;
 
     self.updateView();
+  }
+
+  this.setSpeed = (speed) => {
+    if(!target && /\d/.test(speed) && speed >= Config.CAMERA_MIN_SPEED && speed <= Config.CAMERA_MAX_SPEED){
+      self.speed = speed;
+      return true;
+    }
+    return false;
   }
 
   this.focus = () => {
@@ -121,10 +137,12 @@ var Camera = function(target){
   }
 
   this.use = () => {
-    self.targetPosition.x = target.image.position.x + Config.TILE_WIDTH/2;
-    self.targetPosition.y = target.image.position.y + Config.TILE_HEIGHT/2;
-
-    this.moveIfNeeded();
+    if(target){
+      self.targetPosition.x = target.image.position.x + Config.TILE_WIDTH/2;
+      self.targetPosition.y = target.image.position.y + Config.TILE_HEIGHT/2;
+  
+      this.moveIfNeeded();
+    }
   }
 
   this.init();

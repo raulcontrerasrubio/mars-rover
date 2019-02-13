@@ -44,85 +44,91 @@ var Controls = {
     document.addEventListener('keydown', Controls.keyHandler);
   },
   keyHandler: (evt) => {
-    Controls.useControls(evt, Game.selectedCamera.target);
+    if(Game.selectedCamera.target){
+      Controls.targetControls(evt, Game.selectedCamera.target);
+    }
     Controls.cameraControls(evt);
   },
-  useControls: (evt, rover) => {
-    var action = rover.controls;
+  targetControls: (evt, target) => {
+    var action = target.controls;
 
     evt.preventDefault();
     switch(evt.keyCode){
       case action.up:
-        switch(rover.direction){
+        switch(target.direction){
           case 'N':
-            rover.moveForward();
+            target.moveForward();
           break;
           case 'E':
-            rover.turnLeft();
+            target.turnLeft();
           break;
           case 'S':
-            rover.moveBackward();
+            target.moveBackward();
           break;
           case 'W':
-            rover.turnRight();
+            target.turnRight();
           break;
         }
         
       break;
       case action.down:
-        switch(rover.direction){
+        switch(target.direction){
           case 'N':
-            rover.moveBackward();
+            target.moveBackward();
           break;
           case 'E':
-            rover.turnRight();
+            target.turnRight();
           break;
           case 'S':
-            rover.moveForward();
+            target.moveForward();
           break;
           case 'W':
-            rover.turnLeft();
+            target.turnLeft();
           break;
         }
         
       break;
       case action.right:
-        switch(rover.direction){
+        switch(target.direction){
           case 'N':
-            rover.turnRight();
+            target.turnRight();
           break;
           case 'E':
-            rover.moveForward();
+            target.moveForward();
           break;
           case 'S':
-            rover.turnLeft();
+            target.turnLeft();
           break;
           case 'W':
-            rover.moveBackward();
+            target.moveBackward();
           break;
         }
 
       break;
       case action.left:
-        switch(rover.direction){
+        switch(target.direction){
           case 'N':
-            rover.turnLeft();
+            target.turnLeft();
           break;
           case 'E':
-            rover.moveBackward();
+            target.moveBackward();
           break;
           case 'S':
-            rover.turnRight();
+            target.turnRight();
           break;
           case 'W':
-            rover.moveForward();
+            target.moveForward();
           break;
         }
 
       break;
+      case Controls.KEY_P:
+        Game.selectedCamera.focus();
+      break;
     }
   },
   cameraControls: (evt) => {
+    evt.preventDefault();
     switch(evt.keyCode){
       case Controls.KEY_J:
         Game.selectedCamera.moveLeft();
@@ -141,9 +147,6 @@ var Controls = {
       break;
       case Controls.KEY_O:
         Game.nextCamera();
-      break;
-      case Controls.KEY_P:
-        Game.selectedCamera.focus();
       break;
     }
   }

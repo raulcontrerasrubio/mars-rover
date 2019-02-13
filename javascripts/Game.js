@@ -6,6 +6,15 @@ var Game = {
   cameras: null,
   selectedCamera: null,
   selectedCameraIndex: null,
+  createCamera: (target = null) => {
+    if(target){
+      Game.cameras.push(new Camera(target));
+    }else{
+      Game.cameras.push(new Camera());
+    }
+    
+    Game.selectedCameraIndex = Game.cameras.length - 1;
+  },
   prevCamera: () => {
     let lastCamera = Game.cameras.length - 1;
     if(Game.selectedCameraIndex - 1 < 0){

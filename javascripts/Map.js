@@ -33,8 +33,7 @@ var Map = function(layout){
     if(self.isAnyTileAvailable()){
       var valid = false;
       while(!valid){
-        var row = Math.floor(Math.random() * self.grid.length);
-        var col = Math.floor(Math.random() * self.grid[row].length);
+        var {row, col} = self.getRandomCoord();
         valid = self.grid[row][col] === 0;
       }
 
@@ -43,6 +42,12 @@ var Map = function(layout){
       
     return false;
   };
+
+  this.getRandomCoord = () => {
+    let row = Math.floor(Math.random() * self.grid.length);
+    let col = Math.floor(Math.random() * self.grid[row].length);
+    return {row,col};
+  } 
 
   this.getMapLimits = () => {
     return {minX: 0, maxX: self.grid[0].length - 1, minY: 0, maxY: self.grid.length - 1}
@@ -61,8 +66,7 @@ var Map = function(layout){
         let newRover = new Rover(id);
         newRover.setControls(controls);
         Game.rovers.push(newRover);
-        Game.cameras.push(new Camera(newRover));
-        Game.selectedCameraIndex = Game.cameras.length - 1;
+        Game.createCamera(newRover);
         return true;
     }else{
       console.log("¡No hay más espacio!");
