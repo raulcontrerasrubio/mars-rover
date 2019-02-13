@@ -20,9 +20,10 @@ var Controls = {
   // Extended actions
   KEY_U: 85,
   KEY_O: 79,
+  KEY_P: 80,
 
   presets: {
-    primary: () => {
+    getPrimary: () => {
       return {
         up: Controls.ARROW_UP,
         down: Controls.ARROW_DOWN,
@@ -30,7 +31,7 @@ var Controls = {
         right: Controls.ARROW_RIGHT
       }
     },
-    secondary: () => {
+    getSecondary: () => {
       return {
         up: Controls.KEY_W,
         down: Controls.KEY_S,
@@ -140,6 +141,9 @@ var Controls = {
       break;
       case Controls.KEY_O:
         Game.nextCamera();
+      break;
+      case Controls.KEY_P:
+        Game.selectedCamera.focus();
       break;
     }
   }

@@ -21,15 +21,8 @@ var Camera = function(target){
   this.view = {top: null, bottom: null, left: null, right: null}
 
   this.init = () => {
-    self.position = {
-      x: target.image.position.x + Config.TILE_WIDTH/2,
-      y: target.image.position.y + Config.TILE_HEIGHT/2
-    }
-
-    self.targetPosition = {
-      x: target.image.position.x,
-      y: target.image.position.y
-    }
+    
+    self.focus();
 
     self.speed = target.speed;
 
@@ -39,7 +32,19 @@ var Camera = function(target){
     self.movingRight = false;
 
     self.updateView();
-  }  
+  }
+
+  this.focus = () => {
+    self.position = {
+      x: target.image.position.x + Config.TILE_WIDTH/2,
+      y: target.image.position.y + Config.TILE_HEIGHT/2
+    }
+
+    self.targetPosition = {
+      x: target.image.position.x,
+      y: target.image.position.y
+    }
+  }
 
   this.moveIfNeeded = () => {
     if(self.isTargetBeyondTopLimit()){
