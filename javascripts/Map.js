@@ -21,12 +21,15 @@ var Map = function(layout){
   };
 
   this.isAnyTileAvailable = () => {
-    for(var r of self.grid){
-      if(r.indexOf(0) !== -1){
-        return true;
+    let listOfAvailableTilesId = Tile.getAccesibleTilesId();
+    return listOfAvailableTilesId.filter(id => {
+      for(var r of self.grid){
+        if(r.indexOf(id) !== -1){
+          return true;
+        }
       }
-    }
-    return false;
+      return false;
+    }).length !== 0;
   };
 
   this.getRandomPosition = () => {
@@ -53,13 +56,21 @@ var Map = function(layout){
     return {minX: 0, maxX: self.grid[0].length - 1, minY: 0, maxY: self.grid.length - 1}
   };
   
-  this.isInMapBounds = (x, y) => {
+  this.isInMapBounds = (x, y) => { // Comprueba los límites del mapa
     return (x >= self.limits.minX && x <= self.limits.maxX && y >= self.limits.minY && y <= self.limits.maxY);
   };
   
-  this.isFreeCell = (x, y) => {
+  this.isFreeCell = (x, y, direction) => {
+    // Recibe info sobre los límites del mapa y comprueba que la tile sea 0 -> Que sea transitable
     return self.isInMapBounds(x, y) && self.grid[y][x] === 0;
   };
+  
+  /*
+  Propuesta alternativa para isFreeCell()
+  Comprobar si row, col está dentro de grid. 
+  Comprobar tipo y propiedades de la tile para decidir si deja pasar o no
+
+  */
 
   this.addRover = (id, controls) => {
     if(self.isAnyTileAvailable()){
