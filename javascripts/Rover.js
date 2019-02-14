@@ -136,7 +136,7 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.position.y - 1;
-        if(!Game.map.isFreeCell(self.position.x, nextMove)){
+        if(!Game.map.isFreeCell(self.position.x, nextMove, 'up')){
           self.obstacleReached();
         }else{
           if(!self.movingUp){
@@ -149,7 +149,7 @@ var Rover = function(id = 0){
       break;
       case 'W':
         nextMove = self.position.x - 1;
-        if(!Game.map.isFreeCell(nextMove, self.position.y)){
+        if(!Game.map.isFreeCell(nextMove, self.position.y, 'left')){
           self.obstacleReached();
         }else{
           if(!self.movingLeft){
@@ -162,7 +162,7 @@ var Rover = function(id = 0){
       break;
       case 'S':
         nextMove = self.position.y + 1;
-        if(!Game.map.isFreeCell(self.position.x, nextMove)){
+        if(!Game.map.isFreeCell(self.position.x, nextMove, 'down')){
           self.obstacleReached();
         }else{
           if(!self.movingDown){
@@ -175,7 +175,7 @@ var Rover = function(id = 0){
       break;
       case 'E':
         nextMove = self.position.x + 1;
-        if(!Game.map.isFreeCell(nextMove, self.position.y)){
+        if(!Game.map.isFreeCell(nextMove, self.position.y, 'right')){
           self.obstacleReached();
         }else{
           if(!self.movingRight){
@@ -197,7 +197,7 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.position.y + 1;
-        if(!Game.map.isFreeCell(self.position.x, nextMove)){
+        if(!Game.map.isFreeCell(self.position.x, nextMove, 'down')){
           self.obstacleReached();
         }else{
           if(!self.movingDown){
@@ -210,7 +210,7 @@ var Rover = function(id = 0){
       break;
       case 'W':
         nextMove = self.position.x + 1;
-        if(!Game.map.isFreeCell(nextMove, self.position.y)){
+        if(!Game.map.isFreeCell(nextMove, self.position.y, 'right')){
           self.obstacleReached();
         }else{
           if(!self.movingRight){
@@ -223,7 +223,7 @@ var Rover = function(id = 0){
       break;
       case 'S':
         nextMove = self.position.y - 1;
-        if(!Game.map.isFreeCell(self.position.x, nextMove)){
+        if(!Game.map.isFreeCell(self.position.x, nextMove, 'up')){
           self.obstacleReached();
         }else{
           if(!self.movingUp){
@@ -236,7 +236,7 @@ var Rover = function(id = 0){
       break;
       case 'E':
         nextMove = self.position.x - 1;
-        if(!Game.map.isFreeCell(nextMove, self.position.y)){
+        if(!Game.map.isFreeCell(nextMove, self.position.y, 'left')){
           self.obstacleReached();
         }else{
           if(!self.movingLeft){

@@ -2,11 +2,9 @@ var Map = function(layout){
   var self = this;
 
   this.grid;
-  this.limits;
 
   this.init = () => {
     self.grid = layout ? layout : self.createEmptyMap(Config.DEFAULT_MAP_ROWS, Config.DEFAULT_MAP_COLS);
-    self.limits = self.getMapLimits();
   };
 
   Map.prototype.createEmptyMap = (rows, cols) => {
@@ -34,10 +32,11 @@ var Map = function(layout){
 
   this.getRandomPosition = () => {
     if(self.isAnyTileAvailable()){
+      let validId = Tile.getAccesibleTilesId();
       var valid = false;
       while(!valid){
         var {row, col} = self.getRandomCoord();
-        valid = self.grid[row][col] === 0;
+        valid = validId.includes(self.grid[row][col]);
       }
 
       return {row,col};
@@ -52,26 +51,11 @@ var Map = function(layout){
     return {row,col};
   } 
 
-  this.getMapLimits = () => {
-    return {minX: 0, maxX: self.grid[0].length - 1, minY: 0, maxY: self.grid.length - 1}
-  };
-  
-  this.isInMapBounds = (x, y) => { // Comprueba los límites del mapa
-    return (x >= self.limits.minX && x <= self.limits.maxX && y >= self.limits.minY && y <= self.limits.maxY);
-  };
-  
   this.isFreeCell = (x, y, direction) => {
-    // Recibe info sobre los límites del mapa y comprueba que la tile sea 0 -> Que sea transitable
-    return self.isInMapBounds(x, y) && self.grid[y][x] === 0;
+    let validTiles = Tile.getAccesibleTilesId(direction);
+    return self.grid[y] && validTiles.includes(self.grid[y][x]);
   };
   
-  /*
-  Propuesta alternativa para isFreeCell()
-  Comprobar si row, col está dentro de grid. 
-  Comprobar tipo y propiedades de la tile para decidir si deja pasar o no
-
-  */
-
   this.addRover = (id, controls) => {
     if(self.isAnyTileAvailable()){
         let newRover = new Rover(id);

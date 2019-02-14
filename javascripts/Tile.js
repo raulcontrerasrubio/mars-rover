@@ -6,10 +6,10 @@ var Tile = {
       source: 'images/png32/sand/sand.png',
       isVisible: true, // ¿Es necesario?
       isObstacle: false,
-      accesibleFrom: {
+      accessTo: {
         up: true,
         down: true,
-        left: false,
+        left: true,
         right: true
       },
       activation: () => {} // Sirve para otorgarle funcionalidad a la baldosa.
@@ -19,38 +19,38 @@ var Tile = {
       source: 'images/png32/sand/sand.png',
       isVisible: true, // ¿Es necesario?
       isObstacle: false,
-      accesibleFrom: {
+      accessTo: {
         up: false,
-        down: true,
-        left: true,
-        right: true
+        down: false,
+        left: false,
+        right: false
       },
       activation: () => {} // Sirve para otorgarle funcionalidad a la baldosa.
     }
   ],
   getTileById: id => Tile.tiles.filter(tile => tile.id === id)[0],
-  getAccesibleTilesId: (fromDirection = null) => {
+  getAccesibleTilesId: (toDirection = null) => {
     let accesibleTiles = Tile.tiles.filter(tile => {
-      if(fromDirection){
+      if(toDirection){
         let response;
-        switch(fromDirection){
+        switch(toDirection){
           case 'up':
-            response = tile.accesibleFrom.up;
+            response = tile.accessTo.up;
           break;
           case 'down':
-            response = tile.accesibleFrom.down;
+            response = tile.accessTo.down;
           break;
           case 'left':
-            response = tile.accesibleFrom.left;
+            response = tile.accessTo.left;
           break;
           case 'right':
-            response = tile.accesibleFrom.right;
+            response = tile.accessTo.right;
           break;
         }
         return response;
       }else{
-        for(let direction in tile.accesibleFrom){
-          if(tile.accesibleFrom[direction]){
+        for(let direction in tile.accessTo){
+          if(tile.accessTo[direction]){
             return true;
           }
         }
