@@ -123,28 +123,28 @@ var Controls = {
               case 'N':
                 target.moveForward();
               break;
-              case 'E':
-                target.turnLeft();
-              break;
               case 'S':
                 target.moveBackward();
               break;
               case 'W':
                 target.turnRight();
               break;
+              case 'E':
+                target.turnLeft();
+              break;
             }
             
           break;
           case action.down:
             switch(target.direction){
+              case 'S':
+                target.moveForward();
+              break;
               case 'N':
                 target.moveBackward();
               break;
               case 'E':
                 target.turnRight();
-              break;
-              case 'S':
-                target.moveForward();
               break;
               case 'W':
                 target.turnLeft();
@@ -154,25 +154,25 @@ var Controls = {
           break;
           case action.right:
             switch(target.direction){
-              case 'N':
-                target.turnRight();
-              break;
               case 'E':
                 target.moveForward();
               break;
-              case 'S':
-                target.turnLeft();
-              break;
               case 'W':
                 target.moveBackward();
+              break;
+              case 'N':
+                target.turnRight();
+              break;
+              case 'S':
+                target.turnLeft();
               break;
             }
     
           break;
           case action.left:
             switch(target.direction){
-              case 'N':
-                target.turnLeft();
+              case 'W':
+                target.moveForward();
               break;
               case 'E':
                 target.moveBackward();
@@ -180,8 +180,8 @@ var Controls = {
               case 'S':
                 target.turnRight();
               break;
-              case 'W':
-                target.moveForward();
+              case 'N':
+                target.turnLeft();
               break;
             }
     
@@ -198,9 +198,6 @@ var Controls = {
     for(let key in Controls.validKeys){
       if(Controls.validKeys[key].pressed){
         switch(Controls.validKeys[key].code){
-          case Controls.validKeys.keyJ.code:
-            Game.selectedCamera.moveLeft();
-          break;
           case Controls.validKeys.keyI.code:
             Game.selectedCamera.moveUp();
           break;
@@ -210,11 +207,14 @@ var Controls = {
           case Controls.validKeys.keyL.code:
             Game.selectedCamera.moveRight();
           break;
-          case Controls.validKeys.keyU.code:
-            Game.prevCamera();
+          case Controls.validKeys.keyJ.code:
+            Game.selectedCamera.moveLeft();
           break;
           case Controls.validKeys.keyO.code:
             Game.nextCamera();
+          break;
+          case Controls.validKeys.keyU.code:
+            Game.prevCamera();
           break;
         }
       }
