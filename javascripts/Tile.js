@@ -1,10 +1,9 @@
 var Tile = {
-  // self: this,
   tiles: [
     {
       id: 0,
       source: 'images/png32/sand/sand.png',
-      isVisible: true, // ¿Es necesario?
+      isVisible: true,
       isObstacle: false,
       accessTo: {
         up: true,
@@ -12,12 +11,12 @@ var Tile = {
         left: true,
         right: true
       },
-      activation: () => {} // Sirve para otorgarle funcionalidad a la baldosa.
+      activation: () => {}
     },
     {
       id: 1,
       source: 'images/png32/sand/sand.png',
-      isVisible: true, // ¿Es necesario?
+      isVisible: true,
       isObstacle: false,
       accessTo: {
         up: false,
@@ -25,7 +24,7 @@ var Tile = {
         left: false,
         right: false
       },
-      activation: () => {} // Sirve para otorgarle funcionalidad a la baldosa.
+      activation: () => {}
     }
   ],
   getTileById: id => Tile.tiles.filter(tile => tile.id === id)[0],

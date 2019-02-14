@@ -38,10 +38,8 @@ var Map = function(layout){
         var {row, col} = self.getRandomCoord();
         valid = validId.includes(self.grid[row][col]);
       }
-
       return {row,col};
     }
-      
     return false;
   };
 
