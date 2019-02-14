@@ -19,7 +19,7 @@ var Rover = function(id = 0){
     self.id = id;
     self.position = {x: null, y:null};
     self.getInitialPosition();
-    self.speed = 5;
+    self.speed = 7;
     self.image = {
       obj: new Image(),
       position: {
@@ -66,6 +66,10 @@ var Rover = function(id = 0){
       break;
     }
   }  
+
+  this.addToLog = (obj) => {
+    self.travelLog.push(obj);
+  }
 
   this.turnLeft = () => {
     switch(self.direction){
@@ -141,9 +145,8 @@ var Rover = function(id = 0){
         }else{
           if(!self.movingUp){
             self.position.y = nextMove;
-            self.updateImageUp();
             self.movingUp = true;
-            self.travelLog.push({x:self.position.x, y: self.position.y});
+            self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
@@ -154,9 +157,8 @@ var Rover = function(id = 0){
         }else{
           if(!self.movingLeft){
             self.position.x = nextMove;
-            self.updateImageLeft();
             self.movingLeft = true;
-            self.travelLog.push({x:self.position.x, y: self.position.y});
+            self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
@@ -167,9 +169,8 @@ var Rover = function(id = 0){
         }else{
           if(!self.movingDown){
             self.position.y = nextMove;
-            self.updateImageDown(); 
             self.movingDown = true; 
-            self.travelLog.push({x:self.position.x, y: self.position.y}); 
+            self.addToLog({x:self.position.x, y:self.position.y}); 
           }
         }
       break;
@@ -180,9 +181,8 @@ var Rover = function(id = 0){
         }else{
           if(!self.movingRight){
             self.position.x = nextMove;
-            self.updateImageRight();
             self.movingRight = true;
-            self.travelLog.push({x:self.position.x, y: self.position.y});
+            self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
@@ -202,9 +202,8 @@ var Rover = function(id = 0){
         }else{
           if(!self.movingDown){
             self.position.y = nextMove;
-            self.updateImageDown();
             self.movingDown = true;
-            self.travelLog.push({x:self.position.x, y: self.position.y});
+            self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
@@ -215,9 +214,8 @@ var Rover = function(id = 0){
         }else{
           if(!self.movingRight){
             self.position.x = nextMove;
-            self.updateImageRight();
             self.movingRight = true;
-            self.travelLog.push({x:self.position.x, y: self.position.y});
+            self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
@@ -228,9 +226,8 @@ var Rover = function(id = 0){
         }else{
           if(!self.movingUp){
             self.position.y = nextMove;
-            self.updateImageUp();
             self.movingUp = true;
-            self.travelLog.push({x:self.position.x, y: self.position.y});
+            self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
@@ -241,9 +238,8 @@ var Rover = function(id = 0){
         }else{
           if(!self.movingLeft){
             self.position.x = nextMove;
-            self.updateImageLeft();
             self.movingLeft = true;
-            self.travelLog.push({x:self.position.x, y: self.position.y});
+            self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
@@ -282,7 +278,7 @@ var Rover = function(id = 0){
         }
       });
     }else{
-      console.error("Some of the movements are not valid. The Rover stays in the same position.");
+      console.error("Some of the movements are not valid. The Rover stays at the same position.");
     }
 
     return self.travelLog;
@@ -304,32 +300,53 @@ var Rover = function(id = 0){
     self.image.position.x -= self.speed * (Config.TILE_WIDTH/Config.FRAMES_PER_SECOND);
   }
 
-  this.print = () => {
-      if(self.movingUp && self.getPositionY() < self.image.position.y/Config.TILE_HEIGHT){
+
+  this.animateMovement = () => {
+    if(self.movingUp){
+      if(self.getPositionY() < self.image.position.y/Config.TILE_HEIGHT){
         self.updateImageUp();
         self.movingUp = self.getPositionY() < self.image.position.y/Config.TILE_HEIGHT;
         if(!self.movingUp){
           self.image.position.y = self.getPositionY() * Config.TILE_HEIGHT;
         }
-      }else if(self.movingDown && self.getPositionY() > self.image.position.y/Config.TILE_HEIGHT){
+      }else{
+        self.movingUp = false;
+      } 
+    }else if(self.movingDown){
+      if(self.getPositionY() > self.image.position.y/Config.TILE_HEIGHT){
         self.updateImageDown();
         self.movingDown = self.getPositionY() > self.image.position.y/Config.TILE_HEIGHT;
         if(!self.movingDown){
           self.image.position.y = self.getPositionY() * Config.TILE_HEIGHT;
         }
-      }else if(self.movingRight && self.getPositionX() > self.image.position.x/Config.TILE_WIDTH){
+      }else{
+        self.movingDown = false;
+      }
+    }else if(self.movingRight){
+      if(self.getPositionX() > self.image.position.x/Config.TILE_WIDTH){
         self.updateImageRight();
         self.movingRight = self.getPositionX() > self.image.position.x/Config.TILE_WIDTH;
         if(!self.movingRight){
           self.image.position.x = self.getPositionX() * Config.TILE_WIDTH;
         }
-      }else if(self.movingLeft && self.getPositionX() < self.image.position.x/Config.TILE_WIDTH){
+      }else{
+        self.movingRight = false;
+      }
+    }else if(self.movingLeft){
+      if(self.getPositionX() < self.image.position.x/Config.TILE_WIDTH){
         self.updateImageLeft();
         self.movingLeft = self.getPositionX() < self.image.position.x/Config.TILE_WIDTH;
         if(!self.movingLeft){
           self.image.position.x = self.getPositionX() * Config.TILE_WIDTH;
         }
+      }else{
+        self.movingLeft = false;
       }
+    }
+  }
+
+  this.print = () => {
+      self.animateMovement(); 
       Common.drawBitMap(self.image.obj ,self.image.position.x + Config.TILE_WIDTH/2 , self.image.position.y + Config.TILE_HEIGHT/2);
   }
 

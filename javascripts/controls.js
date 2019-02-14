@@ -87,14 +87,17 @@ var Controls = {
   },
   keyPress: (evt) => {
     evt.preventDefault();
+ 
     for(let key in Controls.validKeys){
       if(Controls.validKeys[key].code === evt.keyCode){
         Controls.validKeys[key].pressed = true;
       }
     }
+    
   },
   keyRelease: (evt) => {
     evt.preventDefault();
+    
     for(let key in Controls.validKeys){
       if(Controls.validKeys[key].code === evt.keyCode){
         Controls.validKeys[key].pressed = false;
