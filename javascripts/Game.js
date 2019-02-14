@@ -49,6 +49,7 @@ var Game = {
     Game.selectedCamera = Game.cameras[Game.selectedCameraIndex];
   },
   gameLoop: () => {
+    Controls.keyController();
     Game.moveElements();
     Game.printElements();  
   },

@@ -7,7 +7,7 @@ window.onload = () => {
   
   Game.init(Layouts.xl);
   
-  window.setInterval(Game.gameLoop, 1000/Config.FRAMES_PER_SECOND);
   Controls.setup();
+  window.setInterval(Game.gameLoop, 1000/Config.FRAMES_PER_SECOND);
 
 };
