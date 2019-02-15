@@ -67,19 +67,6 @@ var Map = function(layout){
     return false;
   };
 
-  this.print = () => {
-    var sand = new Image();
-    sand.src = 'images/png32/sand/sand.png';
-
-    for(let i = 0, rows = Game.canvas.height/Config.TILE_HEIGHT; i < rows; i += 1){
-      for(let j = 0, cols = Game.canvas.width/Config.TILE_WIDTH; j < cols; j += 1){
-        if(this.grid[i] && (this.grid[i][j] || this.grid[i][j] === 0)){
-          Common.drawBitMap(sand, Config.TILE_WIDTH * j + Config.TILE_WIDTH/2, Config.TILE_HEIGHT * i + Config.TILE_HEIGHT/2);
-        }
-      }
-    }
-  };
-
   this.printTilesOnScreen = () => {
     for(let i = Game.selectedCamera.view.top, rows = Game.selectedCamera.view.bottom; i < rows; i+= 1){
       for(let j = Game.selectedCamera.view.left, cols = Game.selectedCamera.view.right; j < cols; j += 1){
@@ -112,14 +99,12 @@ var Map = function(layout){
   };
 
   this.printTile = (x, y) => {
-    var image = new Image();
     var tile = self.getTileType(x, y);
     if(tile){
-      image.src = tile.source;
       var posY = y * Config.TILE_HEIGHT + Config.TILE_HEIGHT/2;
       var posX = x * Config.TILE_WIDTH + Config.TILE_WIDTH/2;
 
-      Common.drawBitMap(image, posX, posY);
+      Common.drawBitMap(tile.image, posX, posY);
     }      
       
   };

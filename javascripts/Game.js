@@ -72,9 +72,7 @@ var Game = {
     Game.context.fillRect(0, 0, Game.canvas.width, Game.canvas.height);
   },
   printObjects: () => {
-    if(!Game.selectedCamera){
-      Game.map.print();
-    }else{
+    if(Game.selectedCamera){
       Game.map.printTilesOnScreen();
     }
     
@@ -85,9 +83,7 @@ var Game = {
     }
     
   },
-  printCameraView: (callback) => {
-    Game.context.save();
-    
+  checkContextBounds: () => {
     var translateX = -Game.selectedCamera.position.x + Game.canvas.width/2;
     var translateY = -Game.selectedCamera.position.y + Game.canvas.height/2;
     
@@ -107,6 +103,11 @@ var Game = {
       translateY = -1 * ((Game.map.grid.length) - (Game.canvas.height/Config.TILE_HEIGHT) + 1) * Config.TILE_HEIGHT;
     }
 
+    return {translateX, translateY};
+  },
+  printCameraView: (callback) => {
+    Game.context.save();
+    let {translateX, translateY} = Game.checkContextBounds();
     Game.context.translate(translateX, translateY);   
     callback();
     Game.context.restore();

@@ -1,34 +1,19 @@
 var ImageManager = {
   dataSet: {
-    rover: {
-      front: Config.IMAGE_DIR + 'svg/rover/rover-front.svg',
-      back: Config.IMAGE_DIR + 'svg/rover/rover-back.svg',
-      left: Config.IMAGE_DIR + 'svg/rover/rover-left.svg',
-      right: Config.IMAGE_DIR + 'svg/rover/rover-right.svg',
-      other: {new: {}}
-    },
-    tiles: {
-      '0': Config.IMAGE_DIR + 'png32/sand/sand.png',
-    },
+    rover_front: 'svg/rover/rover-front.svg',
+    rover_back: 'svg/rover/rover-back.svg',
+    rover_right: 'svg/rover/rover-right.svg',
+    rover_left: 'svg/rover/rover-left.svg',
+    tile_0: 'png32/sand/sand.png',
   },
   
-  currentKey: 'ImageManager.dataSet',
-  findImageSource: (dataset) => {
-    let response = [];
-
+  loadedImages: {},
+  loadImages: (dataset) => {
+    let response = {};
     for(let key in dataset){
-      if(typeof dataset[key] === 'object'){
-        console.log('Depth object', dataset[key], key)
-        ImageManager.findImageSource(dataset[key]);
-      }
-      if(typeof dataset[key] === 'string'){
-        response.push({key: key, source: dataset[key]});
-      }
+      response[key] = new Image();
+      response[key].src = Config.IMAGE_DIR + dataset[key];
     }
     return response;
   },
-  loadedImages: [],
-  loadImages: () => {
-
-  }
 };

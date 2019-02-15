@@ -2,7 +2,7 @@ var Tile = {
   tiles: [
     {
       id: 0,
-      source: 'images/png32/sand/sand.png',
+      image: 'tile_0',
       isVisible: true,
       isObstacle: false,
       accessTo: {
@@ -15,7 +15,7 @@ var Tile = {
     },
     {
       id: 1,
-      source: 'images/png32/sand/sand.png',
+      image: 'tile_0',
       isVisible: true,
       isObstacle: false,
       accessTo: {
@@ -57,6 +57,12 @@ var Tile = {
       }
     });
     return accesibleTiles.map(tile => tile.id);
+  },
+  loadTileImage: () => {
+    for(let tile of Tile.tiles){
+      let key = tile.image;
+      tile.image = ImageManager.loadedImages[key];
+    }
   }
 
 }

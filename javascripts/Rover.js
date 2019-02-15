@@ -15,15 +15,14 @@ var Rover = function(id = 0){
     self.id = id;
     self.position = {x: null, y:null};
     self.getInitialPosition();
-    self.speed = 7;
+    self.speed = 5;
     self.image = {
-      obj: new Image(),
+      obj: ImageManager.loadedImages.rover_back,
       position: {
         x: self.getPositionX() * Config.TILE_WIDTH,
         y: self.getPositionY() * Config.TILE_HEIGHT
       }
     }
-    self.image.obj.src = 'images/svg/rover/rover-back.svg';
     self.direction = "N";
     self.travelLog = [{x: self.getPositionX(), y: self.getPositionY()}];
     self.controls = Controls.presets.getPrimary();
@@ -74,25 +73,25 @@ var Rover = function(id = 0){
       case 'N':
       if(!(self.moving.up || self.moving.down || self.moving.left || self.moving.right)){
         self.direction = 'W';
-        self.image.obj.src = 'images/svg/rover/rover-left.svg';
+        self.image.obj = ImageManager.loadedImages.rover_left;
       }
       break;
       case 'W':
       if(!(self.moving.up || self.moving.down || self.moving.left || self.moving.right)){
         self.direction = 'S';
-        self.image.obj.src = 'images/svg/rover/rover-front.svg';
+        self.image.obj = ImageManager.loadedImages.rover_front;
       }
       break;
       case 'S':
       if(!(self.moving.up || self.moving.down || self.moving.left || self.moving.right)){
         self.direction = 'E';
-        self.image.obj.src = 'images/svg/rover/rover-right.svg';
+        self.image.obj = ImageManager.loadedImages.rover_right;
       }
       break;
       case 'E':
       if(!(self.moving.up || self.moving.down || self.moving.left || self.moving.right)){
         self.direction = 'N';
-        self.image.obj.src = 'images/svg/rover/rover-back.svg';
+        self.image.obj = ImageManager.loadedImages.rover_back;
       }
       break;
       default:
@@ -106,25 +105,25 @@ var Rover = function(id = 0){
       case 'N':
         if(!(self.moving.up || self.moving.down || self.moving.right || self.moving.left)){
           self.direction = 'E';
-          self.image.obj.src = 'images/svg/rover/rover-right.svg';
+          self.image.obj = ImageManager.loadedImages.rover_right;
         }
       break;
       case 'W':
         if(!(self.moving.up || self.moving.down || self.moving.right || self.moving.left)){
           self.direction = 'N';
-          self.image.obj.src = 'images/svg/rover/rover-back.svg';
+          self.image.obj = ImageManager.loadedImages.rover_back;
         }
       break;
       case 'S':
         if(!(self.moving.up || self.moving.down || self.moving.right || self.moving.left)){
           self.direction = 'W';
-          self.image.obj.src = 'images/svg/rover/rover-left.svg';
+          self.image.obj = ImageManager.loadedImages.rover_left;
         }
       break;
       case 'E':
         if(!(self.moving.up || self.moving.down || self.moving.right || self.moving.left)){
           self.direction = 'S';
-          self.image.obj.src = 'images/svg/rover/rover-front.svg';
+          self.image.obj = ImageManager.loadedImages.rover_front;
         }
       break;
       default:
