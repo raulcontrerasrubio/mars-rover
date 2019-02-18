@@ -111,10 +111,10 @@ var Map = function(layout){
 
   this.printTile = (x, y) => {
     var tile = self.getTileType(x, y);
-    if(tile){
+    if(tile && tile.image){
       var posY = y * Config.TILE_HEIGHT + Config.TILE_HEIGHT/2;
       var posX = x * Config.TILE_WIDTH + Config.TILE_WIDTH/2;
-
+      
       Common.drawBitMap(tile.image, posX, posY);
     }      
       
