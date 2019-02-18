@@ -28,10 +28,10 @@ var Rover = function(id = 0){
     self.controls = Controls.presets.getPrimary();
 
     self.moving = {
-      up: null,
-      down: null,
-      right: null,
-      left: null
+      up: false,
+      down: false,
+      right: false,
+      left: false
     }
   }
 
@@ -68,67 +68,88 @@ var Rover = function(id = 0){
     self.travelLog.push(obj);
   }
 
+  this.isMoving = (direction) => {
+    if(direction){
+      let response;
+      switch(direction){
+        case 'up':
+          response = self.moving.up;
+        break;
+        case 'down':
+          response = self.moving.up;
+        break;
+        case 'right':
+          response = self.moving.up;
+        break;
+        case 'left':
+          response = self.moving.up;
+        break;
+      }
+      return response;
+    }
+
+    return self.moving.up || self.moving.down || self.moving.left || self.moving.right;
+  };
+
+  this.setMoving = (direction) => {
+    for(let dir in self.moving){
+      if(dir === direction){
+        self.moving[dir] = true;
+      }else{
+        self.moving[dir] = false;
+      }
+    }
+  }
+
   this.turnLeft = () => {
-    switch(self.direction){
-      case 'N':
-      if(!(self.moving.up || self.moving.down || self.moving.left || self.moving.right)){
-        self.direction = 'W';
-        self.image.obj = ImageManager.loadedImages.rover_left;
+    if(!self.isMoving()){
+      switch(self.direction){
+        case 'N':
+          self.direction = 'W';
+          self.image.obj = ImageManager.loadedImages.rover_left;
+        break;
+        case 'W':
+          self.direction = 'S';
+          self.image.obj = ImageManager.loadedImages.rover_front;
+        break;
+        case 'S':
+          self.direction = 'E';
+          self.image.obj = ImageManager.loadedImages.rover_right;
+        break;
+        case 'E':
+          self.direction = 'N';
+          self.image.obj = ImageManager.loadedImages.rover_back;
+        break;
+        default:
+          console.log("Rover direction is broken!!");
+        break;
       }
-      break;
-      case 'W':
-      if(!(self.moving.up || self.moving.down || self.moving.left || self.moving.right)){
-        self.direction = 'S';
-        self.image.obj = ImageManager.loadedImages.rover_front;
-      }
-      break;
-      case 'S':
-      if(!(self.moving.up || self.moving.down || self.moving.left || self.moving.right)){
-        self.direction = 'E';
-        self.image.obj = ImageManager.loadedImages.rover_right;
-      }
-      break;
-      case 'E':
-      if(!(self.moving.up || self.moving.down || self.moving.left || self.moving.right)){
-        self.direction = 'N';
-        self.image.obj = ImageManager.loadedImages.rover_back;
-      }
-      break;
-      default:
-        console.log("Rover direction is broken!!");
-      break;
     }
   };
 
   this.turnRight = () => {
-    switch(self.direction){
-      case 'N':
-        if(!(self.moving.up || self.moving.down || self.moving.right || self.moving.left)){
-          self.direction = 'E';
-          self.image.obj = ImageManager.loadedImages.rover_right;
-        }
-      break;
-      case 'W':
-        if(!(self.moving.up || self.moving.down || self.moving.right || self.moving.left)){
-          self.direction = 'N';
-          self.image.obj = ImageManager.loadedImages.rover_back;
-        }
-      break;
-      case 'S':
-        if(!(self.moving.up || self.moving.down || self.moving.right || self.moving.left)){
-          self.direction = 'W';
-          self.image.obj = ImageManager.loadedImages.rover_left;
-        }
-      break;
-      case 'E':
-        if(!(self.moving.up || self.moving.down || self.moving.right || self.moving.left)){
-          self.direction = 'S';
-          self.image.obj = ImageManager.loadedImages.rover_front;
-        }
-      break;
-      default:
-        console.log("Rover direction is broken!!");
-      break;
+    if(!self.isMoving()){
+      switch(self.direction){
+        case 'N':
+            self.direction = 'E';
+            self.image.obj = ImageManager.loadedImages.rover_right;
+        break;
+        case 'W':
+            self.direction = 'N';
+            self.image.obj = ImageManager.loadedImages.rover_back;
+        break;
+        case 'S':
+            self.direction = 'W';
+            self.image.obj = ImageManager.loadedImages.rover_left;
+        break;
+        case 'E':
+            self.direction = 'S';
+            self.image.obj = ImageManager.loadedImages.rover_front;
+        break;
+        default:
+          console.log("Rover direction is broken!!");
+        break;
+      }
     }
   };
 
@@ -137,48 +158,48 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.position.y - 1;
-        if(!Game.map.isFreeCell(self.position.x, nextMove, 'up')){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'up') && Game.map.canAccessFrom(self.position.x,  nextMove, 'down'))){
           self.obstacleReached();
         }else{
-          if(!self.moving.up){
+          if(!self.isMoving('up')){
             self.position.y = nextMove;
-            self.moving.up = true;
+            self.setMoving('up');
             self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
       case 'W':
         nextMove = self.position.x - 1;
-        if(!Game.map.isFreeCell(nextMove, self.position.y, 'left')){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'left') && Game.map.canAccessFrom(nextMove,  self.position.y, 'right'))){
           self.obstacleReached();
         }else{
-          if(!self.moving.left){
+          if(!self.isMoving('left')){
             self.position.x = nextMove;
-            self.moving.left = true;
+            self.setMoving('left');
             self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
       case 'S':
         nextMove = self.position.y + 1;
-        if(!Game.map.isFreeCell(self.position.x, nextMove, 'down')){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'down') && Game.map.canAccessFrom(self.position.x,  nextMove, 'up'))){
           self.obstacleReached();
         }else{
-          if(!self.moving.down){
+          if(!self.isMoving('down')){
             self.position.y = nextMove;
-            self.moving.down = true; 
+            self.setMoving('down'); 
             self.addToLog({x:self.position.x, y:self.position.y}); 
           }
         }
       break;
       case 'E':
         nextMove = self.position.x + 1;
-        if(!Game.map.isFreeCell(nextMove, self.position.y, 'right')){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'right') && Game.map.canAccessFrom(nextMove,  self.position.y, 'left'))){
           self.obstacleReached();
         }else{
-          if(!self.moving.right){
+          if(!self.isMoving('right')){
             self.position.x = nextMove;
-            self.moving.right = true;
+            self.setMoving('right');
             self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
@@ -194,48 +215,48 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.position.y + 1;
-        if(!Game.map.isFreeCell(self.position.x, nextMove, 'down')){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'down') && Game.map.canAccessFrom(self.position.x,  nextMove, 'up'))){
           self.obstacleReached();
         }else{
-          if(!self.moving.down){
+          if(!self.isMoving('down')){
             self.position.y = nextMove;
-            self.moving.down = true;
+            self.setMoving('down');
             self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
       case 'W':
         nextMove = self.position.x + 1;
-        if(!Game.map.isFreeCell(nextMove, self.position.y, 'right')){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'right') && Game.map.canAccessFrom(nextMove,  self.position.y, 'left'))){
           self.obstacleReached();
         }else{
-          if(!self.moving.right){
+          if(!self.isMoving('right')){
             self.position.x = nextMove;
-            self.moving.right = true;
+            self.setMoving('right');
             self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
       case 'S':
         nextMove = self.position.y - 1;
-        if(!Game.map.isFreeCell(self.position.x, nextMove, 'up')){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'up') && Game.map.canAccessFrom(self.position.x,  nextMove, 'down'))){
           self.obstacleReached();
         }else{
-          if(!self.moving.up){
+          if(!self.isMoving('up')){
             self.position.y = nextMove;
-            self.moving.up = true;
+            self.setMoving('up');
             self.addToLog({x:self.position.x, y:self.position.y});
           }
         }
       break;
       case 'E':
         nextMove = self.position.x - 1;
-        if(!Game.map.isFreeCell(nextMove, self.position.y, 'left')){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'left') && Game.map.canAccessFrom(nextMove,  self.position.y, 'right'))){
           self.obstacleReached();
         }else{
-          if(!self.moving.left){
+          if(!self.isMoving('left')){
             self.position.x = nextMove;
-            self.moving.left = true;
+            self.setMoving('left');
             self.addToLog({x:self.position.x, y:self.position.y});
           }
         }

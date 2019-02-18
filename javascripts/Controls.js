@@ -116,7 +116,7 @@ var Controls = {
     var action = target.controls;
 
     for(let key in Controls.validKeys){
-      if(Controls.validKeys[key].pressed){
+      if(!target.isMoving() && Controls.validKeys[key].pressed){
         switch(Controls.validKeys[key].code){
           case action.up:
             switch(target.direction){

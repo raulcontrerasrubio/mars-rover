@@ -19,7 +19,7 @@ var Map = function(layout){
   };
 
   this.isAnyTileAvailable = () => {
-    let listOfAvailableTilesId = Tile.getAccesibleTilesId();
+    let listOfAvailableTilesId = Tile.getAccesibleToDirectionTilesId();
     return listOfAvailableTilesId.filter(id => {
       for(var r of self.grid){
         if(r.indexOf(id) !== -1){
@@ -32,7 +32,7 @@ var Map = function(layout){
 
   this.getRandomPosition = () => {
     if(self.isAnyTileAvailable()){
-      let validId = Tile.getAccesibleTilesId();
+      let validId = Tile.getAccesibleToDirectionTilesId();
       var valid = false;
       while(!valid){
         var {row, col} = self.getRandomCoord();
@@ -47,11 +47,22 @@ var Map = function(layout){
     let row = Math.floor(Math.random() * self.grid.length);
     let col = Math.floor(Math.random() * self.grid[row].length);
     return {row,col};
-  } 
+  }
+
+  this.isValidRow = (y) => {
+    return self.grid[y];
+  };
+
+  this.canAccessFrom = (x, y, direction) => {
+    return Tile.getAccesibleFromDirectionTilesId(direction).includes(self.grid[y][x]);
+  };
+
+  this.canAccessTo = (x, y, direction) => {
+    return Tile.getAccesibleToDirectionTilesId(direction).includes(self.grid[y][x]);
+  };
 
   this.isFreeCell = (x, y, direction) => {
-    let validTiles = Tile.getAccesibleTilesId(direction);
-    return self.grid[y] && validTiles.includes(self.grid[y][x]);
+    return self.isValidRow(y) && self.canAccessTo(x, y, direction);
   };
   
   this.addRover = (id, controls) => {
