@@ -10,6 +10,7 @@ var Rover = function(id = 0){
   this.controls;
   this.speed;
   this.moving;
+  this.nextMoves;
 
   this.init = function(){
     self.id = id;
@@ -33,6 +34,8 @@ var Rover = function(id = 0){
       right: false,
       left: false
     }
+
+    self.nextMoves = [];
   }
 
   Rover.prototype.obstacleReached = () => {
@@ -269,18 +272,30 @@ var Rover = function(id = 0){
 
   this.prepareMoves = (list) => {
     var validMoves = ['f', 'l', 'r', 'b'];
-    var movements = list.slice().split('');
-    var fails = 0;
+    var movements;
+
+    if(!self.nextMoves){
+      movements = list.slice().split('');
+    }else{
+      movements = self.nextMoves.concat(list.slice().split(''));
+    }
 
     for(var letter of movements){
       if(!validMoves.includes(letter)){
-        fails += 1;
+        console.error("Some of the movements are not valid. The Rover stays at the same position.");
+        return;
       }
     }
-    
-    if(fails <= 0){
-      movements.forEach(move => {
-        switch(move){
+
+    self.nextMoves = movements;
+    return self.travelLog;
+  }
+
+  this.makeMoves = () => {
+    if(!self.nextMoves){ return; }
+      
+      if(!self.isMoving()){
+        switch(self.nextMoves[0]){
           case 'f':
             self.moveForward();
           break;
@@ -294,13 +309,9 @@ var Rover = function(id = 0){
             self.moveBackward();
           break;
         }
-      });
-    }else{
-      console.error("Some of the movements are not valid. The Rover stays at the same position.");
+        self.nextMoves.shift();
+      }
     }
-
-    return self.travelLog;
-  }
 
   this.updateImageUp = () => {
     self.image.position.y -= self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND);

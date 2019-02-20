@@ -57,6 +57,9 @@ var Game = {
     Game.selectedCamera = Game.cameras[Game.selectedCameraIndex];
     if(Game.selectedCamera){
       Game.selectedCamera.use();
+      if(Game.selectedCamera.target.nextMoves){
+        Game.selectedCamera.target.makeMoves();
+      }
     }
   },
   printElements: () => {
