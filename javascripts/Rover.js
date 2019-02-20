@@ -11,6 +11,7 @@ var Rover = function(id = 0){
   this.speed;
   this.moving;
   this.nextMoves;
+  this.isObstacle;
 
   this.init = function(){
     self.id = id;
@@ -36,6 +37,7 @@ var Rover = function(id = 0){
     }
 
     self.nextMoves = [];
+    self.isObstacle = true;
   }
 
   Rover.prototype.obstacleReached = () => {
@@ -161,7 +163,7 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.position.y - 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'up') && Game.map.canAccessFrom(self.position.x,  nextMove, 'down'))){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'up') && Game.map.canAccessFrom(self.position.x,  nextMove, 'down')) || Game.map.isAnyObstacleActor(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
           if(!self.isMoving('up')){
@@ -173,7 +175,7 @@ var Rover = function(id = 0){
       break;
       case 'W':
         nextMove = self.position.x - 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'left') && Game.map.canAccessFrom(nextMove,  self.position.y, 'right'))){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'left') && Game.map.canAccessFrom(nextMove,  self.position.y, 'right')) || Game.map.isAnyObstacleActor(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
           if(!self.isMoving('left')){
@@ -185,7 +187,7 @@ var Rover = function(id = 0){
       break;
       case 'S':
         nextMove = self.position.y + 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'down') && Game.map.canAccessFrom(self.position.x,  nextMove, 'up'))){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'down') && Game.map.canAccessFrom(self.position.x,  nextMove, 'up')) || Game.map.isAnyObstacleActor(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
           if(!self.isMoving('down')){
@@ -197,7 +199,7 @@ var Rover = function(id = 0){
       break;
       case 'E':
         nextMove = self.position.x + 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'right') && Game.map.canAccessFrom(nextMove,  self.position.y, 'left'))){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'right') && Game.map.canAccessFrom(nextMove,  self.position.y, 'left')) || Game.map.isAnyObstacleActor(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
           if(!self.isMoving('right')){
@@ -218,7 +220,7 @@ var Rover = function(id = 0){
     switch(self.direction){
       case 'N':
         nextMove = self.position.y + 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'down') && Game.map.canAccessFrom(self.position.x,  nextMove, 'up'))){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'down') && Game.map.canAccessFrom(self.position.x,  nextMove, 'up')) || Game.map.isAnyObstacleActor(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
           if(!self.isMoving('down')){
@@ -230,7 +232,7 @@ var Rover = function(id = 0){
       break;
       case 'W':
         nextMove = self.position.x + 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'right') && Game.map.canAccessFrom(nextMove,  self.position.y, 'left'))){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'right') && Game.map.canAccessFrom(nextMove,  self.position.y, 'left')) || Game.map.isAnyObstacleActor(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
           if(!self.isMoving('right')){
@@ -242,7 +244,7 @@ var Rover = function(id = 0){
       break;
       case 'S':
         nextMove = self.position.y - 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'up') && Game.map.canAccessFrom(self.position.x,  nextMove, 'down'))){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'up') && Game.map.canAccessFrom(self.position.x,  nextMove, 'down')) || Game.map.isAnyObstacleActor(self.position.x, nextMove)){
           self.obstacleReached();
         }else{
           if(!self.isMoving('up')){
@@ -254,7 +256,7 @@ var Rover = function(id = 0){
       break;
       case 'E':
         nextMove = self.position.x - 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'left') && Game.map.canAccessFrom(nextMove,  self.position.y, 'right'))){
+        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'left') && Game.map.canAccessFrom(nextMove,  self.position.y, 'right')) || Game.map.isAnyObstacleActor(nextMove, self.position.y)){
           self.obstacleReached();
         }else{
           if(!self.isMoving('left')){
