@@ -272,12 +272,10 @@ var Rover = function(id = 0){
 
   this.prepareMoves = (list) => {
     var validMoves = ['f', 'l', 'r', 'b'];
-    var movements;
+    var movements = list.slice().split('');;
 
-    if(!self.nextMoves){
-      movements = list.slice().split('');
-    }else{
-      movements = self.nextMoves.concat(list.slice().split(''));
+    if(self.nextMoves){
+      movements = self.nextMoves.concat(movements);
     }
 
     for(var letter of movements){
@@ -294,24 +292,24 @@ var Rover = function(id = 0){
   this.makeMoves = () => {
     if(!self.nextMoves){ return; }
       
-      if(!self.isMoving()){
-        switch(self.nextMoves[0]){
-          case 'f':
-            self.moveForward();
-          break;
-          case 'l':
-            self.turnLeft();
-          break;
-          case 'r':
-            self.turnRight();
-          break;
-          case 'b':
-            self.moveBackward();
-          break;
-        }
-        self.nextMoves.shift();
+    if(!self.isMoving()){
+      switch(self.nextMoves[0]){
+        case 'f':
+          self.moveForward();
+        break;
+        case 'l':
+          self.turnLeft();
+        break;
+        case 'r':
+          self.turnRight();
+        break;
+        case 'b':
+          self.moveBackward();
+        break;
       }
+      self.nextMoves.shift();
     }
+  }
 
   this.updateImageUp = () => {
     self.image.position.y -= self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND);
