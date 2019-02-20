@@ -127,9 +127,11 @@ var Controls = {
                 target.moveBackward();
               break;
               case 'W':
+                Controls.validKeys[key].pressed = false;
                 target.turnRight();
               break;
               case 'E':
+                Controls.validKeys[key].pressed = false;
                 target.turnLeft();
               break;
             }
@@ -144,9 +146,11 @@ var Controls = {
                 target.moveBackward();
               break;
               case 'E':
+                Controls.validKeys[key].pressed = false;
                 target.turnRight();
               break;
               case 'W':
+                Controls.validKeys[key].pressed = false;
                 target.turnLeft();
               break;
             }
@@ -161,9 +165,11 @@ var Controls = {
                 target.moveBackward();
               break;
               case 'N':
+                Controls.validKeys[key].pressed = false;
                 target.turnRight();
               break;
               case 'S':
+                Controls.validKeys[key].pressed = false;
                 target.turnLeft();
               break;
             }
@@ -178,9 +184,11 @@ var Controls = {
                 target.moveBackward();
               break;
               case 'S':
+                Controls.validKeys[key].pressed = false;
                 target.turnRight();
               break;
               case 'N':
+                Controls.validKeys[key].pressed = false;
                 target.turnLeft();
               break;
             }
@@ -211,9 +219,11 @@ var Controls = {
             Game.selectedCamera.moveLeft();
           break;
           case Controls.validKeys.keyO.code:
+            Controls.validKeys[key].pressed = false;
             Game.nextCamera();
           break;
           case Controls.validKeys.keyU.code:
+            Controls.validKeys[key].pressed = false;
             Game.prevCamera();
           break;
         }
