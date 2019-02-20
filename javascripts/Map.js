@@ -2,9 +2,11 @@ var Map = function(layout){
   var self = this;
 
   this.grid;
+  this.actors;
 
   this.init = () => {
     self.grid = layout ? layout : self.createEmptyMap(Config.DEFAULT_MAP_ROWS, Config.DEFAULT_MAP_COLS);
+    self.actors = [];
   };
 
   Map.prototype.createEmptyMap = (rows, cols) => {
@@ -71,15 +73,25 @@ var Map = function(layout){
     return Tile.getAccesibleToDirectionTilesId(direction).includes(self.grid[y][x]);
   };
 
+  this.isAnyObstacleActor = (x, y) => {
+    let obstacles = self.actors.filter(actor => actor.isObstacle);
+    for(let obstacle of obstacles){
+      if(obstacle.position.x === x && obstacle.position.y === y){
+        return true;
+      }
+    }
+    return false;
+  }
+
   this.isFreeCell = (x, y, direction) => {
-    return self.isValidRow(y) && self.canAccessTo(x, y, direction);
+    return self.isValidRow(y) && self.isAnyObstacleActor(x, y) && self.canAccessTo(x, y, direction);
   };
   
   this.addRover = (id, controls) => {
     if(self.isAnyTileAvailable()){
         let newRover = new Rover(id);
         newRover.setControls(controls);
-        Game.rovers.push(newRover);
+        self.actors.push(newRover);
         Game.createCamera(newRover);
         return true;
     }else{

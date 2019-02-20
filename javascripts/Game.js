@@ -2,7 +2,6 @@ var Game = {
   canvas: null,
   context:  null,
   map:  null,
-  rovers: null,
   cameras: null,
   selectedCamera: null,
   selectedCameraIndex: null,
@@ -43,8 +42,8 @@ var Game = {
   },
   init: (layout) => {
     Game.map = new Map(layout);
-    Game.rovers = [new Rover(1)];
-    Game.cameras = [new Camera(Game.rovers[0])];
+    Game.cameras = [];
+    Game.map.addRover(1, 'primary');
     Game.selectedCameraIndex = Game.cameras.length - 1;
     Game.selectedCamera = Game.cameras[Game.selectedCameraIndex];
   },
@@ -79,7 +78,7 @@ var Game = {
       Game.map.printTilesOnScreen();
     }
     
-    Game.rovers.map(rover => rover.print());
+    Game.map.actors.filter(a => a instanceof Rover).map(rover => rover.print());
 
     if(Config.DEBUG_CAMERA && Game.selectedCamera){
       Game.selectedCamera.showPosition();
