@@ -50,14 +50,24 @@ var Map = function(layout){
   }
 
   this.isValidRow = (y) => {
-    return self.grid[y];
+    return y >= 0 && self.grid[y];
   };
 
   this.canAccessFrom = (x, y, direction) => {
+    if(y < 0){return false;}
+    if(y > self.grid.length - 1){ return false;}
+    if(x < 0){return false;}
+    if(x > self.grid[y].length - 1){return false;}
+
     return Tile.getAccesibleFromDirectionTilesId(direction).includes(self.grid[y][x]);
   };
 
   this.canAccessTo = (x, y, direction) => {
+    if(y < 0){return false;}
+    if(y > self.grid.length - 1){ return false;}
+    if(x < 0){return false;}
+    if(x > self.grid[y].length - 1){return false;}
+
     return Tile.getAccesibleToDirectionTilesId(direction).includes(self.grid[y][x]);
   };
 
