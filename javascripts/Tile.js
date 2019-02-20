@@ -217,14 +217,14 @@ var Tile = {
       accessTo: {
         up: true,
         down: true,
-        left: false,
-        right: true
+        left: true,
+        right: false
       },
       accessFrom: {
         up: true,
         down: true,
-        left: false,
-        right: true
+        left: true,
+        right: false
       },
       activation: () => {}
     },

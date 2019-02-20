@@ -9,7 +9,7 @@ window.onload = () => {
   ImageManager.loadedImages = ImageManager.loadImages(ImageManager.dataSet);
   Tile.loadTileImage();
 
-  Game.init(Layouts.xl);
+  Game.init(Layouts.lvl1);
   
   Controls.setup();
   window.setInterval(Game.gameLoop, 1000/Config.FRAMES_PER_SECOND);
