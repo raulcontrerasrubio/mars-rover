@@ -43,7 +43,7 @@ var Camera = function(target){
   }
 
   this.setSpeed = (speed) => {
-    if(!target && /\d/.test(speed) && speed >= Config.CAMERA_MIN_SPEED && speed <= Config.CAMERA_MAX_SPEED){
+    if(!self.target && /\d/.test(speed) && speed >= Config.CAMERA_MIN_SPEED && speed <= Config.CAMERA_MAX_SPEED){
       self.speed = speed;
       return true;
     }
@@ -89,18 +89,26 @@ var Camera = function(target){
   }
 
   this.moveLeft = () => { 
+    let nextX = Math.floor(self.position.x/Config.TILE_WIDTH);
+    if(nextX <= 0 || nextX > Game.map.grid[Math.floor(self.position.y/Config.TILE_HEIGHT)].length - 1){return;}
     self.position.x -= self.speed * (Config.TILE_WIDTH/Config.FRAMES_PER_SECOND); 
     self.updateView();
   }
   this.moveRight = () => { 
+    let nextX = Math.floor(self.position.x/Config.TILE_WIDTH);
+    if(nextX < 0 || nextX >= Game.map.grid[Math.floor(self.position.y/Config.TILE_HEIGHT)].length - 1){return;}
     self.position.x += self.speed * (Config.TILE_WIDTH/Config.FRAMES_PER_SECOND); 
     self.updateView();
   }
   this.moveUp = () => { 
+    let nextY = Math.floor(self.position.y/Config.TILE_HEIGHT);
+    if(nextY <= 0 || nextY > Game.map.grid.length - 1){return;}
     self.position.y -= self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND); 
     self.updateView();
   }
   this.moveDown = () => { 
+    let nextY = Math.floor(self.position.y/Config.TILE_HEIGHT);
+    if(nextY < 0 || nextY >= Game.map.grid.length - 1){return;}
     self.position.y += self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND); 
     self.updateView();
   }
