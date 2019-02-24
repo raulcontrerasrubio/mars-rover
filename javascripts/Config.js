@@ -11,7 +11,7 @@ var Config = {
   DEFAULT_CAMERA_SPEED: 5,
   CAMERA_MIN_SPEED: 0,
   CAMERA_MAX_SPEED: 20,
-  DEBUG_CAMERA: false,
+  DEBUG_CAMERA: true,
 
   IMAGE_DIR: 'images/',
 };

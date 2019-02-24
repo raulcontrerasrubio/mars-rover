@@ -18,7 +18,9 @@ var Camera = function(target){
   this.position = {x: null, y: null};
   this.target = target;
   this.targetPosition = {x: null, y: null};
-  this.view = {top: null, bottom: null, left: null, right: null}
+  this.view = {top: null, bottom: null, left: null, right: null};
+
+  this.zoom;
 
   this.init = () => {
     if(target){
@@ -38,6 +40,8 @@ var Camera = function(target){
     self.movingDown = false;
     self.movingLeft = false;
     self.movingRight = false;
+
+    self.zoom = 100;
 
     self.updateView();
   }

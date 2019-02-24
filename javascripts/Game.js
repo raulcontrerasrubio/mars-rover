@@ -95,8 +95,8 @@ var Game = {
     
   },
   checkContextBounds: () => {
-    var translateX = -Game.selectedCamera.position.x + Game.canvas.width/2;
-    var translateY = -Game.selectedCamera.position.y + Game.canvas.height/2;
+    var translateX = ((-Game.selectedCamera.position.x + Game.canvas.width/2) * Game.selectedCamera.zoom) / 100;
+    var translateY = ((-Game.selectedCamera.position.y + Game.canvas.height/2) * Game.selectedCamera.zoom) / 100;
     
     if(translateX > Config.TILE_WIDTH){
       translateX = Config.TILE_WIDTH;
@@ -113,14 +113,24 @@ var Game = {
     if(translateY < -1 * ((Game.map.grid.length) - (Game.canvas.height/Config.TILE_HEIGHT) + 1) * Config.TILE_HEIGHT){
       translateY = -1 * ((Game.map.grid.length) - (Game.canvas.height/Config.TILE_HEIGHT) + 1) * Config.TILE_HEIGHT;
     }
-
+    
     return {translateX, translateY};
   },
   printCameraView: (callback) => {
     Game.context.save();
     let {translateX, translateY} = Game.checkContextBounds();
+
+    TX = (translateX/Game.selectedCamera.zoom) * 100;
+    TY = (translateY/Game.selectedCamera.zoom) * 100;
+
     Game.context.translate(translateX, translateY);   
+    Game.context.scale(Game.selectedCamera.zoom/100, Game.selectedCamera.zoom/100);
+    if(Game.selectedCamera.target && Game.selectedCamera.zoom !== 100){Game.selectedCamera.focus();}
+
     callback();
     Game.context.restore();
   }
 };
+
+var TX;
+var TY;
