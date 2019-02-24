@@ -314,19 +314,19 @@ var Rover = function(id = 0){
   }
 
   this.updateImageUp = () => {
-    self.image.position.y -= self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND);
+    self.image.position.y -= self.speed * (Config.TILE_HEIGHT/60);
   }
 
   this.updateImageDown = () => {
-    self.image.position.y += self.speed * (Config.TILE_HEIGHT/Config.FRAMES_PER_SECOND);
+    self.image.position.y += self.speed * (Config.TILE_HEIGHT/60);
   }
 
   this.updateImageRight = () => {
-    self.image.position.x += self.speed * (Config.TILE_WIDTH/Config.FRAMES_PER_SECOND);
+    self.image.position.x += self.speed * (Config.TILE_WIDTH/60);
   }
 
   this.updateImageLeft = () => {
-    self.image.position.x -= self.speed * (Config.TILE_WIDTH/Config.FRAMES_PER_SECOND);
+    self.image.position.x -= self.speed * (Config.TILE_WIDTH/60);
   }
 
 

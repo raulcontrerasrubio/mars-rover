@@ -1,6 +1,7 @@
 var Game = {
   canvas: null,
   context:  null,
+  frameCount: null,
   map:  null,
   cameras: null,
   selectedCamera: null,
@@ -41,6 +42,7 @@ var Game = {
     }
   },
   init: (layout) => {
+    Game.frameCount = 0;
     Game.map = new Map(layout);
     Game.cameras = [];
     Game.map.addRover(1, 'primary');
@@ -48,9 +50,16 @@ var Game = {
     Game.selectedCamera = Game.cameras[Game.selectedCameraIndex];
   },
   gameLoop: () => {
+    Game.frameCount += 1;
+    if(Game.frameCount >= 60){
+      Game.frameCount = 0;
+    }
+
     Controls.keyController();
     Game.moveElements();
-    Game.printElements();  
+    Game.printElements();
+
+    requestAnimationFrame(Game.gameLoop);
   },
   moveElements: () => {
     Game.selectedCamera = Game.cameras[Game.selectedCameraIndex];
