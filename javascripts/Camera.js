@@ -41,7 +41,7 @@ var Camera = function(target){
     self.movingLeft = false;
     self.movingRight = false;
 
-    self.zoom = 100;
+    self.zoom = 0;
 
     self.updateView();
   }
