@@ -54,13 +54,13 @@ If you put an invalid movement, the rover will stay on the same site.
 Change 'id' with the index of the Rover you want to move.<br>
 If you go beyond the limits of the map, or there is another obstacle, you will get an error.<br>
 
-## Other options
+## Another options
 
 - Add a free camera: `Game.createCamera()`
 - Change a free camera speed: `Game.selectedCamera.setSpeed(number)`(*)
 - Change the zoom of the camera: `Game.selectedCamera.setZoom(number)`(**)
 - Add a camera attached to a rover: `Game.createCamera(Game.map.actors[id])`
 
-A free camera can move within the limits of the map.<br>
-(*): If you try to do it with a camera attached to a rover, it will return false and the speed will be the same. It also happens when you do not enter a number or that number is below the default camera min speed or above the default camera max speed (See config.js file).
+A free camera can move within the limits of the map.<br><br>
+(*): If you try to do it with a camera attached to a rover, it will return false and the speed will be the same. It also happens when you do not enter a number or that number is below the default camera min speed or above the default camera max speed (See config.js file).<br>
 (**): You must enter a number between the min and the max camera zoom (see config.js file). The speed of the zoom is related with the speed of the camera. The default parameters are -100 <= number <= 100;
