@@ -64,3 +64,6 @@ If you go beyond the limits of the map, or there is another obstacle, you will g
 A free camera can move within the limits of the map.<br><br>
 (*): If you try to do it with a camera attached to a rover, it will return false and the speed will be the same. It also happens when you do not enter a number or that number is below the default camera min speed or above the default camera max speed (See config.js file).<br>
 (**): You must enter a number between the min and the max camera zoom (see config.js file). The speed of the zoom is related with the speed of the camera. The default parameters are -100 <= number <= 100;
+
+## Change layout
+To choose another map go to app.js file and change the `Game.init(Layouts.lvl1);` line and replace `.lvl1` with your favorite layout in Layouts.js file. For example, to choose the xxl layout replace the previous line to `Game.init(Layouts.xxl)`. 

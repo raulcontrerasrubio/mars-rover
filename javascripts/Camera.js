@@ -61,6 +61,10 @@ var Camera = function(target){
     self.zoom = zoom;
     self.updateView();
 
+    if(self.target){
+      self.focus();
+    }
+
     return true;
   }
 
