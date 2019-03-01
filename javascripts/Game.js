@@ -96,39 +96,42 @@ var Game = {
   },
   checkContextBounds: () => {
     let zoom = Game.selectedCamera.zoom/100;
-    var translateX = -Game.selectedCamera.position.x + Game.canvas.width/2 - ((Game.canvas.width/4)/Config.TILE_WIDTH)*zoom*Config.TILE_WIDTH;
-    var translateY = -Game.selectedCamera.position.y + Game.canvas.height/2 - ((Game.canvas.height/4)/Config.TILE_HEIGHT)*zoom*Config.TILE_HEIGHT;
+    let scale = zoom >= 0 ? zoom : zoom/2;
+    let correction = scale <= 0 ? 1-scale : 1-scale/2;
 
+    var translateX = -Game.selectedCamera.position.x + Game.canvas.width/(2+(scale*2));
+    var translateY = -Game.selectedCamera.position.y + Game.canvas.height/(2+(scale*2));
+
+    CX = correction;
     
     if(translateX > Config.TILE_WIDTH){
       translateX = Config.TILE_WIDTH;
     }
-
-    if(translateX < -1 * (Game.map.grid[0].length - (Game.canvas.width/Config.TILE_WIDTH) + 1) * Config.TILE_WIDTH){
-      translateX = -1 * (Game.map.grid[0].length - (Game.canvas.width/Config.TILE_WIDTH) + 1) * Config.TILE_WIDTH;
+    
+    if(translateX < -1 * (Game.map.grid[0].length +1 - (Game.canvas.width/Config.TILE_WIDTH)*(correction-(1-correction)*(50*Game.selectedCamera.zoom))) * Config.TILE_WIDTH){
+      translateX = -1 * (Game.map.grid[0].length +1 - (Game.canvas.width/Config.TILE_WIDTH)*(correction-(1-correction)*(50*Game.selectedCamera.zoom))) * Config.TILE_WIDTH;
     }
-
+    
     if(translateY > Config.TILE_HEIGHT){
       translateY = Config.TILE_HEIGHT;
     }
-
-    if(translateY < -1 * (Game.map.grid.length - (Game.canvas.height/Config.TILE_HEIGHT) + 1) * Config.TILE_HEIGHT){
-      translateY = -1 * (Game.map.grid.length - (Game.canvas.height/Config.TILE_HEIGHT) + 1) * Config.TILE_HEIGHT;
+    
+    if(translateY < -1 * (Game.map.grid.length +1 - (Game.canvas.height/Config.TILE_HEIGHT)*(correction-(1-correction)*(50*Game.selectedCamera.zoom))) * Config.TILE_HEIGHT){
+      translateY = -1 * (Game.map.grid.length +1 - (Game.canvas.height/Config.TILE_HEIGHT)*(correction-(1-correction)*(50*Game.selectedCamera.zoom))) * Config.TILE_HEIGHT;
     }
     
-    return {translateX, translateY, zoom};
+    return {translateX, translateY, scale};
   },
   printCameraView: (callback) => {
     
     Game.context.save();
-    let {translateX, translateY, zoom} = Game.checkContextBounds();
-    zoom = zoom >= 0 ? zoom : zoom/2;
+    let {translateX, translateY, scale} = Game.checkContextBounds();
 
     TX = translateX;
     TY = translateY;
-    Z = zoom;
+    Z = scale;
 
-    Game.context.scale(1+zoom, 1+zoom);
+    Game.context.scale(1+scale, 1+scale);
     Game.context.translate(translateX, translateY);   
     
     callback();
@@ -139,3 +142,4 @@ var Game = {
 var TX;
 var TY;
 var Z;
+var CX;
