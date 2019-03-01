@@ -101,8 +101,6 @@ var Game = {
 
     var translateX = -Game.selectedCamera.position.x + Game.canvas.width/(2+(scale*2));
     var translateY = -Game.selectedCamera.position.y + Game.canvas.height/(2+(scale*2));
-
-    CX = correction;
     
     if(translateX > Config.TILE_WIDTH){
       translateX = Config.TILE_WIDTH;
@@ -126,11 +124,7 @@ var Game = {
     
     Game.context.save();
     let {translateX, translateY, scale} = Game.checkContextBounds();
-
-    TX = translateX;
-    TY = translateY;
-    Z = scale;
-
+ 
     Game.context.scale(1+scale, 1+scale);
     Game.context.translate(translateX, translateY);   
     
@@ -138,8 +132,3 @@ var Game = {
     Game.context.restore();
   }
 };
-
-var TX;
-var TY;
-var Z;
-var CX;

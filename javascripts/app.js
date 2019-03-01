@@ -11,7 +11,7 @@ window.onload = () => {
 
   Controls.setup();
   
-  Game.init(Layouts.xxl);
+  Game.init(Layouts.lvl1);
 
   requestAnimationFrame(Game.gameLoop);
 };

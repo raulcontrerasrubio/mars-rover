@@ -33,6 +33,10 @@ var Controls = {
       code: 68,
       pressed: false
     },
+    keyH: {
+      code: 72,
+      pressed: false
+    },
     keyJ: {
       code: 74,
       pressed: false
@@ -47,6 +51,10 @@ var Controls = {
     },
     keyL: {
       code: 76,
+      pressed: false
+    },
+    keyY: {
+      code: 89,
       pressed: false
     },
     keyU: {
@@ -203,6 +211,7 @@ var Controls = {
 
   },
   cameraControls: () => {
+    let nextZoom;
     for(let key in Controls.validKeys){
       if(Controls.validKeys[key].pressed){
         switch(Controls.validKeys[key].code){
@@ -225,6 +234,16 @@ var Controls = {
           case Controls.validKeys.keyU.code:
             Controls.validKeys[key].pressed = false;
             Game.prevCamera();
+          break;
+          case Controls.validKeys.keyY.code:
+            nextZoom = Game.selectedCamera.zoom + Game.selectedCamera.speed;
+            Controls.validKeys[key].pressed = false;
+            Game.selectedCamera.setZoom(nextZoom);
+          break;
+          case Controls.validKeys.keyH.code:
+            nextZoom = Game.selectedCamera.zoom - Game.selectedCamera.speed;
+            Controls.validKeys[key].pressed = false;
+            Game.selectedCamera.setZoom(nextZoom);
           break;
         }
       }

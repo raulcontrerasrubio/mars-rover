@@ -17,7 +17,7 @@ var Rover = function(id = 0){
     self.id = id;
     self.position = {x: null, y:null};
     self.getInitialPosition();
-    self.speed = 20;
+    self.speed = 5;
     self.image = {
       obj: ImageManager.loadedImages.rover_back,
       position: {

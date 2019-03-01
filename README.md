@@ -30,6 +30,8 @@ Camera: <br>
 * Previous Camera: U
 * Next Camera: O
 * Focus on the rover: P
+* Zoom-in: Y
+* Zoom-out: H
 
 ## What you can do with the Rover using the console
 First, open your browser's developer tools. Go to the console.
@@ -56,7 +58,9 @@ If you go beyond the limits of the map, or there is another obstacle, you will g
 
 - Add a free camera: `Game.createCamera()`
 - Change a free camera speed: `Game.selectedCamera.setSpeed(number)`(*)
+- Change the zoom of the camera: `Game.selectedCamera.setZoom(number)`(**)
 - Add a camera attached to a rover: `Game.createCamera(Game.map.actors[id])`
 
 A free camera can move within the limits of the map.<br>
 (*): If you try to do it with a camera attached to a rover, it will return false and the speed will be the same. It also happens when you do not enter a number or that number is below the default camera min speed or above the default camera max speed (See config.js file).
+(**): You must enter a number between the min and the max camera zoom (see config.js file). The speed of the zoom is related with the speed of the camera. The default parameters are -100 <= number <= 100;
