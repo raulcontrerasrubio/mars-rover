@@ -53,6 +53,10 @@ var Controls = {
       code: 76,
       pressed: false
     },
+    keyB: {
+      code: 66,
+      pressed: false
+    },
     keyY: {
       code: 89,
       pressed: false
@@ -244,6 +248,10 @@ var Controls = {
             nextZoom = Game.selectedCamera.zoom - Game.selectedCamera.speed;
             Controls.validKeys[key].pressed = false;
             Game.selectedCamera.setZoom(nextZoom);
+          break;
+          case Controls.validKeys.keyB.code:
+            Controls.validKeys[key].pressed = false;
+            Game.selectedCamera.restoreZoom();
           break;
         }
       }
