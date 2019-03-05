@@ -68,6 +68,10 @@ var Camera = function(target){
     return true;
   }
 
+  this.restoreZoom = () => {
+    self.setZoom(Config.DEFAULT_CAMERA_ZOOM);
+  }
+
   this.focus = () => {
     self.position = {
       x: target.image.position.x + Config.TILE_WIDTH/2,
@@ -138,15 +142,14 @@ var Camera = function(target){
 
   this.updateView = () => {
 
-    let correctionY = self.zoom >= 0 ? 0 : Math.floor(Game.canvas.height/((-self.zoom/100)*Config.TILE_HEIGHT));
-    let correctionX = self.zoom >= 0 ? 0 : Math.floor(Game.canvas.width/((-self.zoom/100)*Config.TILE_WIDTH));
+    let scale = self.zoom/100 >= 0 ? self.zoom/100 : self.zoom/(100*2); 
     
-    self.TARGET_TOP_LIMIT_TO_MOVE_CAMERA = Math.floor((Game.canvas.height/4) / Config.TILE_HEIGHT);
-    self.TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA = Math.floor((Game.canvas.height/4) / Config.TILE_HEIGHT);
-    self.TARGET_LEFT_LIMIT_TO_MOVE_CAMERA = Math.floor((Game.canvas.width/6) / Config.TILE_WIDTH);
-    self.TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA = Math.floor((Game.canvas.width/6) / Config.TILE_WIDTH);
-    self.CAMERA_TILES_SIDES_UP_BOTTOM = 2 * Math.floor((Game.canvas.height/Config.TILE_HEIGHT)/2) + correctionY;
-    self.CAMERA_TILES_SIDES_RIGHT_LEFT = 2 * Math.floor((Game.canvas.width/Config.TILE_WIDTH)/2) + correctionX;
+    self.TARGET_TOP_LIMIT_TO_MOVE_CAMERA = Math.floor(( (Game.canvas.height/(1+scale))/4) / Config.TILE_HEIGHT);
+    self.TARGET_BOTTOM_LIMIT_TO_MOVE_CAMERA = Math.floor(( (Game.canvas.height/(1+scale))/4) / Config.TILE_HEIGHT);
+    self.TARGET_LEFT_LIMIT_TO_MOVE_CAMERA = Math.floor(( (Game.canvas.width/(1+scale))/4) / Config.TILE_WIDTH);
+    self.TARGET_RIGHT_LIMIT_TO_MOVE_CAMERA = Math.floor(( (Game.canvas.width/(1+scale))/4) / Config.TILE_WIDTH);
+    self.CAMERA_TILES_SIDES_UP_BOTTOM = 2 * Math.floor(( (Game.canvas.height/(1+scale))/Config.TILE_HEIGHT)/2);
+    self.CAMERA_TILES_SIDES_RIGHT_LEFT = 2 * Math.floor(( (Game.canvas.width/(1+scale))/Config.TILE_WIDTH)/2);
 
     self.view = {
       top: Math.floor(self.position.y/Config.TILE_HEIGHT) - self.CAMERA_TILES_SIDES_UP_BOTTOM < 0 ? 0 : Math.floor(self.position.y/Config.TILE_HEIGHT) - self.CAMERA_TILES_SIDES_UP_BOTTOM,
