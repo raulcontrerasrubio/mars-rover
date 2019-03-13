@@ -1,5 +1,5 @@
 # mars-rover
-This is a project from Ironhack's prework Javascript module
+This is a solution for the [Mars Rover Kata](http://kata-log.rocks/mars-rover-kata).
 
 ## How to test the project
 1. Go to the [demo page](https://raulcontrerasrubio.github.io/mars-rover/).
