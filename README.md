@@ -41,7 +41,7 @@ You can access to the current Actors (it includes Rovers) using the command `Gam
 You can access to the cameras using the command `Game.cameras`.<br>
 You can perform the next actions:<br>
 
-- Create a new Rover: `Game.map.addRover(id, preset)` where id is a number different of 0 and 1 (because de default Rover has an id of 1), and preset is a string (`'primary'` to use the arrow keys to move the rover and `'secondary'` to use WASD keys).
+- Create a new Rover: `Game.map.addRover(id, preset)` where id is a number different of 0 and 1 (because the default Rover has an id of 1), and preset is a string (`'primary'` to use the arrow keys to move the rover and `'secondary'` to use WASD keys).
 - Move forward: `Game.map.actors[id].moveForward();`
 - Move backward: `Game.map.actors[id].moveBackward();`
 - Turn right: `Game.map.actors[id].turnRight();`
