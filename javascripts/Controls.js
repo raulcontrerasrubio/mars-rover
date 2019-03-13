@@ -76,7 +76,7 @@ var Controls = {
   },
 
   presets: {
-    getPrimary: () => {
+    getPrimary: function(){
       return {
         up: Controls.validKeys.arrowUp.code,
         down: Controls.validKeys.arrowDown.code,
@@ -84,7 +84,7 @@ var Controls = {
         right: Controls.validKeys.arrowRight.code
       }
     },
-    getSecondary: () => {
+    getSecondary: function(){
       return {
         up: Controls.validKeys.keyW.code,
         down: Controls.validKeys.keyS.code,
@@ -93,43 +93,43 @@ var Controls = {
       }
     }
   },
-  setup: () => {
-    document.addEventListener('keydown', Controls.keyPress);
-    document.addEventListener('keyup', Controls.keyRelease);
+  setup: function(){
+    document.addEventListener('keydown', this.keyPress.bind(this));
+    document.addEventListener('keyup', this.keyRelease.bind(this));
   },
-  keyPress: (evt) => {
+  keyPress: function(evt){
     evt.preventDefault();
  
-    for(let key in Controls.validKeys){
-      if(Controls.validKeys[key].code === evt.keyCode){
-        Controls.validKeys[key].pressed = true;
+    for(let key in this.validKeys){
+      if(this.validKeys[key].code === evt.keyCode){
+        this.validKeys[key].pressed = true;
       }
     }
     
   },
-  keyRelease: (evt) => {
+  keyRelease: function(evt){
     evt.preventDefault();
     
-    for(let key in Controls.validKeys){
-      if(Controls.validKeys[key].code === evt.keyCode){
-        Controls.validKeys[key].pressed = false;
+    for(let key in this.validKeys){
+      if(this.validKeys[key].code === evt.keyCode){
+        this.validKeys[key].pressed = false;
       }
     }
   },
 
-  keyController: () => {
+  keyController: function(){
     if(Game.selectedCamera.target){
-      Controls.targetControls(Game.selectedCamera.target);
+      this.targetControls(Game.selectedCamera.target);
     }
-    Controls.cameraControls();
+    this.cameraControls();
   },
 
-  targetControls: (target) => {
+  targetControls: function(target){
     var action = target.controls;
 
-    for(let key in Controls.validKeys){
-      if(!target.isMoving() && Controls.validKeys[key].pressed){
-        switch(Controls.validKeys[key].code){
+    for(let key in this.validKeys){
+      if(!target.isMoving() && this.validKeys[key].pressed){
+        switch(this.validKeys[key].code){
           case action.up:
             switch(target.direction){
               case 'N':
@@ -139,11 +139,11 @@ var Controls = {
                 target.moveBackward();
               break;
               case 'W':
-                Controls.validKeys[key].pressed = false;
+                this.validKeys[key].pressed = false;
                 target.turnRight();
               break;
               case 'E':
-                Controls.validKeys[key].pressed = false;
+                this.validKeys[key].pressed = false;
                 target.turnLeft();
               break;
             }
@@ -158,11 +158,11 @@ var Controls = {
                 target.moveBackward();
               break;
               case 'E':
-                Controls.validKeys[key].pressed = false;
+                this.validKeys[key].pressed = false;
                 target.turnRight();
               break;
               case 'W':
-                Controls.validKeys[key].pressed = false;
+                this.validKeys[key].pressed = false;
                 target.turnLeft();
               break;
             }
@@ -177,11 +177,11 @@ var Controls = {
                 target.moveBackward();
               break;
               case 'N':
-                Controls.validKeys[key].pressed = false;
+                this.validKeys[key].pressed = false;
                 target.turnRight();
               break;
               case 'S':
-                Controls.validKeys[key].pressed = false;
+                this.validKeys[key].pressed = false;
                 target.turnLeft();
               break;
             }
@@ -196,17 +196,17 @@ var Controls = {
                 target.moveBackward();
               break;
               case 'S':
-                Controls.validKeys[key].pressed = false;
+                this.validKeys[key].pressed = false;
                 target.turnRight();
               break;
               case 'N':
-                Controls.validKeys[key].pressed = false;
+                this.validKeys[key].pressed = false;
                 target.turnLeft();
               break;
             }
     
           break;
-          case Controls.validKeys.keyP.code:
+          case this.validKeys.keyP.code:
             Game.selectedCamera.focus();
           break;
         }
@@ -214,43 +214,43 @@ var Controls = {
     }
 
   },
-  cameraControls: () => {
+  cameraControls: function(){
     let nextZoom;
-    for(let key in Controls.validKeys){
-      if(Controls.validKeys[key].pressed){
-        switch(Controls.validKeys[key].code){
-          case Controls.validKeys.keyI.code:
+    for(let key in this.validKeys){
+      if(this.validKeys[key].pressed){
+        switch(this.validKeys[key].code){
+          case this.validKeys.keyI.code:
             Game.selectedCamera.moveUp();
           break;
-          case Controls.validKeys.keyK.code:
+          case this.validKeys.keyK.code:
             Game.selectedCamera.moveDown();
           break;
-          case Controls.validKeys.keyL.code:
+          case this.validKeys.keyL.code:
             Game.selectedCamera.moveRight();
           break;
-          case Controls.validKeys.keyJ.code:
+          case this.validKeys.keyJ.code:
             Game.selectedCamera.moveLeft();
           break;
-          case Controls.validKeys.keyO.code:
-            Controls.validKeys[key].pressed = false;
+          case this.validKeys.keyO.code:
+            this.validKeys[key].pressed = false;
             Game.nextCamera();
           break;
-          case Controls.validKeys.keyU.code:
-            Controls.validKeys[key].pressed = false;
+          case this.validKeys.keyU.code:
+            this.validKeys[key].pressed = false;
             Game.prevCamera();
           break;
-          case Controls.validKeys.keyY.code:
+          case this.validKeys.keyY.code:
             nextZoom = Game.selectedCamera.zoom + Game.selectedCamera.speed;
-            Controls.validKeys[key].pressed = false;
+            this.validKeys[key].pressed = false;
             Game.selectedCamera.setZoom(nextZoom);
           break;
-          case Controls.validKeys.keyH.code:
+          case this.validKeys.keyH.code:
             nextZoom = Game.selectedCamera.zoom - Game.selectedCamera.speed;
-            Controls.validKeys[key].pressed = false;
+            this.validKeys[key].pressed = false;
             Game.selectedCamera.setZoom(nextZoom);
           break;
-          case Controls.validKeys.keyB.code:
-            Controls.validKeys[key].pressed = false;
+          case this.validKeys.keyB.code:
+            this.validKeys[key].pressed = false;
             Game.selectedCamera.restoreZoom();
           break;
         }

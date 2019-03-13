@@ -1,148 +1,136 @@
 var Map = function(layout){
-  var self = this;
+  this.grid = layout ? layout : this.createEmptyMap(Config.DEFAULT_MAP_ROWS, Config.DEFAULT_MAP_COLS);
+  this.actors = [];
+};
 
-  this.grid;
-  this.actors;
-
-  this.init = () => {
-    self.grid = layout ? layout : self.createEmptyMap(Config.DEFAULT_MAP_ROWS, Config.DEFAULT_MAP_COLS);
-    self.actors = [];
-  };
-
-  Map.prototype.createEmptyMap = (rows, cols) => {
-    var map = [];
-    for(var i = 0; i < rows; i += 1){
-      map.push([]);
-      for(var j = 0; j < cols; j += 1){
-        map[i].push(0);
-      }
+Map.prototype.createEmptyMap = function(rows, cols){
+  var map = [];
+  for(var i = 0; i < rows; i += 1){
+    map.push([]);
+    for(var j = 0; j < cols; j += 1){
+      map[i].push(0);
     }
-    return map;
-  };
+  }
+  return map;
+};
 
-  this.isAnyTileAvailable = () => {
-    let listOfAvailableTilesId = Tile.getAccesibleToDirectionTilesId();
-    return listOfAvailableTilesId.filter(id => {
-      for(var r of self.grid){
-        if(r.indexOf(id) !== -1){
-          return true;
-        }
+Map.prototype.isAnyTileAvailable = function(){
+  let listOfAvailableTilesId = Tile.getAccesibleToDirectionTilesId();
+  return listOfAvailableTilesId.filter(id => {
+    for(var r of this.grid){
+      if(r.indexOf(id) !== -1){
+        return true;
       }
-      return false;
-    }).length !== 0;
-  };
-
-  this.getRandomPosition = () => {
-    if(self.isAnyTileAvailable()){
-      let validId = Tile.getAccesibleToDirectionTilesId();
-      var valid = false;
-      while(!valid){
-        var {row, col} = self.getRandomCoord();
-        valid = validId.includes(self.grid[row][col]);
-      }
-      return {row,col};
     }
     return false;
-  };
+  }).length !== 0;
+};
 
-  this.getRandomCoord = () => {
-    let row = Math.floor(Math.random() * self.grid.length);
-    let col = Math.floor(Math.random() * self.grid[row].length);
+Map.prototype.getRandomPosition = function(){
+  if(this.isAnyTileAvailable()){
+    let validId = Tile.getAccesibleToDirectionTilesId();
+    var valid = false;
+    while(!valid){
+      var {row, col} = this.getRandomCoord();
+      valid = validId.includes(this.grid[row][col]);
+    }
     return {row,col};
   }
+  return false;
+};
 
-  this.isValidRow = (y) => {
-    return y >= 0 && self.grid[y];
-  };
+Map.prototype.getRandomCoord = function(){
+  let row = Math.floor(Math.random() * this.grid.length);
+  let col = Math.floor(Math.random() * this.grid[row].length);
+  return {row,col};
+};
 
-  this.canAccessFrom = (x, y, direction) => {
-    if(y < 0){return false;}
-    if(y > self.grid.length - 1){ return false;}
-    if(x < 0){return false;}
-    if(x > self.grid[y].length - 1){return false;}
+Map.prototype.isValidRow = function(y){
+  return y >= 0 && this.grid[y];
+};
 
-    return Tile.getAccesibleFromDirectionTilesId(direction).includes(self.grid[y][x]);
-  };
+Map.prototype.canAccessFrom = function(x, y, direction){
+  if(y < 0){return false;}
+  if(y > this.grid.length - 1){ return false;}
+  if(x < 0){return false;}
+  if(x > this.grid[y].length - 1){return false;}
 
-  this.canAccessTo = (x, y, direction) => {
-    if(y < 0){return false;}
-    if(y > self.grid.length - 1){ return false;}
-    if(x < 0){return false;}
-    if(x > self.grid[y].length - 1){return false;}
+  return Tile.getAccesibleFromDirectionTilesId(direction).includes(this.grid[y][x]);
+};
 
-    return Tile.getAccesibleToDirectionTilesId(direction).includes(self.grid[y][x]);
-  };
+Map.prototype.canAccessTo = function(x, y, direction){
+  if(y < 0){return false;}
+  if(y > this.grid.length - 1){ return false;}
+  if(x < 0){return false;}
+  if(x > this.grid[y].length - 1){return false;}
 
-  this.isAnyObstacleActor = (x, y) => {
-    let obstacles = self.actors.filter(actor => actor.isObstacle);
-    for(let obstacle of obstacles){
-      if(obstacle.position.x === x && obstacle.position.y === y){
-        return true;
-      }
+  return Tile.getAccesibleToDirectionTilesId(direction).includes(this.grid[y][x]);
+};
+
+Map.prototype.isAnyObstacleActor = function(x, y){
+  let obstacles = this.actors.filter(actor => actor.isObstacle);
+  for(let obstacle of obstacles){
+    if(obstacle.position.x === x && obstacle.position.y === y){
+      return true;
     }
+  }
+  return false;
+};
+
+Map.prototype.isFreeCell = function(x, y, direction){
+  return this.isValidRow(y) && this.isAnyObstacleActor(x, y) && this.canAccessTo(x, y, direction);
+};
+
+Map.prototype.addRover = function(id, controls){
+  if(this.isAnyTileAvailable()){
+      let newRover = new Rover(id);
+      newRover.setControls(controls);
+      this.actors.push(newRover);
+      Game.createCamera(newRover);
+      return true;
+  }else{
+    console.log("¡No hay más espacio!");
+  }
+  return false;
+};
+
+Map.prototype.printTilesOnScreen = function(){
+  for(let i = Game.selectedCamera.view.top, rows = Game.selectedCamera.view.bottom; i < rows; i+= 1){
+    for(let j = Game.selectedCamera.view.left, cols = Game.selectedCamera.view.right; j < cols; j += 1){
+      this.printTile(j, i);
+    }
+  }
+};
+
+Map.prototype.tileExists = function(x, y){
+  try{
+    this.grid[y][x];
+    return true;
+  }catch(e){
     return false;
   }
+};
 
-  this.isFreeCell = (x, y, direction) => {
-    return self.isValidRow(y) && self.isAnyObstacleActor(x, y) && self.canAccessTo(x, y, direction);
-  };
-  
-  this.addRover = (id, controls) => {
-    if(self.isAnyTileAvailable()){
-        let newRover = new Rover(id);
-        newRover.setControls(controls);
-        self.actors.push(newRover);
-        Game.createCamera(newRover);
-        return true;
-    }else{
-      console.log("¡No hay más espacio!");
+Map.prototype.getTileType = function(x, y){
+  if(this.tileExists(x, y)){
+    var response = false;
+    var currentTile = this.grid[y][x];
+    var foundTile = Tile.getTileById(currentTile);
+    
+    if(foundTile){
+      response = foundTile;
     }
-    return false;
-  };
 
-  this.printTilesOnScreen = () => {
-    for(let i = Game.selectedCamera.view.top, rows = Game.selectedCamera.view.bottom; i < rows; i+= 1){
-      for(let j = Game.selectedCamera.view.left, cols = Game.selectedCamera.view.right; j < cols; j += 1){
-        self.printTile(j, i);
-      }
-    }
-  };
+    return response;
+  }
+};
 
-  this.tileExists = (x, y) => {
-    try{
-      this.grid[y][x];
-      return true;
-    }catch(e){
-      return false;
-    }
-  }; 
-
-  this.getTileType = (x, y) => {
-    if(self.tileExists(x, y)){
-      var response = false;
-      var currentTile = this.grid[y][x];
-      var foundTile = Tile.getTileById(currentTile);
-      
-      if(foundTile){
-        response = foundTile;
-      }
-
-      return response;
-    }
-  };
-
-  this.printTile = (x, y) => {
-    var tile = self.getTileType(x, y);
-    if(tile && tile.image){
-      var posY = y * Config.TILE_HEIGHT + Config.TILE_HEIGHT/2;
-      var posX = x * Config.TILE_WIDTH + Config.TILE_WIDTH/2;
-      
-      Common.drawBitMap(tile.image, posX, posY);
-    }      
-      
-  };
-
-  // Execution
-  this.init();
-  
-}
+Map.prototype.printTile = function(x, y){
+  var tile = this.getTileType(x, y);
+  if(tile && tile.image){
+    var posY = y * Config.TILE_HEIGHT + Config.TILE_HEIGHT/2;
+    var posX = x * Config.TILE_WIDTH + Config.TILE_WIDTH/2;
+    
+    Common.drawBitMap(tile.image, posX, posY);
+  }        
+};

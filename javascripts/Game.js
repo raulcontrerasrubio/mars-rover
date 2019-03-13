@@ -1,88 +1,107 @@
 var Game = {
   canvas: null,
-  context:  null,
-  frameCount: null,
-  map:  null,
-  cameras: null,
+  context: null,
+  started: false,
+  frameCount: 0,
+  map: null,
+  cameras: [],
   selectedCamera: null,
   selectedCameraIndex: null,
-  createCamera: (target = null) => {
+  createCamera: function(target = null){
     if(target){
-      Game.cameras.push(new Camera(target));
+      this.cameras.push(new Camera(target));
     }else{
-      Game.cameras.push(new Camera());
+      this.cameras.push(new Camera());
     }
     
-    Game.selectedCameraIndex = Game.cameras.length - 1;
+    this.selectedCameraIndex = this.cameras.length - 1;
   },
-  prevCamera: () => {
-    let lastCamera = Game.cameras.length - 1;
-    if(Game.selectedCameraIndex - 1 < 0){
-      Game.selectedCameraIndex = lastCamera;
+  prevCamera: function(){
+    let lastCamera = this.cameras.length - 1;
+    if(this.selectedCameraIndex - 1 < 0){
+      this.selectedCameraIndex = lastCamera;
       return;
     }
-    Game.selectedCameraIndex -= 1;
+    this.selectedCameraIndex -= 1;
   },
-  nextCamera: () => {
-    let lastCamera = Game.cameras.length - 1;
-    if(Game.selectedCameraIndex + 1 > lastCamera){
-      Game.selectedCameraIndex = 0;
+  nextCamera: function(){
+    let lastCamera = this.cameras.length - 1;
+    if(this.selectedCameraIndex + 1 > lastCamera){
+      this.selectedCameraIndex = 0;
       return;
     }
-    Game.selectedCameraIndex += 1;
+    this.selectedCameraIndex += 1;
   },
-  resizeCanvas: (width, height) => {
-    Game.canvas.width = width;
-    Game.canvas.height = height;
+  resizeCanvas: function(width, height){
+    this.canvas.width = width;
+    this.canvas.height = height;
 
-    if(Game.cameras){
-      for(let camera of Game.cameras){
+    if(this.cameras){
+      for(let camera of this.cameras){
         camera.updateView();
       }
     }
   },
-  init: (layout) => {
-    Game.frameCount = 0;
-    Game.map = new Map(layout);
-    Game.cameras = [];
-    Game.map.addRover(1, 'primary');
-    Game.selectedCameraIndex = Game.cameras.length - 1;
-    Game.selectedCamera = Game.cameras[Game.selectedCameraIndex];
+  reset: function(){
+    this.canvas = document.querySelector('#canvas');
+    this.context = this.canvas.getContext('2d');
+    this.resizeCanvas(Config.CANVAS_WIDTH, Config.CANVAS_HEIGHT);
+    this.frameCount = 0;
+    this.map = null;
+    this.cameras = [];
+    this.selectedCamera = null;
+    this.selectedCameraIndex = null;
+    if(this.started){
+      cancelAnimationFrame(this.animationID);
+    }
+    this.started = false;
   },
-  gameLoop: () => {
-    Game.frameCount += 1;
-    if(Game.frameCount >= 60){
-      Game.frameCount = 0;
+  init: function(layout){
+    this.reset();
+    this.map = new Map(layout);
+    this.map.addRover(1, 'primary');
+    this.selectedCameraIndex = this.cameras.length - 1;
+    this.selectedCamera = this.cameras[this.selectedCameraIndex];
+    
+    if(!this.started){
+      this.animationID = requestAnimationFrame(this.gameLoop.bind(this));
+    }
+    this.started = true;
+  },
+  gameLoop: function(){
+    this.frameCount += 1;
+    if(this.frameCount >= 60){
+      this.frameCount = 0;
     }
 
     Controls.keyController();
-    Game.moveElements();
-    Game.printElements();
+    this.moveElements();
+    this.printElements();
 
-    requestAnimationFrame(Game.gameLoop);
+    this.animationID = requestAnimationFrame(this.gameLoop.bind(this));
   },
-  moveElements: () => {
-    Game.selectedCamera = Game.cameras[Game.selectedCameraIndex];
-    if(Game.selectedCamera){
-      Game.selectedCamera.use();
-      if(Game.selectedCamera.target && Game.selectedCamera.target.nextMoves){
-        Game.selectedCamera.target.makeMoves();
+  moveElements: function(){
+    this.selectedCamera = this.cameras[this.selectedCameraIndex];
+    if(this.selectedCamera){
+      this.selectedCamera.use();
+      if(this.selectedCamera.target && this.selectedCamera.target.nextMoves){
+        this.selectedCamera.target.makeMoves();
       }
     }
   },
-  printElements: () => {
-    Game.printBackground();
+  printElements: function(){
+    this.printBackground();
 
-    if(Game.selectedCamera){
-      Game.printCameraView(Game.printObjects);
+    if(this.selectedCamera){
+      this.printCameraView(this.printObjects);
     }
 
   },
-  printBackground: () => {
-    Game.context.fillStyle = Config.BACKGROUND_COLOR;
-    Game.context.fillRect(0, 0, Game.canvas.width, Game.canvas.height);
+  printBackground: function(){
+    this.context.fillStyle = Config.BACKGROUND_COLOR;
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
   },
-  printObjects: () => {
+  printObjects: function(){
     if(Game.selectedCamera){
       Game.map.printTilesOnScreen();
     }
@@ -94,40 +113,40 @@ var Game = {
     }
     
   },
-  checkContextBounds: () => {
-    let zoom = Game.selectedCamera.zoom/100;
+  checkContextBounds: function(){
+    let zoom = this.selectedCamera.zoom/100;
     let scale = zoom >= 0 ? zoom : zoom/2;
 
-    var translateX = -Game.selectedCamera.position.x + Game.canvas.width/(2+(scale*2));
-    var translateY = -Game.selectedCamera.position.y + Game.canvas.height/(2+(scale*2));
+    var translateX = -this.selectedCamera.position.x + this.canvas.width/(2+(scale*2));
+    var translateY = -this.selectedCamera.position.y + this.canvas.height/(2+(scale*2));
     
     if(translateX > Config.TILE_WIDTH){
       translateX = Config.TILE_WIDTH;
     }
     
-    if(translateX < -1 * (Config.TILE_WIDTH*(Game.map.grid[0].length + 1) - (Game.canvas.width/(1+scale)))){
-      translateX = -1 * (Config.TILE_WIDTH*(Game.map.grid[0].length + 1) - (Game.canvas.width/(1+scale)));
+    if(translateX < -1 * (Config.TILE_WIDTH*(this.map.grid[0].length + 1) - (this.canvas.width/(1+scale)))){
+      translateX = -1 * (Config.TILE_WIDTH*(this.map.grid[0].length + 1) - (this.canvas.width/(1+scale)));
     }
     
     if(translateY > Config.TILE_HEIGHT){
       translateY = Config.TILE_HEIGHT;
     }
     
-    if(translateY < -1 * (Config.TILE_HEIGHT*(Game.map.grid.length + 1) - (Game.canvas.height/(1+scale)))){
-      translateY = -1 * (Config.TILE_HEIGHT*(Game.map.grid.length + 1) - (Game.canvas.height/(1+scale)));
+    if(translateY < -1 * (Config.TILE_HEIGHT*(this.map.grid.length + 1) - (this.canvas.height/(1+scale)))){
+      translateY = -1 * (Config.TILE_HEIGHT*(this.map.grid.length + 1) - (this.canvas.height/(1+scale)));
     }
     
     return {translateX, translateY, scale};
   },
-  printCameraView: (callback) => {
+  printCameraView: function(callback){
     
-    Game.context.save();
-    let {translateX, translateY, scale} = Game.checkContextBounds();
+    this.context.save();
+    let {translateX, translateY, scale} = this.checkContextBounds();
     
-    Game.context.scale(1+scale, 1+scale);
-    Game.context.translate(translateX, translateY);   
+    this.context.scale(1+scale, 1+scale);
+    this.context.translate(translateX, translateY);   
     
     callback();
-    Game.context.restore();
+    this.context.restore();
   }
 };
