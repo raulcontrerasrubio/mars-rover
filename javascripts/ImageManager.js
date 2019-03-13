@@ -20,7 +20,7 @@ var ImageManager = {
   },
   
   loadedImages: {},
-  loadImages: (dataset) => {
+  loadImages: function(dataset){
     let response = {};
     for(let key in dataset){
       response[key] = new Image();

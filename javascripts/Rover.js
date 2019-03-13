@@ -1,384 +1,368 @@
 var Rover = function(id = 0){
-
-  var self = this;
-
-  this.id;
-  this.image;
-  this.position;
-  this.direction;
-  this.travelLog;
-  this.controls;
-  this.speed;
-  this.moving;
-  this.nextMoves;
-  this.isObstacle;
-
-  this.init = function(){
-    self.id = id;
-    self.position = {x: null, y:null};
-    self.getInitialPosition();
-    self.speed = 5;
-    self.image = {
-      obj: ImageManager.loadedImages.rover_back,
-      position: {
-        x: self.getPositionX() * Config.TILE_WIDTH,
-        y: self.getPositionY() * Config.TILE_HEIGHT
-      }
+  
+  this.position = {};
+  this.getInitialPosition();
+  
+  this.id = id;
+  this.image = {
+    obj: ImageManager.loadedImages.rover_back,
+    position: {
+      x: this.getPositionX() * Config.TILE_WIDTH,
+      y: this.getPositionY() * Config.TILE_HEIGHT
     }
-    self.direction = "N";
-    self.travelLog = [{x: self.getPositionX(), y: self.getPositionY()}];
-    self.controls = Controls.presets.getPrimary();
-
-    self.moving = {
-      up: false,
-      down: false,
-      right: false,
-      left: false
-    }
-
-    self.nextMoves = [];
-    self.isObstacle = true;
   }
-
-  Rover.prototype.obstacleReached = () => {
-    console.log("There is an obstacle in front of you!");
+  this.direction = "N";
+  this.travelLog = [{x: this.getPositionX(), y: this.getPositionY()}];
+  this.controls = Controls.presets.getPrimary();
+  this.speed = 5;
+  this.moving = {
+    up: false,
+    down: false,
+    right: false,
+    left: false
   }
+  this.nextMoves = [];
+  this.isObstacle = true;
+  
+  return this;
+};
 
-  this.getInitialPosition = () => {
-    var position = Game.map.getRandomPosition();
+Rover.prototype.obstacleReached = function(){
+  console.log("There is an obstacle in front of you!");
+};
 
-    if(position){
-      self.position.x = position.col;
-      self.position.y = position.row;
-    }
-
+Rover.prototype.getInitialPosition = function(){
+  var position = Game.map.getRandomPosition();
+  if(position){
+    this.position.x = position.col;
+    this.position.y = position.row;
   }
+};
 
-  this.getPositionX = () => self.position.x;
+Rover.prototype.getPositionX = function(){
+  return this.position.x;
+};
 
-  this.getPositionY = () => self.position.y;
+Rover.prototype.getPositionY = function(){
+  return this.position.y;
+};
 
-  this.setControls = (preset) => {
-    switch(preset){
-      case 'primary':
-        self.controls = Controls.presets.getPrimary();
+Rover.prototype.setControls = function(preset){
+  switch(preset){
+    case 'primary':
+      this.controls = Controls.presets.getPrimary();
+    break;
+    case 'secondary':
+      this.controls = Controls.presets.getSecondary();
+    break;
+  }
+};
+
+Rover.prototype.addToLog = function(obj){
+  this.travelLog.push(obj);
+};
+
+Rover.prototype.isMoving = function(direction){
+  if(direction){
+    let response;
+    switch(direction){
+      case 'up':
+        response = this.moving.up;
       break;
-      case 'secondary':
-        self.controls = Controls.presets.getSecondary();
+      case 'down':
+        response = this.moving.up;
+      break;
+      case 'right':
+        response = this.moving.up;
+      break;
+      case 'left':
+        response = this.moving.up;
       break;
     }
-  }  
-
-  this.addToLog = (obj) => {
-    self.travelLog.push(obj);
+    return response;
   }
 
-  this.isMoving = (direction) => {
-    if(direction){
-      let response;
-      switch(direction){
-        case 'up':
-          response = self.moving.up;
-        break;
-        case 'down':
-          response = self.moving.up;
-        break;
-        case 'right':
-          response = self.moving.up;
-        break;
-        case 'left':
-          response = self.moving.up;
-        break;
-      }
-      return response;
-    }
+  return this.moving.up || this.moving.down || this.moving.left || this.moving.right;
+};
 
-    return self.moving.up || self.moving.down || self.moving.left || self.moving.right;
-  };
-
-  this.setMoving = (direction) => {
-    for(let dir in self.moving){
-      if(dir === direction){
-        self.moving[dir] = true;
-      }else{
-        self.moving[dir] = false;
-      }
+Rover.prototype.setMoving = function(direction){
+  for(let dir in this.moving){
+    if(dir === direction){
+      this.moving[dir] = true;
+    }else{
+      this.moving[dir] = false;
     }
   }
+};
 
-  this.turnLeft = () => {
-    if(!self.isMoving()){
-      switch(self.direction){
-        case 'N':
-          self.direction = 'W';
-          self.image.obj = ImageManager.loadedImages.rover_left;
-        break;
-        case 'W':
-          self.direction = 'S';
-          self.image.obj = ImageManager.loadedImages.rover_front;
-        break;
-        case 'S':
-          self.direction = 'E';
-          self.image.obj = ImageManager.loadedImages.rover_right;
-        break;
-        case 'E':
-          self.direction = 'N';
-          self.image.obj = ImageManager.loadedImages.rover_back;
-        break;
-        default:
-          console.log("Rover direction is broken!!");
-        break;
-      }
-    }
-  };
-
-  this.turnRight = () => {
-    if(!self.isMoving()){
-      switch(self.direction){
-        case 'N':
-            self.direction = 'E';
-            self.image.obj = ImageManager.loadedImages.rover_right;
-        break;
-        case 'W':
-            self.direction = 'N';
-            self.image.obj = ImageManager.loadedImages.rover_back;
-        break;
-        case 'S':
-            self.direction = 'W';
-            self.image.obj = ImageManager.loadedImages.rover_left;
-        break;
-        case 'E':
-            self.direction = 'S';
-            self.image.obj = ImageManager.loadedImages.rover_front;
-        break;
-        default:
-          console.log("Rover direction is broken!!");
-        break;
-      }
-    }
-  };
-
-  this.moveForward = () => {
-    let nextMove;
-    switch(self.direction){
+Rover.prototype.turnLeft = function(){
+  if(!this.isMoving()){
+    switch(this.direction){
       case 'N':
-        nextMove = self.position.y - 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'up') && Game.map.canAccessFrom(self.position.x,  nextMove, 'down')) || Game.map.isAnyObstacleActor(self.position.x, nextMove)){
-          self.obstacleReached();
-        }else{
-          if(!self.isMoving('up')){
-            self.position.y = nextMove;
-            self.setMoving('up');
-            self.addToLog({x:self.position.x, y:self.position.y});
-          }
-        }
+        this.direction = 'W';
+        this.image.obj = ImageManager.loadedImages.rover_left;
       break;
       case 'W':
-        nextMove = self.position.x - 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'left') && Game.map.canAccessFrom(nextMove,  self.position.y, 'right')) || Game.map.isAnyObstacleActor(nextMove, self.position.y)){
-          self.obstacleReached();
-        }else{
-          if(!self.isMoving('left')){
-            self.position.x = nextMove;
-            self.setMoving('left');
-            self.addToLog({x:self.position.x, y:self.position.y});
-          }
-        }
+        this.direction = 'S';
+        this.image.obj = ImageManager.loadedImages.rover_front;
       break;
       case 'S':
-        nextMove = self.position.y + 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'down') && Game.map.canAccessFrom(self.position.x,  nextMove, 'up')) || Game.map.isAnyObstacleActor(self.position.x, nextMove)){
-          self.obstacleReached();
-        }else{
-          if(!self.isMoving('down')){
-            self.position.y = nextMove;
-            self.setMoving('down'); 
-            self.addToLog({x:self.position.x, y:self.position.y}); 
-          }
-        }
+        this.direction = 'E';
+        this.image.obj = ImageManager.loadedImages.rover_right;
       break;
       case 'E':
-        nextMove = self.position.x + 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'right') && Game.map.canAccessFrom(nextMove,  self.position.y, 'left')) || Game.map.isAnyObstacleActor(nextMove, self.position.y)){
-          self.obstacleReached();
-        }else{
-          if(!self.isMoving('right')){
-            self.position.x = nextMove;
-            self.setMoving('right');
-            self.addToLog({x:self.position.x, y:self.position.y});
-          }
-        }
+        this.direction = 'N';
+        this.image.obj = ImageManager.loadedImages.rover_back;
       break;
       default:
-        console.log("Rover engine is broken!!");
+        console.log("Rover direction is broken!!");
       break;
     }
-  };
+  }
+};
 
-  this.moveBackward = () => {
-    let nextMove;
-    switch(self.direction){
+Rover.prototype.turnRight = function(){
+  if(!this.isMoving()){
+    switch(this.direction){
       case 'N':
-        nextMove = self.position.y + 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'down') && Game.map.canAccessFrom(self.position.x,  nextMove, 'up')) || Game.map.isAnyObstacleActor(self.position.x, nextMove)){
-          self.obstacleReached();
-        }else{
-          if(!self.isMoving('down')){
-            self.position.y = nextMove;
-            self.setMoving('down');
-            self.addToLog({x:self.position.x, y:self.position.y});
-          }
-        }
+          this.direction = 'E';
+          this.image.obj = ImageManager.loadedImages.rover_right;
       break;
       case 'W':
-        nextMove = self.position.x + 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'right') && Game.map.canAccessFrom(nextMove,  self.position.y, 'left')) || Game.map.isAnyObstacleActor(nextMove, self.position.y)){
-          self.obstacleReached();
-        }else{
-          if(!self.isMoving('right')){
-            self.position.x = nextMove;
-            self.setMoving('right');
-            self.addToLog({x:self.position.x, y:self.position.y});
-          }
-        }
+          this.direction = 'N';
+          this.image.obj = ImageManager.loadedImages.rover_back;
       break;
       case 'S':
-        nextMove = self.position.y - 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'up') && Game.map.canAccessFrom(self.position.x,  nextMove, 'down')) || Game.map.isAnyObstacleActor(self.position.x, nextMove)){
-          self.obstacleReached();
-        }else{
-          if(!self.isMoving('up')){
-            self.position.y = nextMove;
-            self.setMoving('up');
-            self.addToLog({x:self.position.x, y:self.position.y});
-          }
-        }
+          this.direction = 'W';
+          this.image.obj = ImageManager.loadedImages.rover_left;
       break;
       case 'E':
-        nextMove = self.position.x - 1;
-        if(!(Game.map.canAccessTo(self.position.x, self.position.y, 'left') && Game.map.canAccessFrom(nextMove,  self.position.y, 'right')) || Game.map.isAnyObstacleActor(nextMove, self.position.y)){
-          self.obstacleReached();
-        }else{
-          if(!self.isMoving('left')){
-            self.position.x = nextMove;
-            self.setMoving('left');
-            self.addToLog({x:self.position.x, y:self.position.y});
-          }
-        }
+          this.direction = 'S';
+          this.image.obj = ImageManager.loadedImages.rover_front;
       break;
       default:
-        console.log("Rover engine is broken!!");
+        console.log("Rover direction is broken!!");
       break;
     }
-  };
-
-  this.prepareMoves = (list) => {
-    var validMoves = ['f', 'l', 'r', 'b'];
-    var movements = list.slice().split('');;
-
-    if(self.nextMoves){
-      movements = self.nextMoves.concat(movements);
-    }
-
-    for(var letter of movements){
-      if(!validMoves.includes(letter)){
-        console.error("Some of the movements are not valid. The Rover stays at the same position.");
-        return;
-      }
-    }
-
-    self.nextMoves = movements;
-    return self.travelLog;
   }
+};
 
-  this.makeMoves = () => {
-    if(!self.nextMoves){ return; }
-      
-    if(!self.isMoving()){
-      switch(self.nextMoves[0]){
-        case 'f':
-          self.moveForward();
-        break;
-        case 'l':
-          self.turnLeft();
-        break;
-        case 'r':
-          self.turnRight();
-        break;
-        case 'b':
-          self.moveBackward();
-        break;
-      }
-      self.nextMoves.shift();
-    }
-  }
-
-  this.updateImageUp = () => {
-    self.image.position.y -= self.speed * (Config.TILE_HEIGHT/60);
-  }
-
-  this.updateImageDown = () => {
-    self.image.position.y += self.speed * (Config.TILE_HEIGHT/60);
-  }
-
-  this.updateImageRight = () => {
-    self.image.position.x += self.speed * (Config.TILE_WIDTH/60);
-  }
-
-  this.updateImageLeft = () => {
-    self.image.position.x -= self.speed * (Config.TILE_WIDTH/60);
-  }
-
-
-  this.animateMovement = () => {
-    if(self.moving.up){
-      if(self.getPositionY() < self.image.position.y/Config.TILE_HEIGHT){
-        self.updateImageUp();
-        self.moving.up = self.getPositionY() < self.image.position.y/Config.TILE_HEIGHT;
-        if(!self.moving.up){
-          self.image.position.y = self.getPositionY() * Config.TILE_HEIGHT;
-        }
+Rover.prototype.moveForward = function(){
+  let nextMove;
+  switch(this.direction){
+    case 'N':
+      nextMove = this.position.y - 1;
+      if(!(Game.map.canAccessTo(this.position.x, this.position.y, 'up') && Game.map.canAccessFrom(this.position.x,  nextMove, 'down')) || Game.map.isAnyObstacleActor(this.position.x, nextMove)){
+        this.obstacleReached();
       }else{
-        self.moving.up = false;
-      } 
-    }else if(self.moving.down){
-      if(self.getPositionY() > self.image.position.y/Config.TILE_HEIGHT){
-        self.updateImageDown();
-        self.moving.down = self.getPositionY() > self.image.position.y/Config.TILE_HEIGHT;
-        if(!self.moving.down){
-          self.image.position.y = self.getPositionY() * Config.TILE_HEIGHT;
+        if(!this.isMoving('up')){
+          this.position.y = nextMove;
+          this.setMoving('up');
+          this.addToLog({x:this.position.x, y:this.position.y});
         }
-      }else{
-        self.moving.down = false;
       }
-    }else if(self.moving.right){
-      if(self.getPositionX() > self.image.position.x/Config.TILE_WIDTH){
-        self.updateImageRight();
-        self.moving.right = self.getPositionX() > self.image.position.x/Config.TILE_WIDTH;
-        if(!self.moving.right){
-          self.image.position.x = self.getPositionX() * Config.TILE_WIDTH;
+    break;
+    case 'W':
+      nextMove = this.position.x - 1;
+      if(!(Game.map.canAccessTo(this.position.x, this.position.y, 'left') && Game.map.canAccessFrom(nextMove,  this.position.y, 'right')) || Game.map.isAnyObstacleActor(nextMove, this.position.y)){
+        this.obstacleReached();
+      }else{
+        if(!this.isMoving('left')){
+          this.position.x = nextMove;
+          this.setMoving('left');
+          this.addToLog({x:this.position.x, y:this.position.y});
         }
-      }else{
-        self.moving.right = false;
       }
-    }else if(self.moving.left){
-      if(self.getPositionX() < self.image.position.x/Config.TILE_WIDTH){
-        self.updateImageLeft();
-        self.moving.left = self.getPositionX() < self.image.position.x/Config.TILE_WIDTH;
-        if(!self.moving.left){
-          self.image.position.x = self.getPositionX() * Config.TILE_WIDTH;
+    break;
+    case 'S':
+      nextMove = this.position.y + 1;
+      if(!(Game.map.canAccessTo(this.position.x, this.position.y, 'down') && Game.map.canAccessFrom(this.position.x,  nextMove, 'up')) || Game.map.isAnyObstacleActor(this.position.x, nextMove)){
+        this.obstacleReached();
+      }else{
+        if(!this.isMoving('down')){
+          this.position.y = nextMove;
+          this.setMoving('down'); 
+          this.addToLog({x:this.position.x, y:this.position.y}); 
         }
-      }else{
-        self.moving.left = false;
       }
+    break;
+    case 'E':
+      nextMove = this.position.x + 1;
+      if(!(Game.map.canAccessTo(this.position.x, this.position.y, 'right') && Game.map.canAccessFrom(nextMove,  this.position.y, 'left')) || Game.map.isAnyObstacleActor(nextMove, this.position.y)){
+        this.obstacleReached();
+      }else{
+        if(!this.isMoving('right')){
+          this.position.x = nextMove;
+          this.setMoving('right');
+          this.addToLog({x:this.position.x, y:this.position.y});
+        }
+      }
+    break;
+    default:
+      console.log("Rover engine is broken!!");
+    break;
+  }
+};
+
+Rover.prototype.moveBackward = function(){
+  let nextMove;
+  switch(this.direction){
+    case 'N':
+      nextMove = this.position.y + 1;
+      if(!(Game.map.canAccessTo(this.position.x, this.position.y, 'down') && Game.map.canAccessFrom(this.position.x,  nextMove, 'up')) || Game.map.isAnyObstacleActor(this.position.x, nextMove)){
+        this.obstacleReached();
+      }else{
+        if(!this.isMoving('down')){
+          this.position.y = nextMove;
+          this.setMoving('down');
+          this.addToLog({x:this.position.x, y:this.position.y});
+        }
+      }
+    break;
+    case 'W':
+      nextMove = this.position.x + 1;
+      if(!(Game.map.canAccessTo(this.position.x, this.position.y, 'right') && Game.map.canAccessFrom(nextMove,  this.position.y, 'left')) || Game.map.isAnyObstacleActor(nextMove, this.position.y)){
+        this.obstacleReached();
+      }else{
+        if(!this.isMoving('right')){
+          this.position.x = nextMove;
+          this.setMoving('right');
+          this.addToLog({x:this.position.x, y:this.position.y});
+        }
+      }
+    break;
+    case 'S':
+      nextMove = this.position.y - 1;
+      if(!(Game.map.canAccessTo(this.position.x, this.position.y, 'up') && Game.map.canAccessFrom(this.position.x,  nextMove, 'down')) || Game.map.isAnyObstacleActor(this.position.x, nextMove)){
+        this.obstacleReached();
+      }else{
+        if(!this.isMoving('up')){
+          this.position.y = nextMove;
+          this.setMoving('up');
+          this.addToLog({x:this.position.x, y:this.position.y});
+        }
+      }
+    break;
+    case 'E':
+      nextMove = this.position.x - 1;
+      if(!(Game.map.canAccessTo(this.position.x, this.position.y, 'left') && Game.map.canAccessFrom(nextMove,  this.position.y, 'right')) || Game.map.isAnyObstacleActor(nextMove, this.position.y)){
+        this.obstacleReached();
+      }else{
+        if(!this.isMoving('left')){
+          this.position.x = nextMove;
+          this.setMoving('left');
+          this.addToLog({x:this.position.x, y:this.position.y});
+        }
+      }
+    break;
+    default:
+      console.log("Rover engine is broken!!");
+    break;
+  }
+};
+
+Rover.prototype.prepareMoves = function(list){
+  var validMoves = ['f', 'l', 'r', 'b'];
+  var movements = list.slice().split('');;
+
+  if(this.nextMoves){
+    movements = this.nextMoves.concat(movements);
+  }
+
+  for(var letter of movements){
+    if(!validMoves.includes(letter)){
+      console.error("Some of the movements are not valid. The Rover stays at the same position.");
+      return;
     }
   }
 
-  this.print = () => {
-      self.animateMovement(); 
-      Common.drawBitMap(self.image.obj ,self.image.position.x + Config.TILE_WIDTH/2 , self.image.position.y + Config.TILE_HEIGHT/2);
-  }
+  this.nextMoves = movements;
+  return this.travelLog;
+};
 
-  // Execution
-  this.init();
-}
+Rover.prototype.makeMoves = function(){
+  if(!this.nextMoves){ return; }
+    
+  if(!this.isMoving()){
+    switch(this.nextMoves[0]){
+      case 'f':
+        this.moveForward();
+      break;
+      case 'l':
+        this.turnLeft();
+      break;
+      case 'r':
+        this.turnRight();
+      break;
+      case 'b':
+        this.moveBackward();
+      break;
+    }
+    this.nextMoves.shift();
+  }
+};
+
+Rover.prototype.updateImageUp = function(){
+  this.image.position.y -= this.speed * (Config.TILE_HEIGHT/60);
+};
+
+Rover.prototype.updateImageDown = function(){
+  this.image.position.y += this.speed * (Config.TILE_HEIGHT/60);
+};
+
+Rover.prototype.updateImageRight = function(){
+  this.image.position.x += this.speed * (Config.TILE_WIDTH/60);
+};
+
+Rover.prototype.updateImageLeft = function(){
+  this.image.position.x -= this.speed * (Config.TILE_WIDTH/60);
+};
+
+Rover.prototype.animateMovement = function(){
+  if(this.moving.up){
+    if(this.getPositionY() < this.image.position.y/Config.TILE_HEIGHT){
+      this.updateImageUp();
+      this.moving.up = this.getPositionY() < this.image.position.y/Config.TILE_HEIGHT;
+      if(!this.moving.up){
+        this.image.position.y = this.getPositionY() * Config.TILE_HEIGHT;
+      }
+    }else{
+      this.moving.up = false;
+    } 
+  }else if(this.moving.down){
+    if(this.getPositionY() > this.image.position.y/Config.TILE_HEIGHT){
+      this.updateImageDown();
+      this.moving.down = this.getPositionY() > this.image.position.y/Config.TILE_HEIGHT;
+      if(!this.moving.down){
+        this.image.position.y = this.getPositionY() * Config.TILE_HEIGHT;
+      }
+    }else{
+      this.moving.down = false;
+    }
+  }else if(this.moving.right){
+    if(this.getPositionX() > this.image.position.x/Config.TILE_WIDTH){
+      this.updateImageRight();
+      this.moving.right = this.getPositionX() > this.image.position.x/Config.TILE_WIDTH;
+      if(!this.moving.right){
+        this.image.position.x = this.getPositionX() * Config.TILE_WIDTH;
+      }
+    }else{
+      this.moving.right = false;
+    }
+  }else if(this.moving.left){
+    if(this.getPositionX() < this.image.position.x/Config.TILE_WIDTH){
+      this.updateImageLeft();
+      this.moving.left = this.getPositionX() < this.image.position.x/Config.TILE_WIDTH;
+      if(!this.moving.left){
+        this.image.position.x = this.getPositionX() * Config.TILE_WIDTH;
+      }
+    }else{
+      this.moving.left = false;
+    }
+  }
+};
+
+Rover.prototype.print = function(){
+  this.animateMovement(); 
+  Common.drawBitMap(this.image.obj ,this.image.position.x + Config.TILE_WIDTH/2 , this.image.position.y + Config.TILE_HEIGHT/2);
+};

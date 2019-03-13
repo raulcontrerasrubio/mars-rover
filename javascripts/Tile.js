@@ -248,7 +248,9 @@ var Tile = {
       activation: () => {}
     },
   ],
-  getTileById: id => Tile.tiles.filter(tile => tile.id === id)[0],
+  getTileById: function(id){
+    return this.tiles.filter(tile => tile.id === id)[0];
+  },
   getAccesibleToDirectionTilesId: (toDirection = null) => {
     let accesibleTiles = Tile.tiles.filter(tile => {
       if(toDirection){
